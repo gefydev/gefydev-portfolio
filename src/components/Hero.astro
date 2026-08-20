@@ -1,0 +1,169 @@
+---
+import { translations } from '../data/translations';
+import { Terminal, Copy, Check, ArrowRight, Sparkles, Code2, Layers, Cpu, MapPin } from 'lucide-astro';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = translations[lang];
+---
+
+<section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden" aria-label="Hero">
+  <div class="absolute inset-0 bg-radial-glow pointer-events-none opacity-60"></div>
+  <div class="absolute inset-0 bg-grid-pattern opacity-40 pointer-events-none"></div>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <div class="lg:col-span-8 space-y-6">
+        <div class="inline-flex flex-wrap items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-800 text-xs font-mono text-zinc-300">
+          <span class="inline-flex items-center gap-1.5 text-sky-400 font-semibold">
+            <Sparkles class="w-3.5 h-3.5" />
+            <span>GenaDeev</span>
+          </span>
+          <span class="text-zinc-600">•</span>
+          <span class="text-zinc-400">{t.hero.badge}</span>
+        </div>
+
+        <div class="space-y-3">
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white font-sans leading-[1.08]">
+            <span class="text-zinc-400 font-normal text-3xl sm:text-4xl block mb-1">{t.hero.greeting}</span>
+            <span class="text-gradient">Genaro Febbo</span>
+            <span class="text-sky-400 font-mono text-2xl sm:text-3xl font-normal ml-2 opacity-90">/ GenaDeev</span>
+          </h1>
+          <p class="text-xl sm:text-2xl font-medium text-sky-400/90 font-mono flex items-center gap-2">
+            <span class="text-zinc-500 font-sans">&gt;</span> {t.hero.roleTitle}
+          </p>
+        </div>
+
+        <p class="text-base sm:text-lg text-zinc-400 max-w-2xl leading-relaxed font-sans">
+          {t.hero.subtitle}
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+          <div class="relative flex items-center rounded-lg bg-zinc-950/90 border border-zinc-800 hover:border-sky-500/40 transition-colors p-1 font-mono text-xs text-zinc-300 max-w-md group">
+            <div class="flex items-center gap-2 px-3 py-1.5 text-zinc-400 border-r border-zinc-800/80">
+              <Terminal class="w-3.5 h-3.5 text-sky-400" />
+              <span class="text-zinc-500">$</span>
+            </div>
+            <code id="hero-cmd-text" class="px-3 py-1.5 text-sky-300 font-mono flex-1 select-all">npx genadeev</code>
+            <button
+              id="hero-copy-cmd"
+              type="button"
+              class="px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-sky-500 hover:text-zinc-950 text-zinc-300 text-xs font-mono font-medium transition-all flex items-center gap-1.5 cursor-pointer"
+              aria-label="Copiar comando npx genadeev"
+            >
+              <Copy class="w-3.5 h-3.5 copy-icon" />
+              <Check class="w-3.5 h-3.5 check-icon hidden text-emerald-400" />
+              <span class="copy-label">{lang === 'es' ? 'Copiar' : 'Copy'}</span>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs font-mono text-emerald-400">
+            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>{t.hero.availableBadge}</span>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          <a
+            href="#projects"
+            class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-sky-500 hover:bg-sky-400 text-zinc-950 font-sans font-semibold text-sm transition-all shadow-lg shadow-sky-500/20 hover:shadow-sky-500/35 hover:-translate-y-0.5"
+          >
+            <span>{t.hero.exploreProjects}</span>
+            <ArrowRight class="w-4 h-4" />
+          </a>
+
+          <a
+            href="#contact"
+            class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-200 font-mono text-sm transition-all hover:-translate-y-0.5"
+          >
+            <span>{t.hero.contactMe}</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="lg:col-span-4 flex justify-center lg:justify-end">
+        <div class="relative w-full max-w-xs group">
+          <div class="absolute -inset-1 bg-gradient-to-r from-sky-500 via-indigo-500 to-teal-500 rounded-2xl blur-lg opacity-25 group-hover:opacity-40 transition-opacity"></div>
+          
+          <div class="relative rounded-2xl bg-zinc-950/90 border border-zinc-800 p-5 space-y-4">
+            <div class="relative aspect-square rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 overflow-hidden flex flex-col items-center justify-center text-center p-6 group/avatar">
+              <div id="avatar-photo-container" class="w-full h-full flex flex-col items-center justify-center">
+                <div class="w-24 h-24 rounded-full bg-sky-500/10 border-2 border-sky-400/40 flex items-center justify-center text-3xl font-bold font-mono text-sky-300 shadow-inner mb-3 group-hover/avatar:scale-105 transition-transform">
+                  GD
+                </div>
+                <p class="font-mono text-xs font-semibold text-zinc-200">Genaro Febbo</p>
+                <p class="text-[11px] font-mono text-zinc-500">@GenaDeev</p>
+              </div>
+
+              <div class="absolute top-3 right-3 px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900/90 border border-zinc-700/80 text-zinc-400">
+                16 y/o
+              </div>
+            </div>
+
+            <div class="space-y-2 font-mono text-xs">
+              <div class="flex items-center justify-between py-1.5 px-2.5 rounded-md bg-zinc-900/60 border border-zinc-800/60 text-zinc-400">
+                <span class="flex items-center gap-1.5 text-zinc-300">
+                  <MapPin class="w-3.5 h-3.5 text-sky-400" />
+                  <span>Buenos Aires</span>
+                </span>
+                <span class="text-zinc-500">AR 🇦🇷</span>
+              </div>
+
+              <div class="flex items-center justify-between py-1.5 px-2.5 rounded-md bg-zinc-900/60 border border-zinc-800/60 text-zinc-400">
+                <span class="flex items-center gap-1.5 text-zinc-300">
+                  <Layers class="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Educación</span>
+                </span>
+                <span class="text-zinc-400 font-semibold">CNBA (UBA)</span>
+              </div>
+
+              <div class="flex items-center justify-between py-1.5 px-2.5 rounded-md bg-zinc-900/60 border border-zinc-800/60 text-zinc-400">
+                <span class="flex items-center gap-1.5 text-zinc-300">
+                  <Cpu class="w-3.5 h-3.5 text-amber-400" />
+                  <span>Primary Stack</span>
+                </span>
+                <span class="text-sky-300">TS / Astro / React</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import confetti from 'canvas-confetti';
+
+  const copyBtn = document.getElementById('hero-copy-cmd');
+  const copyIcon = copyBtn?.querySelector('.copy-icon');
+  const checkIcon = copyBtn?.querySelector('.check-icon');
+  const copyLabel = copyBtn?.querySelector('.copy-label');
+
+  copyBtn?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText('npx genadeev');
+      copyIcon?.classList.add('hidden');
+      checkIcon?.classList.remove('hidden');
+      if (copyLabel) copyLabel.textContent = '¡Listo!';
+
+      try {
+        confetti({
+          particleCount: 35,
+          spread: 60,
+          origin: { y: 0.8 },
+          colors: ['#38bdf8', '#818cf8', '#34d399'],
+        });
+      } catch {}
+
+      setTimeout(() => {
+        copyIcon?.classList.remove('hidden');
+        checkIcon?.classList.add('hidden');
+        if (copyLabel) copyLabel.textContent = copyBtn.getAttribute('aria-label')?.includes('Copy') ? 'Copy' : 'Copiar';
+      }, 2500);
+    } catch {}
+  });
+</script>

@@ -1,0 +1,151 @@
+---
+import { projects } from '../data/projects';
+
+interface Props {
+  title: string;
+  description: string;
+  keywords?: string;
+  lang: 'es' | 'en';
+  canonicalUrl?: string;
+  image?: string;
+}
+
+const {
+  title,
+  description,
+  keywords = 'GenaDeev, Genaro Febbo Yapur, Full Stack Developer, Frontend, Astro, TypeScript, Buenos Aires, Argentina',
+  lang,
+  canonicalUrl = Astro.url.href,
+  image = 'https://genadeev.dev/og-image.png',
+} = Astro.props;
+
+const siteUrl = 'https://genadeev.dev';
+const esUrl = `${siteUrl}/es`;
+const enUrl = `${siteUrl}/en`;
+const ogLocale = lang === 'es' ? 'es_AR' : 'en_US';
+const ogLocaleAlt = lang === 'es' ? 'en_US' : 'es_AR';
+
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${siteUrl}/#person`,
+    name: 'Genaro Febbo Yapur',
+    alternateName: ['GenaDeev', 'Genaro Febbo', 'Gena'],
+    givenName: 'Genaro',
+    familyName: 'Febbo Yapur',
+    url: siteUrl,
+    jobTitle: lang === 'es' ? 'Desarrollador Full-Stack & Frontend' : 'Full-Stack & Frontend Software Developer',
+    description: description,
+    image: image,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Buenos Aires',
+      addressCountry: 'AR',
+    },
+    alumniOf: {
+      '@type': 'EducationalOrganization',
+      name: 'Colegio Nacional de Buenos Aires',
+      alternateName: 'CNBA',
+      url: 'https://cnba.uba.ar',
+    },
+    sameAs: [
+      'https://github.com/GenaDeev',
+      'https://comidolar.com.ar',
+      'https://blackmaps.com.ar',
+      'https://cuatrodoce.vercel.app',
+      'https://rockpaperchiappa.vercel.app',
+    ],
+    knowsAbout: [
+      'TypeScript',
+      'JavaScript',
+      'Astro',
+      'React',
+      'Node.js',
+      'Express',
+      'Rust',
+      'Tailwind CSS',
+      'Linux',
+      'Web Performance',
+      'Search Engine Optimization (SEO)',
+      'Core Web Vitals',
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    '@id': `${siteUrl}/#profile`,
+    url: canonicalUrl,
+    name: title,
+    isPartOf: {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
+      name: 'GenaDeev Portfolio',
+      description: description,
+      inLanguage: ['es', 'en'],
+    },
+    mainEntity: {
+      '@id': `${siteUrl}/#person`,
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: lang === 'es' ? 'Proyectos de Software de GenaDeev' : 'Software Projects by GenaDeev',
+    itemListElement: projects.map((project, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: project.name,
+      url: project.homepageUrl || project.githubUrl,
+      description: project.description[lang],
+    })),
+  },
+];
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="keywords" content={keywords} />
+<meta name="author" content="Genaro Febbo Yapur (GenaDeev)" />
+<meta name="creator" content="GenaDeev" />
+<meta name="publisher" content="Genaro Febbo Yapur" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+<meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+<link rel="canonical" href={canonicalUrl} />
+<link rel="alternate" hreflang="es" href={esUrl} />
+<link rel="alternate" hreflang="en" href={enUrl} />
+<link rel="alternate" hreflang="x-default" href={siteUrl} />
+<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+<link rel="help" type="text/plain" href="/llms.txt" />
+
+<meta property="og:type" content="profile" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:site_name" content="GenaDeev — Developer Portfolio" />
+<meta property="og:image" content={image} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="GenaDeev — Full-Stack Developer Portfolio" />
+<meta property="og:locale" content={ogLocale} />
+<meta property="og:locale:alternate" content={ogLocaleAlt} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={image} />
+<meta name="twitter:image:alt" content="GenaDeev — Full-Stack Developer Portfolio" />
+<meta name="twitter:creator" content="@GenaDeev" />
+<meta name="twitter:site" content="@GenaDeev" />
+
+<meta name="theme-color" content="#07080c" />
+<meta name="color-scheme" content="dark" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="generator" content={Astro.generator} />
+
+{structuredData.map((schema) => (
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+))}

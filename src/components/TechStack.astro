@@ -1,0 +1,143 @@
+---
+import { techStack } from '../data/stack';
+import { translations } from '../data/translations';
+import { Cpu, Terminal, CheckCircle2, Zap } from 'lucide-astro';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = translations[lang];
+
+const categories = [
+  { key: 'languages', title: t.stack.languages },
+  { key: 'frameworks', title: t.stack.frameworks },
+  { key: 'tools', title: t.stack.tools },
+  { key: 'databases', title: t.stack.databases },
+  { key: 'systems', title: t.stack.systems },
+] as const;
+---
+
+<section id="stack" class="py-24 border-t border-zinc-800/80 relative" aria-labelledby="stack-title">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="space-y-3 mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-mono text-emerald-400">
+        <Cpu class="w-3.5 h-3.5" />
+        <span>02 // {lang === 'es' ? 'TECNOLOGÍAS' : 'TECH STACK'}</span>
+      </div>
+      <h2 id="stack-title" class="text-3xl sm:text-4xl font-bold tracking-tight text-white font-sans">
+        {t.stack.sectionTitle}
+      </h2>
+      <p class="text-zinc-400 text-sm sm:text-base font-sans max-w-xl">
+        {t.stack.sectionSubtitle}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div class="lg:col-span-8 space-y-8">
+        {categories.map((cat) => {
+          const items = techStack.filter((item) => item.category === cat.key);
+          if (items.length === 0) return null;
+          return (
+            <div class="space-y-3">
+              <h3 class="text-xs font-mono font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-xs bg-sky-500"></span>
+                <span>{cat.title}</span>
+              </h3>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {items.map((tech) => (
+                  <div class="group relative rounded-lg bg-zinc-950/70 border border-zinc-800/80 hover:border-sky-500/50 p-4 transition-all duration-200">
+                    <div class="flex items-center justify-between mb-1.5">
+                      <span class="font-mono text-sm font-semibold text-zinc-200 group-hover:text-sky-300 transition-colors flex items-center gap-1.5">
+                        {tech.highlight && <Zap class="w-3.5 h-3.5 text-sky-400" />}
+                        <span>{tech.name}</span>
+                      </span>
+
+                      <span class={`text-[10px] font-mono px-2 py-0.5 rounded ${
+                        tech.level === 'core'
+                          ? 'bg-sky-500/10 border border-sky-500/30 text-sky-400'
+                          : tech.level === 'proficient'
+                          ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'
+                          : 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
+                      }`}>
+                        {tech.level.toUpperCase()}
+                      </span>
+                    </div>
+
+                    <p class="text-xs text-zinc-400 font-sans leading-relaxed">
+                      {tech.description[lang]}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div class="lg:col-span-4 space-y-4">
+        <div class="rounded-xl bg-zinc-950 border border-zinc-800 p-5 space-y-4 font-mono text-xs shadow-lg">
+          <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+            <div class="flex items-center gap-2 text-zinc-400">
+              <Terminal class="w-3.5 h-3.5 text-sky-400" />
+              <span class="text-xs text-zinc-300 font-bold">gena@workstation:~</span>
+            </div>
+            <div class="flex gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+            </div>
+          </div>
+
+          <div class="space-y-3 text-zinc-400 leading-relaxed overflow-x-auto">
+            <div>
+              <p class="text-zinc-500">$ bun --version</p>
+              <p class="text-sky-300 font-semibold">1.3.14</p>
+            </div>
+
+            <div>
+              <p class="text-zinc-500">$ uname -srmo</p>
+              <p class="text-zinc-300">Linux x86_64 GNU/Linux</p>
+            </div>
+
+            <div>
+              <p class="text-zinc-500">$ gh --version | head -n 1</p>
+              <p class="text-emerald-400">gh version 2.x (auth: @GenaDeev)</p>
+            </div>
+
+            <div>
+              <p class="text-zinc-500">$ astro check</p>
+              <p class="text-emerald-400 flex items-center gap-1.5">
+                <CheckCircle2 class="w-3.5 h-3.5" />
+                <span>Result: 0 errors, 0 warnings</span>
+              </p>
+            </div>
+
+            <div class="pt-2 border-t border-zinc-800/80">
+              <p class="text-zinc-500 text-[11px]">// Core principle</p>
+              <p class="text-zinc-300 text-[11px] italic">
+                {lang === 'es' 
+                  ? '"Entender el por qué, eliminar el bloat y priorizar rendimiento puro."'
+                  : '"Understand the why, eliminate bloat, and prioritize raw performance."'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-gradient-to-br from-sky-950/30 to-zinc-950 border border-sky-500/20 p-5 space-y-2">
+          <div class="flex items-center gap-2 text-sky-400 text-xs font-mono font-bold">
+            <Zap class="w-4 h-4" />
+            <span>{lang === 'es' ? 'Enfoque de Optimización' : 'Optimization Focus'}</span>
+          </div>
+          <p class="text-xs text-zinc-300 font-sans leading-relaxed">
+            {lang === 'es'
+              ? 'Lighthouse 100/100, 0 layout shifts (CLS = 0), First Contentful Paint sub-segundo e interfaces accesibles según estándares WCAG.'
+              : 'Lighthouse 100/100, zero layout shifts (CLS = 0), sub-second First Contentful Paint, and WCAG-compliant accessibility.'}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

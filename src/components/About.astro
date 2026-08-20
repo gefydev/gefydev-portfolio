@@ -1,0 +1,121 @@
+---
+import { translations } from '../data/translations';
+import { User, GraduationCap, MapPin, Award, CheckCircle2, Clock } from 'lucide-astro';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = translations[lang];
+---
+
+<section id="about" class="py-24 border-t border-zinc-800/80 relative" aria-labelledby="about-title">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="space-y-3 mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-mono text-indigo-400">
+        <User class="w-3.5 h-3.5" />
+        <span>03 // {lang === 'es' ? 'PERFIL & BIO' : 'PROFILE & BIO'}</span>
+      </div>
+      <h2 id="about-title" class="text-3xl sm:text-4xl font-bold tracking-tight text-white font-sans">
+        {t.about.sectionTitle}
+      </h2>
+      <p class="text-zinc-400 text-sm sm:text-base font-sans max-w-xl">
+        {t.about.sectionSubtitle}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div class="lg:col-span-7 space-y-6 text-zinc-300 font-sans leading-relaxed text-sm sm:text-base">
+        <p>
+          {t.about.bioParagraph1}
+        </p>
+        <p>
+          {t.about.bioParagraph2}
+        </p>
+        <p>
+          {t.about.bioParagraph3}
+        </p>
+
+        <div class="grid grid-cols-3 gap-4 pt-4 border-t border-zinc-800/80 font-mono text-center">
+          <div class="rounded-lg bg-zinc-900/60 border border-zinc-800 p-4">
+            <p class="text-2xl sm:text-3xl font-bold text-sky-400">16</p>
+            <p class="text-[11px] text-zinc-400 mt-1">{lang === 'es' ? 'Años de edad' : 'Years of age'}</p>
+          </div>
+
+          <div class="rounded-lg bg-zinc-900/60 border border-zinc-800 p-4">
+            <p class="text-2xl sm:text-3xl font-bold text-emerald-400">10+</p>
+            <p class="text-[11px] text-zinc-400 mt-1">{lang === 'es' ? 'Proyectos creados' : 'Projects built'}</p>
+          </div>
+
+          <div class="rounded-lg bg-zinc-900/60 border border-zinc-800 p-4">
+            <p class="text-2xl sm:text-3xl font-bold text-amber-400">100%</p>
+            <p class="text-[11px] text-zinc-400 mt-1">{lang === 'es' ? 'Performance focus' : 'Performance score'}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 space-y-4">
+        <div class="rounded-xl bg-zinc-950/80 border border-zinc-800 p-6 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="p-2.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">
+              <GraduationCap class="w-5 h-5" />
+            </div>
+            <div>
+              <h3 class="font-sans font-bold text-white text-base">{t.about.educationTitle}</h3>
+              <p class="font-mono text-xs text-sky-400">{t.about.educationSchool}</p>
+            </div>
+          </div>
+          <p class="text-xs text-zinc-400 font-sans leading-relaxed">
+            {t.about.educationDesc}
+          </p>
+          <div class="flex items-center gap-2 text-[11px] font-mono text-zinc-500 pt-2 border-t border-zinc-900">
+            <CheckCircle2 class="w-3.5 h-3.5 text-emerald-400" />
+            <span>{lang === 'es' ? 'Ciclo lectivo activo • Bachiller' : 'Active academic term • High School'}</span>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-zinc-950/80 border border-zinc-800 p-6 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="p-2.5 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-400">
+              <MapPin class="w-5 h-5" />
+            </div>
+            <div>
+              <h3 class="font-sans font-bold text-white text-base">{t.about.locationTitle}</h3>
+              <p class="font-mono text-xs text-zinc-400">{t.about.locationCity}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between p-3 rounded-lg bg-zinc-900/80 border border-zinc-800 text-xs font-mono text-zinc-300">
+            <span class="flex items-center gap-1.5 text-zinc-400">
+              <Clock class="w-3.5 h-3.5 text-sky-400" />
+              <span>{t.about.localTime}</span>
+            </span>
+            <span id="about-live-clock" class="text-sky-300 font-bold tabular-nums">--:--:--</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function updateAboutClock() {
+    const el = document.getElementById('about-live-clock');
+    if (!el) return;
+    try {
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat('es-AR', {
+        timeZone: 'America/Argentina/Buenos_Aires',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      });
+      el.textContent = formatter.format(now);
+    } catch {
+      el.textContent = new Date().toLocaleTimeString();
+    }
+  }
+  updateAboutClock();
+  setInterval(updateAboutClock, 1000);
+</script>

@@ -1,0 +1,300 @@
+---
+import { translations } from '../data/translations';
+import { Terminal, Search, FolderGit2, Cpu, User, Mail, Globe, Github, Sparkles, X } from 'lucide-astro';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = translations[lang];
+const otherLang = lang === 'es' ? 'en' : 'es';
+---
+
+<div
+  id="terminal-modal"
+  class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-start justify-center p-4 sm:p-6 pt-20 sm:pt-28"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="cmd-palette-title"
+>
+  <div
+    id="terminal-card"
+    class="relative w-full max-w-xl rounded-xl bg-zinc-950 border border-zinc-800 shadow-2xl overflow-hidden font-mono text-sm"
+  >
+    <div class="flex items-center justify-between px-4 py-3 border-b border-zinc-800 bg-zinc-900/60">
+      <div class="flex items-center gap-2 text-zinc-400">
+        <Terminal class="w-4 h-4 text-sky-400" />
+        <span id="cmd-palette-title" class="text-xs font-semibold text-zinc-200">{t.terminal.title}</span>
+      </div>
+      <button
+        id="close-terminal-btn"
+        type="button"
+        class="p-1 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+        aria-label="Cerrar modal"
+      >
+        <X class="w-4 h-4" />
+      </button>
+    </div>
+
+    <div class="relative flex items-center px-4 py-3 border-b border-zinc-800/80">
+      <Search class="w-4 h-4 text-zinc-500 mr-3 shrink-0" />
+      <input
+        id="terminal-search-input"
+        type="text"
+        placeholder={t.terminal.searchPlaceholder}
+        class="w-full bg-transparent text-zinc-100 placeholder:text-zinc-500 focus:outline-hidden text-sm"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </div>
+
+    <div id="terminal-list" class="max-h-80 overflow-y-auto p-2 space-y-1">
+      <div class="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+        {t.terminal.navigation}
+      </div>
+
+      <button
+        type="button"
+        class="terminal-item w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+        data-action="navigate"
+        data-target="#projects"
+      >
+        <div class="flex items-center gap-2.5">
+          <FolderGit2 class="w-4 h-4 text-sky-400 shrink-0" />
+          <span>{t.terminal.goToProjects}</span>
+        </div>
+        <kbd class="text-[10px] bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-400">#projects</kbd>
+      </button>
+
+      <button
+        type="button"
+        class="terminal-item w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+        data-action="navigate"
+        data-target="#stack"
+      >
+        <div class="flex items-center gap-2.5">
+          <Cpu class="w-4 h-4 text-emerald-400 shrink-0" />
+          <span>{t.terminal.goToStack}</span>
+        </div>
+        <kbd class="text-[10px] bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-400">#stack</kbd>
+      </button>
+
+      <button
+        type="button"
+        class="terminal-item w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+        data-action="navigate"
+        data-target="#about"
+      >
+        <div class="flex items-center gap-2.5">
+          <User class="w-4 h-4 text-indigo-400 shrink-0" />
+          <span>{t.terminal.goToAbout}</span>
+        </div>
+        <kbd class="text-[10px] bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-400">#about</kbd>
+      </button>
+
+      <button
+        type="button"
+        class="terminal-item w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+        data-action="navigate"
+        data-target="#contact"
+      >
+        <div class="flex items-center gap-2.5">
+          <Mail class="w-4 h-4 text-rose-400 shrink-0" />
+          <span>{t.terminal.goToContact}</span>
+        </div>
+        <kbd class="text-[10px] bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-400">#contact</kbd>
+      </button>
+
+      <div class="px-3 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+        {t.terminal.actions}
+      </div>
+
+      <button
+        type="button"
+        class="terminal-item w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+        data-action="copy-email"
+      >
+        <div class="flex items-center gap-2.5">
+          <Mail class="w-4 h-4 text-amber-400 shrink-0" />
+          <span>{t.terminal.copyEmail}</span>
+        </div>
+        <span class="text-[11px] text-zinc-500">contact</span>
+      </button>
+
+      <button
+        type="button"
+        class="terminal-item w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+        data-action="switch-lang"
+        data-target-lang={otherLang}
+      >
+        <div class="flex items-center gap-2.5">
+          <Globe class="w-4 h-4 text-sky-400 shrink-0" />
+          <span>{t.terminal.switchLanguage}</span>
+        </div>
+        <span class="text-[11px] text-sky-400 font-bold">{otherLang.toUpperCase()}</span>
+      </button>
+
+      <button
+        type="button"
+        class="terminal-item w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+        data-action="open-url"
+        data-url="https://github.com/GenaDeev"
+      >
+        <div class="flex items-center gap-2.5">
+          <Github class="w-4 h-4 text-zinc-300 shrink-0" />
+          <span>{t.terminal.openGithub}</span>
+        </div>
+        <span class="text-[11px] text-zinc-500">@GenaDeev</span>
+      </button>
+
+      <button
+        type="button"
+        class="terminal-item w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+        data-action="confetti"
+      >
+        <div class="flex items-center gap-2.5">
+          <Sparkles class="w-4 h-4 text-amber-400 shrink-0" />
+          <span>{t.terminal.triggerConfetti}</span>
+        </div>
+        <span class="text-[11px] text-amber-400">🎉</span>
+      </button>
+    </div>
+
+    <div class="px-4 py-2 border-t border-zinc-800/80 bg-zinc-900/40 flex items-center justify-between text-[11px] text-zinc-500">
+      <span>{t.terminal.close}</span>
+      <span>[↵] Ejecutar</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  import confetti from 'canvas-confetti';
+
+  const modal = document.getElementById('terminal-modal');
+  const card = document.getElementById('terminal-card');
+  const input = document.getElementById('terminal-search-input') as HTMLInputElement | null;
+  const closeBtn = document.getElementById('close-terminal-btn');
+  const cmdPaletteBtn = document.getElementById('cmd-palette-btn');
+  const items = document.querySelectorAll<HTMLButtonElement>('.terminal-item');
+
+  let selectedIndex = 0;
+
+  function openTerminal() {
+    modal?.classList.remove('hidden');
+    input?.focus();
+    if (input) input.value = '';
+    filterItems('');
+    updateSelection(0);
+  }
+
+  function closeTerminal() {
+    modal?.classList.add('hidden');
+  }
+
+  function updateSelection(index: number) {
+    const visibleItems = Array.from(items).filter((i) => i.style.display !== 'none');
+    if (visibleItems.length === 0) return;
+
+    selectedIndex = Math.max(0, Math.min(index, visibleItems.length - 1));
+
+    visibleItems.forEach((item, idx) => {
+      if (idx === selectedIndex) {
+        item.classList.add('bg-zinc-900', 'text-white');
+        item.scrollIntoView({ block: 'nearest' });
+      } else {
+        item.classList.remove('bg-zinc-900', 'text-white');
+      }
+    });
+  }
+
+  function filterItems(query: string) {
+    const q = query.toLowerCase().trim();
+    items.forEach((item) => {
+      const text = item.textContent?.toLowerCase() || '';
+      if (!q || text.includes(q)) {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+    updateSelection(0);
+  }
+
+  input?.addEventListener('input', (e) => {
+    filterItems((e.target as HTMLInputElement).value);
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (modal?.classList.contains('hidden')) {
+        openTerminal();
+      } else {
+        closeTerminal();
+      }
+    } else if (e.key === 'Escape' && !modal?.classList.contains('hidden')) {
+      closeTerminal();
+    } else if (!modal?.classList.contains('hidden')) {
+      const visibleItems = Array.from(items).filter((i) => i.style.display !== 'none');
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        updateSelection(selectedIndex + 1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        updateSelection(selectedIndex - 1);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (visibleItems[selectedIndex]) {
+          visibleItems[selectedIndex].click();
+        }
+      }
+    }
+  });
+
+  window.addEventListener('toggle-terminal', openTerminal);
+  cmdPaletteBtn?.addEventListener('click', openTerminal);
+  closeBtn?.addEventListener('click', closeTerminal);
+
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeTerminal();
+    }
+  });
+
+  items.forEach((item) => {
+    item.addEventListener('click', () => {
+      const action = item.getAttribute('data-action');
+      if (action === 'navigate') {
+        const target = item.getAttribute('data-target');
+        closeTerminal();
+        if (target) {
+          window.location.hash = target;
+        }
+      } else if (action === 'copy-email') {
+        navigator.clipboard.writeText('genafeeboyapur@gmail.com');
+        closeTerminal();
+        alert('Email copiado: genafeeboyapur@gmail.com');
+      } else if (action === 'switch-lang') {
+        const targetLang = item.getAttribute('data-target-lang');
+        if (targetLang) {
+          document.cookie = `user_lang=${targetLang}; path=/; max-age=31536000; SameSite=Lax`;
+          window.location.href = `/${targetLang}`;
+        }
+      } else if (action === 'open-url') {
+        const url = item.getAttribute('data-url');
+        if (url) window.open(url, '_blank');
+        closeTerminal();
+      } else if (action === 'confetti') {
+        try {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+          });
+        } catch {}
+        closeTerminal();
+      }
+    });
+  });
+</script>

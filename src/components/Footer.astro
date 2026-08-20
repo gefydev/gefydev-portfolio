@@ -1,0 +1,57 @@
+---
+import { translations } from '../data/translations';
+import { ArrowUp, Heart, Code2 } from 'lucide-astro';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = translations[lang];
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="border-t border-zinc-800/80 bg-[#07080c] py-12 relative font-mono text-xs text-zinc-500">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-sky-400"></span>
+        <span class="font-bold text-zinc-300">GenaDeev</span>
+        <span>© {currentYear}</span>
+      </div>
+      <span class="hidden sm:inline text-zinc-700">|</span>
+      <span>{t.footer.builtWith}</span>
+    </div>
+
+    <div class="flex items-center gap-6">
+      <a
+        href="https://github.com/GenaDeev"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-zinc-400 hover:text-sky-400 transition-colors"
+      >
+        {t.footer.sourceCode}
+      </a>
+
+      <button
+        id="back-to-top-btn"
+        type="button"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer"
+        aria-label="Volver arriba"
+      >
+        <span>{t.footer.backToTop}</span>
+        <ArrowUp class="w-3.5 h-3.5" />
+      </button>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const backToTopBtn = document.getElementById('back-to-top-btn');
+  backToTopBtn?.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  });
+</script>

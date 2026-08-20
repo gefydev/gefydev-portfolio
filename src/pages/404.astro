@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Home, ArrowLeft } from 'lucide-astro';
+
+const lang = Astro.locals.lang || 'es';
+---
+
+<Layout
+  lang={lang}
+  title={lang === 'es' ? '404 — Página no encontrada | GenaDeev' : '404 — Page Not Found | GenaDeev'}
+  description={lang === 'es' ? 'La página que buscas no existe.' : 'The requested page could not be found.'}
+>
+  <div class="min-h-[70vh] flex items-center justify-center px-4 py-20">
+    <div class="max-w-md w-full rounded-2xl bg-zinc-950/90 border border-zinc-800 p-8 text-center space-y-6 shadow-2xl">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 font-mono text-2xl font-bold">
+        404
+      </div>
+
+      <div class="space-y-2">
+        <h1 class="text-2xl font-bold font-sans text-white">
+          {lang === 'es' ? 'Página no encontrada' : 'Page Not Found'}
+        </h1>
+        <p class="font-mono text-xs text-zinc-400">
+          {lang === 'es'
+            ? 'La ruta a la que intentaste acceder no existe o fue movida.'
+            : 'The route you are trying to access does not exist or has been relocated.'}
+        </p>
+      </div>
+
+      <div class="p-3 rounded-lg bg-zinc-900 border border-zinc-800 font-mono text-xs text-zinc-500 text-left">
+        <p>&gt; HTTP/1.1 404 Not Found</p>
+        <p>&gt; status: resource_missing</p>
+      </div>
+
+      <a
+        href={`/${lang}`}
+        class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-sky-500 hover:bg-sky-400 text-zinc-950 font-semibold text-sm transition-all"
+      >
+        <Home class="w-4 h-4" />
+        <span>{lang === 'es' ? 'Volver al Inicio' : 'Return to Home'}</span>
+      </a>
+    </div>
+  </div>
+</Layout>
