@@ -39,7 +39,7 @@ export const GET: APIRoute = async () => {
   return new Response(sitemap.trim(), {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, max-age=86400',
+      'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
     },
   });
 };

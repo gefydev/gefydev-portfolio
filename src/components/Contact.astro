@@ -9,16 +9,19 @@ interface Props {
 const { lang } = Astro.props;
 const t = translations[lang];
 const email = 'hi@gefy.dev';
+
+const copyEmailAria = lang === 'es' ? 'Copiar correo electrónico al portapapeles' : 'Copy email address to clipboard';
+const githubAria = lang === 'es' ? 'Abrir perfil de GitHub de GefyDev' : 'Open GefyDev GitHub profile';
 ---
 
 <section id="contact" class="py-24 border-t border-zinc-800/80 relative font-sans" aria-labelledby="contact-title">
   <div class="max-w-6xl mx-auto px-4 sm:px-6">
     <div class="space-y-3 mb-12">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-medium text-[#0db7b9]">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-[11px] font-mono font-semibold tracking-wider uppercase text-[#0db7b9]">
         <Mail class="w-3.5 h-3.5" />
         <span>04 // {lang === 'es' ? 'CONEXIÓN' : 'CONNECT'}</span>
       </div>
-      <h2 id="contact-title" class="text-3xl sm:text-4xl font-bold tracking-tight text-white font-sans">
+      <h2 id="contact-title" class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
         {t.contact.sectionTitle}
       </h2>
       <p class="text-zinc-400 text-sm sm:text-base max-w-xl">
@@ -54,8 +57,8 @@ const email = 'hi@gefy.dev';
                 id="contact-copy-email-btn"
                 type="button"
                 data-email={email}
-                class="px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
-                aria-label="Copiar email al portapapeles"
+                class="px-4 py-2.5 min-h-[44px] rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer active:scale-[0.98]"
+                aria-label={copyEmailAria}
               >
                 <Copy class="w-3.5 h-3.5 contact-copy-icon" />
                 <Check class="w-3.5 h-3.5 contact-check-icon hidden text-emerald-400" />
@@ -64,7 +67,7 @@ const email = 'hi@gefy.dev';
 
               <a
                 href={`mailto:${email}?subject=Hola%20Gefy!`}
-                class="px-4 py-2 rounded-lg bg-gradient-to-r from-[#0db7b9] to-[#735ed5] hover:opacity-95 text-white font-semibold text-xs transition-opacity flex items-center gap-1.5"
+                class="px-5 py-2.5 min-h-[44px] rounded-lg bg-gradient-to-r from-[#0db7b9] to-[#735ed5] hover:opacity-95 text-white font-semibold text-xs transition-opacity flex items-center gap-1.5 active:scale-[0.98]"
               >
                 <Send class="w-3.5 h-3.5" />
                 <span>{t.contact.sendEmailBtn}</span>
@@ -79,7 +82,8 @@ const email = 'hi@gefy.dev';
           href="https://github.com/gefydev"
           target="_blank"
           rel="noopener noreferrer"
-          class="group rounded-2xl bg-zinc-950/80 border border-zinc-800 hover:border-[#735ed5]/50 p-6 flex items-center justify-between transition-all duration-200 hover:-translate-y-0.5 shadow-md flex-1"
+          class="group rounded-2xl bg-zinc-950/80 border border-zinc-800 hover:border-[#735ed5]/50 p-6 flex items-center justify-between transition-all duration-200 hover:-translate-y-0.5 shadow-md flex-1 active:scale-[0.98]"
+          aria-label={githubAria}
         >
           <div class="flex items-center gap-4">
             <div class="p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-200 group-hover:text-white group-hover:border-zinc-700 transition-colors">
@@ -110,26 +114,30 @@ const email = 'hi@gefy.dev';
 </section>
 
 <script>
-  const copyBtn = document.getElementById('contact-copy-email-btn');
-  const copyIcon = copyBtn?.querySelector('.contact-copy-icon');
-  const checkIcon = copyBtn?.querySelector('.contact-check-icon');
-  const copyLabel = copyBtn?.querySelector('.contact-copy-label');
+  function initContact() {
+    const copyBtn = document.getElementById('contact-copy-email-btn');
+    const copyIcon = copyBtn?.querySelector('.contact-copy-icon');
+    const checkIcon = copyBtn?.querySelector('.contact-check-icon');
+    const copyLabel = copyBtn?.querySelector('.contact-copy-label');
 
-  copyBtn?.addEventListener('click', async () => {
-    const email = copyBtn.getAttribute('data-email');
-    if (!email) return;
+    copyBtn?.addEventListener('click', async () => {
+      const email = copyBtn.getAttribute('data-email');
+      if (!email) return;
 
-    try {
-      await navigator.clipboard.writeText(email);
-      copyIcon?.classList.add('hidden');
-      checkIcon?.classList.remove('hidden');
-      if (copyLabel) copyLabel.textContent = '¡Copiado!';
+      try {
+        await navigator.clipboard.writeText(email);
+        copyIcon?.classList.add('hidden');
+        checkIcon?.classList.remove('hidden');
+        if (copyLabel) copyLabel.textContent = '¡Copiado!';
 
-      setTimeout(() => {
-        copyIcon?.classList.remove('hidden');
-        checkIcon?.classList.add('hidden');
-        if (copyLabel) copyLabel.textContent = copyBtn.getAttribute('aria-label')?.includes('Copy') ? 'Copy Email' : 'Copiar Email';
-      }, 2500);
-    } catch {}
-  });
+        setTimeout(() => {
+          copyIcon?.classList.remove('hidden');
+          checkIcon?.classList.add('hidden');
+          if (copyLabel) copyLabel.textContent = copyBtn.getAttribute('aria-label')?.includes('Copy') ? 'Copy Email' : 'Copiar Email';
+        }, 2500);
+      } catch {}
+    });
+  }
+
+  document.addEventListener('astro:page-load', initContact);
 </script>

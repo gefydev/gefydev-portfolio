@@ -10,6 +10,10 @@ const { lang } = Astro.props;
 const t = translations[lang];
 const otherLang = lang === 'es' ? 'en' : 'es';
 const otherLangUrl = `/${otherLang}`;
+
+const cmdAriaLabel = lang === 'es' ? 'Abrir paleta de comandos (Cmd+K / Ctrl+K)' : 'Open command palette (Cmd+K / Ctrl+K)';
+const langAriaLabel = lang === 'es' ? 'Cambiar idioma a Inglés' : 'Switch language to Spanish';
+const menuAriaLabel = lang === 'es' ? 'Alternar menú de navegación móvil' : 'Toggle mobile navigation menu';
 ---
 
 <header class="fixed top-0 inset-x-0 z-40 transition-all duration-300 border-b border-white/[0.06] bg-[#06070b]/85 backdrop-blur-md">
@@ -21,7 +25,7 @@ const otherLangUrl = `/${otherLang}`;
         aria-label="GefyDev Home"
       >
         <img 
-          src="/logo-white-bg.png" 
+          src="/logo-white-bg.webp" 
           alt="GefyDev Logo" 
           class="w-7 h-7 rounded-md object-contain shadow-xs group-hover:scale-105 transition-transform" 
           width="28" 
@@ -51,12 +55,12 @@ const otherLangUrl = `/${otherLang}`;
       <a href="#contact" class="hover:text-white transition-colors py-1 focus-visible:text-[#0db7b9]">{t.nav.contact}</a>
     </nav>
 
-    <div class="flex items-center gap-2.5">
+    <div class="flex items-center gap-2">
       <button
         id="cmd-palette-btn"
         type="button"
-        class="hidden sm:inline-flex items-center gap-2 px-2.5 py-1.5 rounded-md bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white text-xs font-sans transition-all cursor-pointer shadow-xs"
-        aria-label="Abrir paleta de comandos (Cmd+K / Ctrl+K)"
+        class="hidden sm:inline-flex items-center gap-2 px-3 py-2 min-h-[40px] rounded-lg bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white text-xs font-sans transition-all cursor-pointer shadow-xs active:scale-[0.98]"
+        aria-label={cmdAriaLabel}
       >
         <Terminal class="w-3.5 h-3.5 text-[#0db7b9]" />
         <span class="text-[11px] text-zinc-300 font-medium">{t.nav.commandPalette}</span>
@@ -67,8 +71,8 @@ const otherLangUrl = `/${otherLang}`;
         href={otherLangUrl}
         id="lang-toggle-btn"
         data-target-lang={otherLang}
-        class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 hover:border-[#0db7b9]/40 text-xs font-sans font-medium text-zinc-300 hover:text-[#0db7b9] transition-all cursor-pointer"
-        aria-label={`Cambiar idioma a ${otherLang.toUpperCase()}`}
+        class="inline-flex items-center gap-1.5 px-3 py-2 min-h-[40px] min-w-[44px] justify-center rounded-lg bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 hover:border-[#0db7b9]/40 text-xs font-sans font-medium text-zinc-300 hover:text-[#0db7b9] transition-all cursor-pointer active:scale-[0.98]"
+        aria-label={langAriaLabel}
       >
         <Globe class="w-3.5 h-3.5 text-zinc-400" />
         <span class="font-bold font-mono text-[11px]">{lang.toUpperCase()}</span>
@@ -78,9 +82,10 @@ const otherLangUrl = `/${otherLang}`;
       <button
         id="mobile-menu-btn"
         type="button"
-        class="md:hidden p-2 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white transition-colors"
-        aria-label="Alternar menú de navegación"
+        class="md:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white transition-colors cursor-pointer"
+        aria-label={menuAriaLabel}
         aria-expanded="false"
+        aria-controls="mobile-menu-drawer"
       >
         <Menu class="w-5 h-5 menu-open-icon" />
         <X class="w-5 h-5 menu-close-icon hidden" />
@@ -88,108 +93,141 @@ const otherLangUrl = `/${otherLang}`;
     </div>
   </div>
 
-  <div id="mobile-menu-drawer" class="hidden md:hidden border-b border-zinc-800/80 bg-[#06070b]/95 backdrop-blur-xl px-6 py-5 space-y-4 font-sans text-sm">
-    <div class="flex flex-col space-y-3">
-      <a href="#projects" class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-1.5 flex items-center justify-between border-b border-zinc-900">
-        <span>{t.nav.projects}</span>
+  <nav 
+    id="mobile-menu-drawer" 
+    class="hidden md:hidden border-b border-zinc-800/80 bg-[#06070b]/95 backdrop-blur-xl px-6 py-5 space-y-4 font-sans text-sm"
+    aria-label={lang === 'es' ? 'Navegación móvil' : 'Mobile Navigation'}
+  >
+    <div class="flex flex-col space-y-1">
+      <a href="#projects" class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-3 min-h-[44px] flex items-center justify-between border-b border-zinc-900">
+        <span class="font-medium">{t.nav.projects}</span>
         <ArrowUpRight class="w-4 h-4 text-zinc-600" />
       </a>
-      <a href="#contributions" class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-1.5 flex items-center justify-between border-b border-zinc-900">
-        <span>{t.nav.contributions}</span>
+      <a href="#contributions" class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-3 min-h-[44px] flex items-center justify-between border-b border-zinc-900">
+        <span class="font-medium">{t.nav.contributions}</span>
         <ArrowUpRight class="w-4 h-4 text-zinc-600" />
       </a>
-      <a href="#stack" class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-1.5 flex items-center justify-between border-b border-zinc-900">
-        <span>{t.nav.stack}</span>
+      <a href="#stack" class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-3 min-h-[44px] flex items-center justify-between border-b border-zinc-900">
+        <span class="font-medium">{t.nav.stack}</span>
         <ArrowUpRight class="w-4 h-4 text-zinc-600" />
       </a>
-      <a href="#about" class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-1.5 flex items-center justify-between border-b border-zinc-900">
-        <span>{t.nav.about}</span>
+      <a href="#about" class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-3 min-h-[44px] flex items-center justify-between border-b border-zinc-900">
+        <span class="font-medium">{t.nav.about}</span>
         <ArrowUpRight class="w-4 h-4 text-zinc-600" />
       </a>
-      <a href="#contact" class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-1.5 flex items-center justify-between">
-        <span>{t.nav.contact}</span>
+      <a href="#contact" class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-3 min-h-[44px] flex items-center justify-between">
+        <span class="font-medium">{t.nav.contact}</span>
         <ArrowUpRight class="w-4 h-4 text-zinc-600" />
       </a>
     </div>
 
-    <div class="pt-2 border-t border-zinc-800 flex items-center justify-between text-xs text-zinc-400">
+    <div class="pt-3 border-t border-zinc-800 flex items-center justify-between text-xs text-zinc-400">
       <div class="flex items-center gap-2">
         <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
         <span>Buenos Aires: <span id="mobile-live-clock" class="text-zinc-200 font-mono">--:--:--</span></span>
       </div>
-      <button id="mobile-cmd-btn" class="px-2.5 py-1 rounded bg-zinc-800 text-zinc-300 flex items-center gap-1.5">
-        <Terminal class="w-3 h-3 text-[#0db7b9]" />
-        <span class="font-mono">⌘K</span>
+      <button id="mobile-cmd-btn" class="px-3 py-2 min-h-[40px] rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 flex items-center gap-1.5 cursor-pointer">
+        <Terminal class="w-3.5 h-3.5 text-[#0db7b9]" />
+        <span class="font-mono text-xs">⌘K</span>
       </button>
     </div>
-  </div>
+  </nav>
 </header>
 
 <script>
-  function updateBuenosAiresClock() {
-    const clockEls = [document.getElementById('nav-live-clock'), document.getElementById('mobile-live-clock')];
-    if (!clockEls[0] && !clockEls[1]) return;
+  let clockInterval: ReturnType<typeof setInterval> | null = null;
+  const timeFormatter = new Intl.DateTimeFormat('es-AR', {
+    timeZone: 'America/Argentina/Buenos_Aires',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
 
+  function updateAllClocks() {
     try {
       const now = new Date();
-      const formatter = new Intl.DateTimeFormat('es-AR', {
-        timeZone: 'America/Argentina/Buenos_Aires',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-      });
-      const timeStr = formatter.format(now);
-      clockEls.forEach((el) => {
+      const timeStr = timeFormatter.format(now);
+      const targets = document.querySelectorAll('#nav-live-clock, #mobile-live-clock, #about-live-clock');
+      targets.forEach((el) => {
         if (el) el.textContent = timeStr;
       });
-    } catch {
-      const fallback = new Date().toLocaleTimeString();
-      clockEls.forEach((el) => {
-        if (el) el.textContent = fallback;
-      });
+    } catch {}
+  }
+
+  function initNavbar() {
+    if (clockInterval) clearInterval(clockInterval);
+    updateAllClocks();
+    clockInterval = setInterval(updateAllClocks, 1000);
+
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const drawer = document.getElementById('mobile-menu-drawer');
+    const openIcon = mobileBtn?.querySelector('.menu-open-icon');
+    const closeIcon = mobileBtn?.querySelector('.menu-close-icon');
+
+    function closeMobileMenu() {
+      if (!drawer || !mobileBtn) return;
+      drawer.classList.add('hidden');
+      mobileBtn.setAttribute('aria-expanded', 'false');
+      openIcon?.classList.remove('hidden');
+      closeIcon?.classList.add('hidden');
     }
-  }
 
-  updateBuenosAiresClock();
-  setInterval(updateBuenosAiresClock, 1000);
+    function toggleMobileMenu(e: Event) {
+      e.stopPropagation();
+      if (!drawer || !mobileBtn) return;
+      const isHidden = drawer.classList.toggle('hidden');
+      mobileBtn.setAttribute('aria-expanded', String(!isHidden));
+      openIcon?.classList.toggle('hidden', !isHidden);
+      closeIcon?.classList.toggle('hidden', isHidden);
+    }
 
-  const mobileBtn = document.getElementById('mobile-menu-btn');
-  const drawer = document.getElementById('mobile-menu-drawer');
-  const openIcon = mobileBtn?.querySelector('.menu-open-icon');
-  const closeIcon = mobileBtn?.querySelector('.menu-close-icon');
+    mobileBtn?.addEventListener('click', toggleMobileMenu);
 
-  function toggleMobileMenu() {
-    if (!drawer || !mobileBtn) return;
-    const isExpanded = drawer.classList.toggle('hidden');
-    mobileBtn.setAttribute('aria-expanded', String(!isExpanded));
-    openIcon?.classList.toggle('hidden', !isExpanded);
-    closeIcon?.classList.toggle('hidden', isExpanded);
-  }
+    document.querySelectorAll('.mobile-nav-link').forEach((link) => {
+      link.addEventListener('click', closeMobileMenu);
+    });
 
-  mobileBtn?.addEventListener('click', toggleMobileMenu);
-
-  document.querySelectorAll('.mobile-nav-link').forEach((link) => {
-    link.addEventListener('click', () => {
+    document.addEventListener('click', (e) => {
       if (drawer && !drawer.classList.contains('hidden')) {
-        toggleMobileMenu();
+        if (!drawer.contains(e.target as Node) && !mobileBtn?.contains(e.target as Node)) {
+          closeMobileMenu();
+        }
       }
     });
-  });
 
-  const langToggle = document.getElementById('lang-toggle-btn');
-  langToggle?.addEventListener('click', () => {
-    const targetLang = langToggle.getAttribute('data-target-lang');
-    if (targetLang) {
-      document.cookie = `user_lang=${targetLang}; path=/; max-age=31536000; SameSite=Lax`;
-    }
-  });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer && !drawer.classList.contains('hidden')) {
+        closeMobileMenu();
+      }
+    });
 
-  const mobileCmdBtn = document.getElementById('mobile-cmd-btn');
-  mobileCmdBtn?.addEventListener('click', () => {
-    if (drawer && !drawer.classList.contains('hidden')) {
-      toggleMobileMenu();
+    const langToggle = document.getElementById('lang-toggle-btn');
+    langToggle?.addEventListener('click', () => {
+      const targetLang = langToggle.getAttribute('data-target-lang');
+      if (targetLang) {
+        document.cookie = `user_lang=${targetLang}; path=/; max-age=31536000; SameSite=Lax`;
+      }
+    });
+
+    const cmdPaletteBtn = document.getElementById('cmd-palette-btn');
+    const mobileCmdBtn = document.getElementById('mobile-cmd-btn');
+
+    cmdPaletteBtn?.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('toggle-terminal'));
+    });
+
+    mobileCmdBtn?.addEventListener('click', () => {
+      closeMobileMenu();
+      window.dispatchEvent(new CustomEvent('toggle-terminal'));
+    });
+  }
+
+  document.addEventListener('astro:page-load', initNavbar);
+  document.addEventListener('astro:before-swap', () => {
+    if (clockInterval) {
+      clearInterval(clockInterval);
+      clockInterval = null;
     }
-    window.dispatchEvent(new CustomEvent('toggle-terminal'));
   });
 </script>

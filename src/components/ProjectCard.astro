@@ -1,6 +1,6 @@
 ---
 import type { Project } from '../data/projects';
-import { ExternalLink, Github, Star, Sparkles, Music, Terminal, TrendingUp, Radio, Map } from 'lucide-astro';
+import { ExternalLink, Github, Star, Sparkles, Music, Map } from 'lucide-astro';
 
 interface Props {
   project: Project;
@@ -8,6 +8,9 @@ interface Props {
 }
 
 const { project, lang } = Astro.props;
+const liveDemoAria = lang === 'es' ? `Visitar demo en vivo de ${project.name}` : `Visit live demo of ${project.name}`;
+const sourceCodeAria = lang === 'es' ? `Ver código fuente de ${project.name} en GitHub` : `View source code of ${project.name} on GitHub`;
+const techAria = lang === 'es' ? 'Tecnologías utilizadas' : 'Technologies used';
 ---
 
 <article 
@@ -20,7 +23,7 @@ const { project, lang } = Astro.props;
       
       {project.placeholderPattern === 'music' && (
         <div class="absolute inset-0 opacity-25 flex items-center justify-center pointer-events-none">
-          <div class="w-16 h-16 rounded-2xl bg-[#735ed5]/20 border border-[#735ed5]/40 flex items-center justify-center text-[#735ed5]">
+          <div class="w-16 h-16 rounded-2xl bg-[#735ed5]/20 border border-[#735ed5]/40 flex items-center justify-center text-purple-400">
             <Music class="w-8 h-8" />
           </div>
         </div>
@@ -46,7 +49,7 @@ const { project, lang } = Astro.props;
       {project.placeholderPattern === 'stream' && (
         <div class="absolute inset-0 opacity-25 flex items-center justify-center pointer-events-none">
           <div class="w-14 h-14 rounded-full border-2 border-purple-400 flex items-center justify-center">
-            <Radio class="w-6 h-6 text-purple-400" />
+            <span class="w-4 h-4 rounded-full bg-purple-400 animate-pulse"></span>
           </div>
         </div>
       )}
@@ -95,7 +98,7 @@ const { project, lang } = Astro.props;
   </div>
 
   <div class="p-6 pt-0 space-y-4">
-    <div class="flex flex-wrap gap-1.5" aria-label="Tecnologías utilizadas">
+    <div class="flex flex-wrap gap-1.5" aria-label={techAria}>
       {project.techTags.map((tag) => (
         <span 
           class="px-2.5 py-0.5 rounded text-[11px] font-sans font-medium border"
@@ -112,8 +115,8 @@ const { project, lang } = Astro.props;
           href={project.homepageUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#0db7b9]/10 hover:bg-[#0db7b9]/20 border border-[#0db7b9]/30 text-[#0db7b9] hover:text-cyan-200 text-xs font-sans font-medium transition-colors"
-          aria-label={`Visitar sitio de ${project.name}`}
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-lg bg-[#0db7b9]/10 hover:bg-[#0db7b9]/20 border border-[#0db7b9]/30 text-[#0db7b9] hover:text-cyan-200 text-xs font-sans font-medium transition-colors active:scale-[0.98]"
+          aria-label={liveDemoAria}
         >
           <span>{lang === 'es' ? 'Ver Sitio' : 'Live Demo'}</span>
           <ExternalLink class="w-3.5 h-3.5" />
@@ -126,8 +129,8 @@ const { project, lang } = Astro.props;
         href={project.githubUrl}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white text-xs font-sans font-medium transition-colors ml-auto"
-        aria-label={`Ver repositorio de código fuente de ${project.name}`}
+        class="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white text-xs font-sans font-medium transition-colors ml-auto active:scale-[0.98]"
+        aria-label={sourceCodeAria}
       >
         <Github class="w-3.5 h-3.5" />
         <span>{lang === 'es' ? 'Código' : 'Source'}</span>

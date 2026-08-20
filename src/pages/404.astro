@@ -1,44 +1,49 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Home, ArrowLeft } from 'lucide-astro';
+import { Terminal, Home, ArrowLeft } from 'lucide-astro';
 
 const lang = Astro.locals.lang || 'es';
+
+const t = {
+  es: {
+    title: '404 // Página No Encontrada — GefyDev',
+    code: '404',
+    subtitle: 'Ruta no encontrada en el servidor',
+    description: 'La página que buscas no existe, ha sido movida o la ruta especificada no es válida.',
+    backHome: 'Volver al Inicio',
+  },
+  en: {
+    title: '404 // Page Not Found — GefyDev',
+    code: '404',
+    subtitle: 'Route not found on server',
+    description: 'The requested page does not exist, has been moved, or the route is invalid.',
+    backHome: 'Return Home',
+  },
+}[lang];
 ---
 
-<Layout
-  lang={lang}
-  title={lang === 'es' ? '404 — Página no encontrada | GenaDeev' : '404 — Page Not Found | GenaDeev'}
-  description={lang === 'es' ? 'La página que buscas no existe.' : 'The requested page could not be found.'}
->
-  <div class="min-h-[70vh] flex items-center justify-center px-4 py-20">
-    <div class="max-w-md w-full rounded-2xl bg-zinc-950/90 border border-zinc-800 p-8 text-center space-y-6 shadow-2xl">
-      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 font-mono text-2xl font-bold">
-        404
+<Layout lang={lang} title={t.title} noindex={true}>
+  <section class="min-h-[75vh] flex items-center justify-center px-4 sm:px-6 py-20 relative font-sans">
+    <div class="max-w-md w-full text-center space-y-6">
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-zinc-950 border border-zinc-800 text-[#0db7b9] shadow-xl">
+        <Terminal class="w-10 h-10" />
       </div>
 
       <div class="space-y-2">
-        <h1 class="text-2xl font-bold font-sans text-white">
-          {lang === 'es' ? 'Página no encontrada' : 'Page Not Found'}
-        </h1>
-        <p class="font-mono text-xs text-zinc-400">
-          {lang === 'es'
-            ? 'La ruta a la que intentaste acceder no existe o fue movida.'
-            : 'The route you are trying to access does not exist or has been relocated.'}
-        </p>
+        <p class="font-mono text-xs text-[#0db7b9] font-bold uppercase tracking-wider">ERROR // {t.code}</p>
+        <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">{t.subtitle}</h1>
+        <p class="text-sm text-zinc-400 leading-relaxed">{t.description}</p>
       </div>
 
-      <div class="p-3 rounded-lg bg-zinc-900 border border-zinc-800 font-mono text-xs text-zinc-500 text-left">
-        <p>&gt; HTTP/1.1 404 Not Found</p>
-        <p>&gt; status: resource_missing</p>
+      <div class="pt-4 flex items-center justify-center gap-3">
+        <a
+          href={`/${lang}`}
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#0db7b9] to-[#735ed5] hover:opacity-95 text-white text-xs font-semibold transition-opacity shadow-md"
+        >
+          <Home class="w-4 h-4" />
+          <span>{t.backHome}</span>
+        </a>
       </div>
-
-      <a
-        href={`/${lang}`}
-        class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-sky-500 hover:bg-sky-400 text-zinc-950 font-semibold text-sm transition-all"
-      >
-        <Home class="w-4 h-4" />
-        <span>{lang === 'es' ? 'Volver al Inicio' : 'Return to Home'}</span>
-      </a>
     </div>
-  </div>
+  </section>
 </Layout>

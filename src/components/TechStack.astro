@@ -19,17 +19,17 @@ const categories = [
 ] as const;
 ---
 
-<section id="stack" class="py-24 border-t border-zinc-800/80 relative" aria-labelledby="stack-title">
+<section id="stack" class="py-24 border-t border-zinc-800/80 relative font-sans" aria-labelledby="stack-title">
   <div class="max-w-6xl mx-auto px-4 sm:px-6">
     <div class="space-y-3 mb-12">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-sans font-medium text-[#0db7b9]">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-[11px] font-mono font-semibold tracking-wider uppercase text-[#0db7b9]">
         <Cpu class="w-3.5 h-3.5" />
         <span>02 // {lang === 'es' ? 'TECNOLOGÍAS' : 'TECH STACK'}</span>
       </div>
-      <h2 id="stack-title" class="text-3xl sm:text-4xl font-bold tracking-tight text-white font-sans">
+      <h2 id="stack-title" class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
         {t.stack.sectionTitle}
       </h2>
-      <p class="text-zinc-400 text-sm sm:text-base font-sans max-w-xl">
+      <p class="text-zinc-400 text-sm sm:text-base max-w-xl">
         {t.stack.sectionSubtitle}
       </p>
     </div>
@@ -41,7 +41,7 @@ const categories = [
           if (items.length === 0) return null;
           return (
             <div class="space-y-3">
-              <h3 class="text-xs font-sans font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-2">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-2">
                 <span class="w-2 h-2 rounded-xs bg-[#0db7b9]"></span>
                 <span>{cat.title}</span>
               </h3>
@@ -53,20 +53,20 @@ const categories = [
                     style={`border-left: 3px solid ${tech.color};`}
                   >
                     <div class="flex items-center justify-between mb-2">
-                      <span class="font-sans text-sm font-bold text-white group-hover:text-cyan-300 transition-colors flex items-center gap-2">
+                      <span class="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full" style={`background-color: ${tech.color};`}></span>
                         <span>{tech.name}</span>
                       </span>
 
                       <span 
-                        class="text-[11px] font-sans font-medium px-2 py-0.5 rounded"
+                        class="text-[11px] font-medium px-2 py-0.5 rounded"
                         style={`color: ${tech.color}; background-color: ${tech.bg}; border: 1px solid ${tech.border};`}
                       >
                         {tech.level.toUpperCase()}
                       </span>
                     </div>
 
-                    <p class="text-xs text-zinc-300 font-sans leading-relaxed">
+                    <p class="text-xs text-zinc-300 leading-relaxed">
                       {tech.description[lang]}
                     </p>
                   </div>
@@ -78,7 +78,7 @@ const categories = [
       </div>
 
       <div class="lg:col-span-4 space-y-4">
-        <div class="rounded-xl bg-zinc-950 border border-zinc-800 p-5 space-y-4 text-xs shadow-lg">
+        <div class="rounded-2xl bg-zinc-950 border border-zinc-800 p-5 space-y-4 text-xs shadow-lg">
           <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
             <div class="flex items-center gap-2 text-zinc-400 font-mono">
               <Terminal class="w-3.5 h-3.5 text-[#0db7b9]" />
@@ -116,7 +116,7 @@ const categories = [
             </div>
 
             <div class="pt-2 border-t border-zinc-800/80 font-sans">
-              <p class="text-zinc-500 text-[11px] font-mono">// Filosofía de desarrollo</p>
+              <p class="text-zinc-500 text-[11px] font-mono">{lang === 'es' ? '// Filosofía de desarrollo' : '// Engineering philosophy'}</p>
               <p class="text-zinc-300 text-xs italic mt-1">
                 {lang === 'es' 
                   ? '"Comprender el funcionamiento a bajo nivel, optimizar cada recurso y priorizar velocidad pura."'
@@ -126,12 +126,12 @@ const categories = [
           </div>
         </div>
 
-        <div class="rounded-xl bg-gradient-to-br from-[#0db7b9]/10 via-zinc-950 to-[#735ed5]/10 border border-[#735ed5]/30 p-5 space-y-2">
-          <div class="flex items-center gap-2 text-white text-xs font-sans font-bold">
+        <div class="rounded-2xl bg-gradient-to-br from-[#0db7b9]/10 via-zinc-950 to-[#735ed5]/10 border border-[#735ed5]/30 p-5 space-y-2">
+          <div class="flex items-center gap-2 text-white text-xs font-bold">
             <Zap class="w-4 h-4 text-[#0db7b9]" />
             <span>{lang === 'es' ? 'Optimización & Rendimiento' : 'Optimization & Performance'}</span>
           </div>
-          <p class="text-xs text-zinc-300 font-sans leading-relaxed">
+          <p class="text-xs text-zinc-300 leading-relaxed">
             {lang === 'es'
               ? 'Lighthouse 100/100, cero movimientos de diseño (CLS = 0), First Contentful Paint sub-segundo y código 100% tipado y limpio.'
               : 'Lighthouse 100/100, zero layout shifts (CLS = 0), sub-second First Contentful Paint, and strictly typed clean codebase.'}

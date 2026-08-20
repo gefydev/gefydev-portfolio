@@ -12,6 +12,7 @@ interface Props {
   title?: string;
   description?: string;
   keywords?: string;
+  noindex?: boolean;
 }
 
 const lang = Astro.props.lang || Astro.locals.lang || 'es';
@@ -20,6 +21,7 @@ const t = translations[lang];
 const title = Astro.props.title || t.meta.title;
 const description = Astro.props.description || t.meta.description;
 const keywords = Astro.props.keywords || t.meta.keywords;
+const noindex = Astro.props.noindex || false;
 ---
 
 <!doctype html>
@@ -28,18 +30,21 @@ const keywords = Astro.props.keywords || t.meta.keywords;
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="preload" href="/logo-white-bg.webp" as="image" type="image/webp" />
     <SEO
       title={title}
       description={description}
       keywords={keywords}
       lang={lang}
+      noindex={noindex}
     />
     <ClientRouter />
   </head>
-  <body class="bg-[#07080c] text-zinc-100 antialiased selection:bg-sky-500/20 selection:text-sky-200 min-h-screen flex flex-col justify-between">
+  <body class="bg-[#06070b] text-zinc-100 antialiased selection:bg-[#735ed5]/30 selection:text-white min-h-screen flex flex-col justify-between">
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-sky-500 focus:text-zinc-950 focus:font-mono focus:font-bold focus:rounded-md focus:shadow-xl"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#0db7b9] focus:text-zinc-950 focus:font-sans focus:font-bold focus:rounded-md focus:shadow-xl"
     >
       {lang === 'es' ? 'Saltar al contenido principal' : 'Skip to main content'}
     </a>

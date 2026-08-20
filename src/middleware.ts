@@ -4,6 +4,19 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const url = new URL(context.request.url);
   const pathname = url.pathname;
 
+  if (
+    pathname.startsWith('/_astro') ||
+    pathname.startsWith('/favicon') ||
+    pathname.endsWith('.png') ||
+    pathname.endsWith('.webp') ||
+    pathname.endsWith('.svg') ||
+    pathname.endsWith('.ico') ||
+    pathname.endsWith('.xml') ||
+    pathname.endsWith('.txt')
+  ) {
+    return next();
+  }
+
   let lang: 'es' | 'en' = 'es';
 
   if (pathname.startsWith('/en')) {
@@ -40,5 +53,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
 
   context.locals.lang = lang;
-  return next();
+
+  const response = await next();
+  response.headers.set('Vary', 'Accept-Language, Cookie');
+  return response;
 });

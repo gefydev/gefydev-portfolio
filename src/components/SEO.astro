@@ -8,18 +8,23 @@ interface Props {
   lang: 'es' | 'en';
   canonicalUrl?: string;
   image?: string;
+  noindex?: boolean;
 }
+
+const siteUrl = 'https://gefy.dev';
+const pathname = Astro.url.pathname.replace(/\/+$/, '');
+const computedCanonical = pathname === '' ? `${siteUrl}/` : `${siteUrl}${pathname}`;
 
 const {
   title,
   description,
   keywords = 'GefyDev, Genaro Febbo Yapur, Desarrollador Web, Rust, Astro, TypeScript, Ciencias de la Computacion, Exactas UBA, CNBA, Buenos Aires, Portfolio',
   lang,
-  canonicalUrl = Astro.url.href,
-  image = 'https://gefy.dev/logo-white-bg.png',
+  canonicalUrl = computedCanonical,
+  image = `${siteUrl}/og-image.png`,
+  noindex = false,
 } = Astro.props;
 
-const siteUrl = 'https://gefy.dev';
 const esUrl = `${siteUrl}/es`;
 const enUrl = `${siteUrl}/en`;
 const ogLocale = lang === 'es' ? 'es_AR' : 'en_US';
@@ -37,7 +42,7 @@ const structuredData = [
     url: siteUrl,
     jobTitle: lang === 'es' ? 'Desarrollador Full-Stack & Sistemas' : 'Full-Stack & Systems Software Developer',
     description: description,
-    image: image,
+    image: `${siteUrl}/logo-white-bg.png`,
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Buenos Aires',
@@ -51,15 +56,18 @@ const structuredData = [
     },
     affiliation: {
       '@type': 'EducationalOrganization',
-      name: 'Facultad de Ciencias Exactas y Naturales (FCEyN) — Universidad de Buenos Aires',
+      name: 'Facultad de Ciencias Exactas y Naturales (FCEyN)',
       alternateName: 'Exactas UBA',
       url: 'https://exactas.uba.ar',
+      parentOrganization: {
+        '@type': 'EducationalOrganization',
+        name: 'Universidad de Buenos Aires',
+        alternateName: 'UBA',
+        url: 'https://www.uba.ar',
+      },
     },
     sameAs: [
       'https://github.com/gefydev',
-      'https://comidolar.com.ar',
-      'https://spotifust.comidolar.com.ar',
-      'https://cuatrodoce.vercel.app',
     ],
     knowsAbout: [
       'Rust',
@@ -85,7 +93,7 @@ const structuredData = [
     isPartOf: {
       '@type': 'WebSite',
       '@id': `${siteUrl}/#website`,
-      url: siteUrl,
+      url: `${siteUrl}/`,
       name: 'GefyDev Portfolio',
       description: description,
       inLanguage: ['es', 'en'],
@@ -101,9 +109,18 @@ const structuredData = [
     itemListElement: projects.map((project, index) => ({
       '@type': 'ListItem',
       position: index + 1,
-      name: project.name,
-      url: project.homepageUrl || project.githubUrl,
-      description: project.description[lang],
+      item: {
+        '@type': 'SoftwareApplication',
+        name: project.name,
+        url: project.homepageUrl || project.githubUrl,
+        description: project.description[lang],
+        applicationCategory: 'DeveloperApplication',
+        operatingSystem: 'Any',
+        codeRepository: project.githubUrl,
+        author: {
+          '@id': `${siteUrl}/#person`,
+        },
+      },
     })),
   },
 ];
@@ -115,13 +132,21 @@ const structuredData = [
 <meta name="author" content="Genaro Febbo Yapur (GefyDev)" />
 <meta name="creator" content="GefyDev" />
 <meta name="publisher" content="Genaro Febbo Yapur" />
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-<meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+{noindex ? (
+  <meta name="robots" content="noindex, nofollow" />
+) : (
+  <>
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  </>
+)}
 
 <link rel="canonical" href={canonicalUrl} />
 <link rel="alternate" hreflang="es" href={esUrl} />
 <link rel="alternate" hreflang="en" href={enUrl} />
-<link rel="alternate" hreflang="x-default" href={siteUrl} />
+<link rel="alternate" hreflang="x-default" href={`${siteUrl}/`} />
 <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 <link rel="help" type="text/plain" href="/llms.txt" />
 
@@ -131,15 +156,21 @@ const structuredData = [
 <meta property="og:url" content={canonicalUrl} />
 <meta property="og:site_name" content="GefyDev — Developer Portfolio" />
 <meta property="og:image" content={image} />
-<meta property="og:image:alt" content="GefyDev — Full-Stack & Systems Developer" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="GefyDev (Genaro Febbo Yapur) — Full-Stack & Systems Developer" />
 <meta property="og:locale" content={ogLocale} />
 <meta property="og:locale:alternate" content={ogLocaleAlt} />
+<meta property="profile:first_name" content="Genaro" />
+<meta property="profile:last_name" content="Febbo Yapur" />
+<meta property="profile:username" content="gefydev" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={image} />
-<meta name="twitter:image:alt" content="GefyDev — Full-Stack & Systems Developer" />
+<meta name="twitter:image:alt" content="GefyDev (Genaro Febbo Yapur) — Full-Stack & Systems Developer" />
 
 <meta name="theme-color" content="#06070b" />
 <meta name="color-scheme" content="dark" />
