@@ -22,7 +22,7 @@ const categories = [
 <section id="stack" class="py-24 border-t border-zinc-800/80 relative" aria-labelledby="stack-title">
   <div class="max-w-6xl mx-auto px-4 sm:px-6">
     <div class="space-y-3 mb-12">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-mono text-emerald-400">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-sans font-medium text-[#0db7b9]">
         <Cpu class="w-3.5 h-3.5" />
         <span>02 // {lang === 'es' ? 'TECNOLOGÍAS' : 'TECH STACK'}</span>
       </div>
@@ -41,32 +41,32 @@ const categories = [
           if (items.length === 0) return null;
           return (
             <div class="space-y-3">
-              <h3 class="text-xs font-mono font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-xs bg-sky-500"></span>
+              <h3 class="text-xs font-sans font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-xs bg-[#0db7b9]"></span>
                 <span>{cat.title}</span>
               </h3>
               
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {items.map((tech) => (
-                  <div class="group relative rounded-lg bg-zinc-950/70 border border-zinc-800/80 hover:border-sky-500/50 p-4 transition-all duration-200">
-                    <div class="flex items-center justify-between mb-1.5">
-                      <span class="font-mono text-sm font-semibold text-zinc-200 group-hover:text-sky-300 transition-colors flex items-center gap-1.5">
-                        {tech.highlight && <Zap class="w-3.5 h-3.5 text-sky-400" />}
+                  <div 
+                    class="group relative rounded-xl bg-zinc-950/70 border border-zinc-800/80 hover:border-zinc-700 p-4 transition-all duration-200"
+                    style={`border-left: 3px solid ${tech.color};`}
+                  >
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="font-sans text-sm font-bold text-white group-hover:text-cyan-300 transition-colors flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full" style={`background-color: ${tech.color};`}></span>
                         <span>{tech.name}</span>
                       </span>
 
-                      <span class={`text-[10px] font-mono px-2 py-0.5 rounded ${
-                        tech.level === 'core'
-                          ? 'bg-sky-500/10 border border-sky-500/30 text-sky-400'
-                          : tech.level === 'proficient'
-                          ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'
-                          : 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
-                      }`}>
+                      <span 
+                        class="text-[11px] font-sans font-medium px-2 py-0.5 rounded"
+                        style={`color: ${tech.color}; background-color: ${tech.bg}; border: 1px solid ${tech.border};`}
+                      >
                         {tech.level.toUpperCase()}
                       </span>
                     </div>
 
-                    <p class="text-xs text-zinc-400 font-sans leading-relaxed">
+                    <p class="text-xs text-zinc-300 font-sans leading-relaxed">
                       {tech.description[lang]}
                     </p>
                   </div>
@@ -78,11 +78,11 @@ const categories = [
       </div>
 
       <div class="lg:col-span-4 space-y-4">
-        <div class="rounded-xl bg-zinc-950 border border-zinc-800 p-5 space-y-4 font-mono text-xs shadow-lg">
+        <div class="rounded-xl bg-zinc-950 border border-zinc-800 p-5 space-y-4 text-xs shadow-lg">
           <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
-            <div class="flex items-center gap-2 text-zinc-400">
-              <Terminal class="w-3.5 h-3.5 text-sky-400" />
-              <span class="text-xs text-zinc-300 font-bold">gena@workstation:~</span>
+            <div class="flex items-center gap-2 text-zinc-400 font-mono">
+              <Terminal class="w-3.5 h-3.5 text-[#0db7b9]" />
+              <span class="text-xs text-zinc-200 font-bold">gefy@workstation:~</span>
             </div>
             <div class="flex gap-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
@@ -91,20 +91,20 @@ const categories = [
             </div>
           </div>
 
-          <div class="space-y-3 text-zinc-400 leading-relaxed overflow-x-auto">
+          <div class="space-y-3 font-mono text-zinc-400 leading-relaxed overflow-x-auto">
+            <div>
+              <p class="text-zinc-500">$ rustc --version</p>
+              <p class="text-[#f97316] font-semibold">rustc 1.8x (edition 2021)</p>
+            </div>
+
             <div>
               <p class="text-zinc-500">$ bun --version</p>
-              <p class="text-sky-300 font-semibold">1.3.14</p>
+              <p class="text-cyan-300 font-semibold">1.3.14</p>
             </div>
 
             <div>
-              <p class="text-zinc-500">$ uname -srmo</p>
-              <p class="text-zinc-300">Linux x86_64 GNU/Linux</p>
-            </div>
-
-            <div>
-              <p class="text-zinc-500">$ gh --version | head -n 1</p>
-              <p class="text-emerald-400">gh version 2.x (auth: @GenaDeev)</p>
+              <p class="text-zinc-500">$ gh auth status</p>
+              <p class="text-emerald-400">✓ Logged in as @gefydev</p>
             </div>
 
             <div>
@@ -115,26 +115,26 @@ const categories = [
               </p>
             </div>
 
-            <div class="pt-2 border-t border-zinc-800/80">
-              <p class="text-zinc-500 text-[11px]">// Core principle</p>
-              <p class="text-zinc-300 text-[11px] italic">
+            <div class="pt-2 border-t border-zinc-800/80 font-sans">
+              <p class="text-zinc-500 text-[11px] font-mono">// Filosofía de desarrollo</p>
+              <p class="text-zinc-300 text-xs italic mt-1">
                 {lang === 'es' 
-                  ? '"Entender el por qué, eliminar el bloat y priorizar rendimiento puro."'
-                  : '"Understand the why, eliminate bloat, and prioritize raw performance."'}
+                  ? '"Comprender el funcionamiento a bajo nivel, optimizar cada recurso y priorizar velocidad pura."'
+                  : '"Understand low-level mechanics, eliminate memory overhead, and prioritize pure performance."'}
               </p>
             </div>
           </div>
         </div>
 
-        <div class="rounded-xl bg-gradient-to-br from-sky-950/30 to-zinc-950 border border-sky-500/20 p-5 space-y-2">
-          <div class="flex items-center gap-2 text-sky-400 text-xs font-mono font-bold">
-            <Zap class="w-4 h-4" />
-            <span>{lang === 'es' ? 'Enfoque de Optimización' : 'Optimization Focus'}</span>
+        <div class="rounded-xl bg-gradient-to-br from-[#0db7b9]/10 via-zinc-950 to-[#735ed5]/10 border border-[#735ed5]/30 p-5 space-y-2">
+          <div class="flex items-center gap-2 text-white text-xs font-sans font-bold">
+            <Zap class="w-4 h-4 text-[#0db7b9]" />
+            <span>{lang === 'es' ? 'Optimización & Rendimiento' : 'Optimization & Performance'}</span>
           </div>
           <p class="text-xs text-zinc-300 font-sans leading-relaxed">
             {lang === 'es'
-              ? 'Lighthouse 100/100, 0 layout shifts (CLS = 0), First Contentful Paint sub-segundo e interfaces accesibles según estándares WCAG.'
-              : 'Lighthouse 100/100, zero layout shifts (CLS = 0), sub-second First Contentful Paint, and WCAG-compliant accessibility.'}
+              ? 'Lighthouse 100/100, cero movimientos de diseño (CLS = 0), First Contentful Paint sub-segundo y código 100% tipado y limpio.'
+              : 'Lighthouse 100/100, zero layout shifts (CLS = 0), sub-second First Contentful Paint, and strictly typed clean codebase.'}
           </p>
         </div>
       </div>

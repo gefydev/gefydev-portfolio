@@ -1,7 +1,14 @@
+export interface TechTag {
+  name: string;
+  color: string;
+  bg: string;
+  border: string;
+}
+
 export interface Project {
   id: string;
   name: string;
-  category: 'astro' | 'fullstack' | 'tools';
+  category: 'rust' | 'astro' | 'tools' | 'web';
   title: {
     es: string;
     en: string;
@@ -13,55 +20,119 @@ export interface Project {
   featured: boolean;
   homepageUrl?: string;
   githubUrl: string;
-  tech: string[];
+  techTags: TechTag[];
   stars: number;
-  badge?: string;
+  badge?: {
+    es: string;
+    en: string;
+  };
   accentColor: string;
-  placeholderPattern: 'crypto' | 'maps' | 'stream' | 'game' | 'terminal' | 'notes';
+  placeholderPattern: 'music' | 'crypto' | 'terminal' | 'stream' | 'maps';
 }
+
+export interface OpenSourceContribution {
+  repo: string;
+  author: string;
+  url: string;
+  stars: number;
+  role: {
+    es: string;
+    en: string;
+  };
+  description: {
+    es: string;
+    en: string;
+  };
+  techTags: TechTag[];
+}
+
+export const techBadgeStyles: Record<string, TechTag> = {
+  Rust: { name: 'Rust', color: '#f97316', bg: 'rgba(249, 115, 22, 0.12)', border: 'rgba(249, 115, 22, 0.3)' },
+  TypeScript: { name: 'TypeScript', color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.12)', border: 'rgba(56, 189, 248, 0.3)' },
+  JavaScript: { name: 'JavaScript', color: '#facc15', bg: 'rgba(250, 204, 21, 0.12)', border: 'rgba(250, 204, 21, 0.3)' },
+  Astro: { name: 'Astro', color: '#ff5d01', bg: 'rgba(255, 93, 1, 0.12)', border: 'rgba(255, 93, 1, 0.3)' },
+  React: { name: 'React', color: '#0db7b9', bg: 'rgba(13, 183, 185, 0.12)', border: 'rgba(13, 183, 185, 0.3)' },
+  Tailwind: { name: 'Tailwind CSS', color: '#06b6d4', bg: 'rgba(6, 182, 212, 0.12)', border: 'rgba(6, 182, 212, 0.3)' },
+  Node: { name: 'Node.js', color: '#22c55e', bg: 'rgba(34, 197, 94, 0.12)', border: 'rgba(34, 197, 94, 0.3)' },
+  TUI: { name: 'TUI / Terminal', color: '#a855f7', bg: 'rgba(168, 85, 247, 0.12)', border: 'rgba(168, 85, 247, 0.3)' },
+  ADB: { name: 'ADB / Android', color: '#10b981', bg: 'rgba(16, 185, 129, 0.12)', border: 'rgba(16, 185, 129, 0.3)' },
+  Electron: { name: 'Electron', color: '#735ed5', bg: 'rgba(115, 94, 213, 0.12)', border: 'rgba(115, 94, 213, 0.3)' },
+  CI: { name: 'GitHub Actions', color: '#6366f1', bg: 'rgba(99, 102, 241, 0.12)', border: 'rgba(99, 102, 241, 0.3)' },
+  API: { name: 'REST API', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.12)', border: 'rgba(236, 72, 153, 0.3)' },
+  Leaflet: { name: 'Leaflet Maps', color: '#84cc16', bg: 'rgba(132, 204, 22, 0.12)', border: 'rgba(132, 204, 22, 0.3)' },
+};
 
 export const projects: Project[] = [
   {
+    id: 'spotifust',
+    name: 'Spotifust',
+    category: 'rust',
+    featured: true,
+    title: {
+      es: 'Spotifust — Cliente de Spotify Ultraligero en Rust',
+      en: 'Spotifust — Ultra-lightweight Spotify Client in Rust',
+    },
+    description: {
+      es: 'Proyecto estrella. Un cliente de Spotify desarrollado desde cero en Rust priorizando velocidad instantánea, mínimo uso de memoria y rendimiento nativo sin la sobrecarga de clientes pesados.',
+      en: 'Flagship project. A lightweight Spotify client built from scratch in Rust, engineered for minimal memory footprint, instant startup, and blazing fast audio streaming.',
+    },
+    homepageUrl: 'https://spotifust.comidolar.com.ar',
+    githubUrl: 'https://github.com/gefydev/spotifust',
+    techTags: [techBadgeStyles.Rust, techBadgeStyles.TypeScript, techBadgeStyles.Tailwind],
+    stars: 2,
+    badge: {
+      es: '⭐ Proyecto Estrella',
+      en: '⭐ Flagship Project',
+    },
+    accentColor: '#735ed5',
+    placeholderPattern: 'music',
+  },
+  {
     id: 'comidolar',
-    name: 'ComiDolar',
+    name: 'ComiDólar',
     category: 'astro',
     featured: true,
     title: {
-      es: 'ComiDolar — Monitor de Divisas Argentinas',
-      en: 'ComiDolar — Argentine Currency Exchange Monitor',
+      es: 'ComiDólar — Monitor de Divisas en Tiempo Real',
+      en: 'ComiDólar — Real-Time Argentine Currency Exchange',
     },
     description: {
-      es: 'Plataforma web en tiempo real para consultar las cotizaciones de todos los tipos de cambio de dólar en Argentina (Blue, Oficial, MEP, CCL, Cripto). Desarrollada con Astro, TypeScript y la API de Argentina Datos, con builds automatizadas vía GitHub Actions cada 30 minutos.',
-      en: 'Real-time online exchange intelligence platform tracking all circulating Argentine dollar denominations (Blue, Official, MEP, CCL, Crypto). Built with Astro, TypeScript, Argentina Datos API, and automated GitHub Actions CI builds every 30 mins.',
+      es: 'Plataforma web en producción que monitorea todas las cotizaciones de dólar en Argentina (Blue, Oficial, MEP, CCL, Cripto). Desarrollada con Astro y TypeScript, consumiendo la API de Argentina Datos con builds automatizadas vía GitHub Actions cada 30 minutos.',
+      en: 'Production web application providing real-time tracking of all Argentine dollar denominations. Engineered with Astro, TypeScript, and Argentina Datos API, coupled with automated CI builds every 30 minutes.',
     },
     homepageUrl: 'https://comidolar.com.ar',
-    githubUrl: 'https://github.com/GenaDeev/ComiDolar',
-    tech: ['Astro', 'TypeScript', 'Tailwind CSS', 'GitHub Actions', 'REST API'],
+    githubUrl: 'https://github.com/gefydev/ComiDolar',
+    techTags: [techBadgeStyles.Astro, techBadgeStyles.TypeScript, techBadgeStyles.Tailwind, techBadgeStyles.CI],
     stars: 2,
-    badge: 'Producción',
-    accentColor: '#38bdf8',
+    badge: {
+      es: 'En Producción',
+      en: 'In Production',
+    },
+    accentColor: '#0db7b9',
     placeholderPattern: 'crypto',
   },
   {
-    id: 'blackmaps',
-    name: 'BlackMaps',
-    category: 'tools',
+    id: 'genacleaner',
+    name: 'GenaCleaner',
+    category: 'rust',
     featured: true,
     title: {
-      es: 'BlackMaps Website — Cartografía & Visualización',
-      en: 'BlackMaps Website — Cartography & Data Storytelling',
+      es: 'GenaCleaner — Limpieza Profunda de Android vía ADB en Rust',
+      en: 'GenaCleaner — Deep Android Cleaning via ADB & Rust TUI',
     },
     description: {
-      es: 'Sitio web interactivo y catálogo visual para la cuenta de X @BlackMaps. Visualizaciones geográficas de alta definición, datos culturales, explorador de mapas interactivos y diseño minimalista.',
-      en: 'Interactive web platform and visual archive for the viral X cartography channel @BlackMaps. High-resolution geographic data storytelling, interactive maps browser, and sleek dark UI.',
+      es: 'Herramienta de terminal y TUI modular desarrollada en Rust para optimizar y limpiar dispositivos Android a bajo nivel mediante el protocolo ADB, eliminando bloatware y paquetes innecesarios con interfaz visual cuidada.',
+      en: 'Modular Rust-powered terminal TUI for deep Android debloating and system maintenance via ADB, delivering high-speed execution and an elegant console interface.',
     },
-    homepageUrl: 'https://blackmaps.com.ar',
-    githubUrl: 'https://github.com/GenaDeev/BlackMaps-Website',
-    tech: ['JavaScript', 'HTML5/CSS3', 'Leaflet', 'Tailwind CSS', 'Vercel'],
-    stars: 1,
-    badge: 'Producción',
-    accentColor: '#818cf8',
-    placeholderPattern: 'maps',
+    githubUrl: 'https://github.com/gefydev/genacleaner',
+    techTags: [techBadgeStyles.Rust, techBadgeStyles.TUI, techBadgeStyles.ADB],
+    stars: 0,
+    badge: {
+      es: 'CLI & TUI',
+      en: 'CLI & TUI',
+    },
+    accentColor: '#f97316',
+    placeholderPattern: 'terminal',
   },
   {
     id: '412',
@@ -69,117 +140,55 @@ export const projects: Project[] = [
     category: 'astro',
     featured: true,
     title: {
-      es: '412 — Plataforma Web de Streaming',
+      es: '412 — Web Hub para Streaming de Fútbol',
       en: '412 — Sports & Entertainment Streaming Web Hub',
     },
     description: {
-      es: 'Sitio web moderno con estética cyber/editorial para el programa de streaming de debate de fútbol conducido por referentes como Davo Xeneize y La Cobra. Integra horarios, panel interactivo y enlaces en vivo.',
-      en: 'Dynamic, high-performance web experience for the prime football and entertainment streaming show in LATAM. Features live schedule tracking, interactive panels, and instant stream gateways.',
+      es: 'Sitio web moderno y veloz para el programa de streaming de debate de fútbol y entretenimiento 412 (Davo Xeneize, La Cobra, Teo D\'Elia). Arquitectura en Astro con navegación fluida y animaciones cuidadas.',
+      en: 'High-performance interactive web experience for the prominent football debate streaming show 412. Built with Astro and modern CSS grid architecture for responsive media consumption.',
     },
     homepageUrl: 'https://cuatrodoce.vercel.app',
-    githubUrl: 'https://github.com/GenaDeev/412',
-    tech: ['Astro', 'TypeScript', 'Tailwind CSS', 'CSS Grid', 'Vercel'],
+    githubUrl: 'https://github.com/gefydev/412',
+    techTags: [techBadgeStyles.Astro, techBadgeStyles.TypeScript, techBadgeStyles.Tailwind],
     stars: 0,
-    badge: 'Live',
-    accentColor: '#fbbf24',
+    accentColor: '#735ed5',
     placeholderPattern: 'stream',
   },
   {
-    id: 'rockpaperchiappa',
-    name: 'RockPaperChiappa',
-    category: 'tools',
+    id: 'blackmaps',
+    name: 'BlackMaps Website',
+    category: 'web',
     featured: false,
     title: {
-      es: 'RockPaperChiappa — Mini-Juego Arcade Interactivo',
-      en: 'RockPaperChiappa — Interactive Arcade Web Game',
+      es: 'BlackMaps — Cartografía & Visualización Geográfica',
+      en: 'BlackMaps — Cartography & Geographic Data Visualizer',
     },
     description: {
-      es: 'Juego interactivo de Piedra, Papel o Tijera con humor y animaciones fluidas, enfrentando a un profesor querido del CNBA. Desarrollado con Preact, TypeScript y Vite para lograr un bundle diminuto y 60 FPS constantes.',
-      en: 'Custom arcade rock-paper-scissors web game with CNBA humor and silky 60fps animations. Built with Preact, TypeScript, and Vite for an ultra-lightweight client bundle.',
+      es: 'Sitio web interactivo y visor de mapas temáticos para el proyecto de divulgación geográfica BlackMaps. Explorador cartográfico con capas interactivas y visualización de datos culturales y demográficos.',
+      en: 'Interactive cartography and geographic storytelling platform for the BlackMaps project, featuring dynamic map layers and visual demographic analysis.',
     },
-    homepageUrl: 'https://rockpaperchiappa.vercel.app',
-    githubUrl: 'https://github.com/GenaDeev/RockPaperChiappa',
-    tech: ['Preact', 'TypeScript', 'Vite', 'CSS Animations'],
-    stars: 0,
-    accentColor: '#f43f5e',
-    placeholderPattern: 'game',
+    githubUrl: 'https://github.com/gefydev/BlackMaps-Website',
+    techTags: [techBadgeStyles.JavaScript, techBadgeStyles.Leaflet, techBadgeStyles.Tailwind],
+    stars: 1,
+    accentColor: '#0db7b9',
+    placeholderPattern: 'maps',
   },
+];
+
+export const openSourceContributions: OpenSourceContribution[] = [
   {
-    id: 'yourprofiles',
-    name: 'YourProfiles',
-    category: 'fullstack',
-    featured: false,
-    title: {
-      es: 'YourProfiles — Muro Colaborativo de Perfiles',
-      en: 'YourProfiles — Collaborative Social Wall',
+    repo: 'stremio-enhanced',
+    author: 'REVENGE977',
+    url: 'https://github.com/REVENGE977/stremio-enhanced',
+    stars: 819,
+    role: {
+      es: 'Contribuidor Principal',
+      en: 'Core Contributor',
     },
     description: {
-      es: 'Plataforma web comunitaria donde los usuarios pueden registrar perfiles con fotografía, biografía y datos personalizados, quedando inmortalizados en una cuadrícula interactiva.',
-      en: 'Community platform allowing visitors to publish persistent profiles with custom descriptions and visual avatars on an interactive digital wall.',
+      es: 'Importantes contribuciones al cliente de escritorio de Stremio basado en Electron, aportando mejoras en la arquitectura del sistema de plugins, personalización de temas y optimización de rendimiento.',
+      en: 'Significant contributions to the community-driven Electron desktop client for Stremio, implementing plugin system enhancements, theme customizations, and performance optimizations.',
     },
-    homepageUrl: 'https://yourprofiles.vercel.app',
-    githubUrl: 'https://github.com/GenaDeev/yourProfiles',
-    tech: ['JavaScript', 'Node.js', 'Express', 'HTML5/CSS3'],
-    stars: 0,
-    accentColor: '#34d399',
-    placeholderPattern: 'terminal',
-  },
-  {
-    id: 'macsplash',
-    name: 'macsplash',
-    category: 'tools',
-    featured: false,
-    title: {
-      es: 'macsplash — Splash Screen para KDE Plasma',
-      en: 'macsplash — macOS Splash Theme for KDE Plasma',
-    },
-    description: {
-      es: 'Tema y script de animación para el arranque de sistemas Linux con entorno de escritorio KDE Plasma, recreando con fidelidad la estética y elegancia de macOS.',
-      en: 'Linux desktop customization package providing a faithful, fluid macOS-styled boot splash animation for the KDE Plasma desktop environment.',
-    },
-    githubUrl: 'https://github.com/GenaDeev/macsplash',
-    tech: ['Shell', 'Linux', 'KDE Plasma', 'QML'],
-    stars: 0,
-    accentColor: '#a855f7',
-    placeholderPattern: 'terminal',
-  },
-  {
-    id: 'hojasdiarias',
-    name: 'HojasDiarias',
-    category: 'fullstack',
-    featured: false,
-    title: {
-      es: 'HojasDiarias — Gestor de Notas y Diarios Digitales',
-      en: 'HojasDiarias — Digital Journal & Daily Notes',
-    },
-    description: {
-      es: 'Aplicación web para la toma de apuntes rápidos y diario personal, con arquitectura desacoplada frontend en TypeScript y backend dedicado.',
-      en: 'Minimalist daily notes and personal journaling web application built with a decoupled TypeScript frontend and robust API backend.',
-    },
-    homepageUrl: 'https://hojasdiarias.vercel.app',
-    githubUrl: 'https://github.com/GenaDeev/hojasdiarias',
-    tech: ['TypeScript', 'React', 'Node.js', 'REST API'],
-    stars: 0,
-    accentColor: '#06b6d4',
-    placeholderPattern: 'notes',
-  },
-  {
-    id: 'cnbaauth',
-    name: 'CNBA Auth & Ecosystem',
-    category: 'fullstack',
-    featured: false,
-    title: {
-      es: 'CNBA Auth & Herramientas Estudiantiles',
-      en: 'CNBA Auth & Student Community Tools',
-    },
-    description: {
-      es: 'Herramientas y experimentos de autenticación e integración creados para simplificar la vida digital de la comunidad del Colegio Nacional de Buenos Aires.',
-      en: 'Authentication prototypes and developer tools created to serve the student community of the Colegio Nacional de Buenos Aires.',
-    },
-    githubUrl: 'https://github.com/GenaDeev/cnbaauth',
-    tech: ['TypeScript', 'Express', 'Node.js', 'Security'],
-    stars: 0,
-    accentColor: '#6366f1',
-    placeholderPattern: 'terminal',
+    techTags: [techBadgeStyles.TypeScript, techBadgeStyles.Electron, techBadgeStyles.React],
   },
 ];

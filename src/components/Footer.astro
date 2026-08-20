@@ -1,6 +1,6 @@
 ---
 import { translations } from '../data/translations';
-import { ArrowUp, Heart, Code2 } from 'lucide-astro';
+import { ArrowUp } from 'lucide-astro';
 
 interface Props {
   lang: 'es' | 'en';
@@ -11,12 +11,12 @@ const t = translations[lang];
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="border-t border-zinc-800/80 bg-[#07080c] py-12 relative font-mono text-xs text-zinc-500">
+<footer class="border-t border-zinc-800/80 bg-[#06070b] py-12 relative font-sans text-xs text-zinc-500">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
     <div class="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
       <div class="flex items-center gap-2">
-        <span class="inline-block w-2 h-2 rounded-full bg-sky-400"></span>
-        <span class="font-bold text-zinc-300">GenaDeev</span>
+        <span class="inline-block w-2.5 h-2.5 rounded-full bg-gradient-to-r from-[#0db7b9] to-[#735ed5]"></span>
+        <span class="font-bold text-zinc-200">GefyDev</span>
         <span>© {currentYear}</span>
       </div>
       <span class="hidden sm:inline text-zinc-700">|</span>
@@ -25,10 +25,10 @@ const currentYear = new Date().getFullYear();
 
     <div class="flex items-center gap-6">
       <a
-        href="https://github.com/GenaDeev"
+        href="https://github.com/gefydev"
         target="_blank"
         rel="noopener noreferrer"
-        class="text-zinc-400 hover:text-sky-400 transition-colors"
+        class="text-zinc-400 hover:text-[#0db7b9] transition-colors"
       >
         {t.footer.sourceCode}
       </a>
@@ -36,7 +36,7 @@ const currentYear = new Date().getFullYear();
       <button
         id="back-to-top-btn"
         type="button"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition-colors cursor-pointer"
         aria-label="Volver arriba"
       >
         <span>{t.footer.backToTop}</span>

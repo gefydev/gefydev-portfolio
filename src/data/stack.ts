@@ -2,6 +2,10 @@ export interface TechItem {
   name: string;
   category: 'languages' | 'frameworks' | 'tools' | 'databases' | 'systems';
   level: 'core' | 'proficient' | 'exploring';
+  color: string;
+  bg: string;
+  border: string;
+  iconName: 'rust' | 'typescript' | 'javascript' | 'astro' | 'react' | 'tailwind' | 'node' | 'bun' | 'linux' | 'git' | 'ci' | 'vite' | 'database';
   description: {
     es: string;
     en: string;
@@ -11,12 +15,30 @@ export interface TechItem {
 
 export const techStack: TechItem[] = [
   {
+    name: 'Rust',
+    category: 'languages',
+    level: 'core',
+    color: '#f97316',
+    bg: 'rgba(249, 115, 22, 0.10)',
+    border: 'rgba(249, 115, 22, 0.35)',
+    iconName: 'rust',
+    description: {
+      es: 'Lenguaje de sistemas para proyectos de máxima eficiencia (Spotifust, GenaCleaner), concurrencia segura y bajo consumo de memoria.',
+      en: 'Systems language for maximum efficiency (Spotifust, GenaCleaner), safe concurrency, and zero runtime overhead.',
+    },
+    highlight: true,
+  },
+  {
     name: 'TypeScript',
     category: 'languages',
     level: 'core',
+    color: '#38bdf8',
+    bg: 'rgba(56, 189, 248, 0.10)',
+    border: 'rgba(56, 189, 248, 0.35)',
+    iconName: 'typescript',
     description: {
-      es: 'Mi lenguaje diario principal. Tipado estricto, interfaces sólidas y DX impecable.',
-      en: 'My daily primary driver. Strict typing, robust interfaces, and stellar developer experience.',
+      es: 'Tipado estricto, interfaces robustas y diseño de arquitecturas escalables tanto en frontend como en backend.',
+      en: 'Strict typing, robust interfaces, and scalable architecture design across frontend and backend applications.',
     },
     highlight: true,
   },
@@ -24,9 +46,13 @@ export const techStack: TechItem[] = [
     name: 'JavaScript (ESNext)',
     category: 'languages',
     level: 'core',
+    color: '#facc15',
+    bg: 'rgba(250, 204, 21, 0.10)',
+    border: 'rgba(250, 204, 21, 0.35)',
+    iconName: 'javascript',
     description: {
-      es: 'Dominio profundo del motor JS, asincronía, Event Loop y APIs nativas del navegador.',
-      en: 'Deep mastery of the V8/JS engine, async patterns, event loop, and web platform APIs.',
+      es: 'Dominio profundo del motor JS, asincronía, Event Loop y manipulación eficiente del DOM.',
+      en: 'Deep mastery of the JS runtime engine, asynchronous patterns, event loop, and web platform APIs.',
     },
     highlight: true,
   },
@@ -34,9 +60,13 @@ export const techStack: TechItem[] = [
     name: 'Astro',
     category: 'frameworks',
     level: 'core',
+    color: '#ff5d01',
+    bg: 'rgba(255, 93, 1, 0.10)',
+    border: 'rgba(255, 93, 1, 0.35)',
+    iconName: 'astro',
     description: {
-      es: 'Framework de cabecera para webs ultra veloces con arquitectura de islas y SSR.',
-      en: 'Go-to framework for blazing fast websites with island architecture and zero-JS footprint.',
+      es: 'Framework predilecto para desarrollo web con renderizado en servidor (SSR), arquitectura de islas y 0 KB de JS innecesario.',
+      en: 'Primary framework for server-side rendered (SSR) web applications, island architecture, and zero unnecessary JS.',
     },
     highlight: true,
   },
@@ -44,9 +74,13 @@ export const techStack: TechItem[] = [
     name: 'React / Preact',
     category: 'frameworks',
     level: 'core',
+    color: '#0db7b9',
+    bg: 'rgba(13, 183, 185, 0.10)',
+    border: 'rgba(13, 183, 185, 0.35)',
+    iconName: 'react',
     description: {
-      es: 'Construcción de interfaces interactivas complejas, hooks y gestión de estado modular.',
-      en: 'Crafting interactive component architectures, custom hooks, and reactive UI patterns.',
+      es: 'Construcción de interfaces modulares, custom hooks, gestión de estado reactivo y optimización de renderizado.',
+      en: 'Component-driven UI engineering, custom hooks, state management, and optimized render cycles.',
     },
     highlight: true,
   },
@@ -54,9 +88,13 @@ export const techStack: TechItem[] = [
     name: 'Tailwind CSS',
     category: 'frameworks',
     level: 'core',
+    color: '#06b6d4',
+    bg: 'rgba(6, 182, 212, 0.10)',
+    border: 'rgba(6, 182, 212, 0.35)',
+    iconName: 'tailwind',
     description: {
-      es: 'Diseño moderno basado en tokens, micro-animaciones, container queries y diseño responsivo.',
-      en: 'Design-system token driven styling, micro-animations, container queries, and responsive layouts.',
+      es: 'Sistemas de diseño basados en tokens, diseño responsivo, container queries y micro-interacciones fluidas.',
+      en: 'Design-system tokens, responsive layouts, container queries, and fluid micro-interactions.',
     },
     highlight: true,
   },
@@ -64,9 +102,27 @@ export const techStack: TechItem[] = [
     name: 'Node.js & Express',
     category: 'databases',
     level: 'core',
+    color: '#22c55e',
+    bg: 'rgba(34, 197, 94, 0.10)',
+    border: 'rgba(34, 197, 94, 0.35)',
+    iconName: 'node',
     description: {
-      es: 'Desarrollo de APIs RESTful, middlewares seguros, workers y servicios backend.',
-      en: 'Architecting RESTful APIs, robust middlewares, background workers, and microservices.',
+      es: 'Creación de APIs RESTful, servidores web, middlewares de seguridad y microservicios.',
+      en: 'Building RESTful APIs, web servers, security middlewares, and lightweight backend services.',
+    },
+    highlight: true,
+  },
+  {
+    name: 'Linux & Bash Shell',
+    category: 'systems',
+    level: 'core',
+    color: '#fbbf24',
+    bg: 'rgba(251, 191, 36, 0.10)',
+    border: 'rgba(251, 191, 36, 0.35)',
+    iconName: 'linux',
+    description: {
+      es: 'Sistema operativo diario. Automatización avanzada por línea de comandos y scripting de sistemas.',
+      en: 'Daily driver OS. Command-line automation, shell scripting, and system environment customization.',
     },
     highlight: true,
   },
@@ -74,75 +130,52 @@ export const techStack: TechItem[] = [
     name: 'Bun',
     category: 'tools',
     level: 'core',
+    color: '#f472b6',
+    bg: 'rgba(244, 114, 182, 0.10)',
+    border: 'rgba(244, 114, 182, 0.35)',
+    iconName: 'bun',
     description: {
-      es: 'Package manager y runtime por defecto para desarrollo veloz y scripts eficientes.',
-      en: 'Default package manager and ultra-fast runtime for seamless developer workflows.',
+      es: 'Runtime y gestor de paquetes por defecto para máxima velocidad de ejecución y desarrollo ágil.',
+      en: 'Default ultra-fast package manager and JavaScript runtime for streamlined developer workflows.',
     },
-    highlight: true,
-  },
-  {
-    name: 'Rust',
-    category: 'languages',
-    level: 'exploring',
-    description: {
-      es: 'Explorando activamente gestión de memoria, seguridad de hilos y CLI tools de alto rendimiento.',
-      en: 'Actively exploring memory safety, concurrency, systems programming, and high-performance CLIs.',
-    },
-    highlight: true,
-  },
-  {
-    name: 'Linux & Bash Shell',
-    category: 'systems',
-    level: 'proficient',
-    description: {
-      es: 'Sistema operativo diario. Automatización mediante scripts de shell y configuración avanzada.',
-      en: 'Daily driver OS. Shell automation scripting, terminal workflows, and system customization.',
-    },
-    highlight: true,
   },
   {
     name: 'Git & GitHub CLI',
     category: 'tools',
     level: 'core',
+    color: '#f43f5e',
+    bg: 'rgba(244, 63, 94, 0.10)',
+    border: 'rgba(244, 63, 94, 0.35)',
+    iconName: 'git',
     description: {
-      es: 'Control de versiones riguroso, automatizaciones con gh CLI y flujos de trabajo limpios.',
-      en: 'Rigorous version control, CLI automation, branch strategies, and clean atomic commits.',
+      es: 'Control de versiones riguroso, automatizaciones con gh CLI, ramas y commits atómicos limpios.',
+      en: 'Strict version control, gh CLI scripting, atomic commit habits, and collaborative workflows.',
     },
   },
   {
     name: 'GitHub Actions / CI',
     category: 'systems',
     level: 'proficient',
+    color: '#6366f1',
+    bg: 'rgba(99, 102, 241, 0.10)',
+    border: 'rgba(99, 102, 241, 0.35)',
+    iconName: 'ci',
     description: {
-      es: 'Pipelines automatizados de testing, build programado (ej. ComiDolar cada 30m) y deploy.',
-      en: 'Automated CI/CD pipelines, scheduled builds (e.g. ComiDolar every 30m), and deployment flows.',
+      es: 'Pipelines automatizados de integración continua, builds programadas y despliegues automáticos.',
+      en: 'Automated CI/CD workflows, scheduled cron builds (like ComiDólar every 30m), and automated releases.',
     },
   },
   {
     name: 'Vite',
     category: 'tools',
     level: 'proficient',
+    color: '#735ed5',
+    bg: 'rgba(115, 94, 213, 0.10)',
+    border: 'rgba(115, 94, 213, 0.35)',
+    iconName: 'vite',
     description: {
-      es: 'Bundling ultrarrápido con ESM nativo, optimización de assets y configuración limpia.',
-      en: 'Fast ESM bundling, tree-shaking, asset optimization, and lightning-fast HMR.',
-    },
-  },
-  {
-    name: 'PostgreSQL & SQLite',
-    category: 'databases',
-    level: 'proficient',
-    description: {
-      es: 'Modelado relacional, consultas estructuradas e integración eficiente con ORMs y drivers.',
-      en: 'Relational data modeling, structured SQL queries, and lightweight local storage.',
-    },
-  },
-  {
-    name: 'Vercel / Cloudflare',
-    category: 'systems',
-    level: 'proficient',
-    description: {
-      es: 'Despliegues en el edge, serverless functions y optimización de entrega global.',
-      en: 'Edge computing deployments, serverless functions, and global CDN delivery optimization.',
+      es: 'Empaquetado moderno basado en ESM nativo con Hot Module Replacement ultrarrápido.',
+      en: 'Modern ESM-driven build tooling with lightning-fast Hot Module Replacement (HMR).',
     },
   },
 ];

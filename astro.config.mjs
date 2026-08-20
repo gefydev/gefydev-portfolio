@@ -3,7 +3,7 @@ import node from '@astrojs/node';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://genadeev.dev',
+  site: 'https://gefy.dev',
   output: 'server',
   adapter: node({
     mode: 'standalone',

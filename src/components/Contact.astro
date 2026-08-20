@@ -1,6 +1,6 @@
 ---
 import { translations } from '../data/translations';
-import { Mail, Github, Twitter, Copy, Check, Send, ArrowUpRight, MessageSquareCode } from 'lucide-astro';
+import { Mail, Github, Copy, Check, Send, ArrowUpRight } from 'lucide-astro';
 
 interface Props {
   lang: 'es' | 'en';
@@ -8,44 +8,44 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = translations[lang];
-const email = 'genafeeboyapur@gmail.com';
+const email = 'hi@gefy.dev';
 ---
 
-<section id="contact" class="py-24 border-t border-zinc-800/80 relative" aria-labelledby="contact-title">
+<section id="contact" class="py-24 border-t border-zinc-800/80 relative font-sans" aria-labelledby="contact-title">
   <div class="max-w-6xl mx-auto px-4 sm:px-6">
     <div class="space-y-3 mb-12">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-mono text-rose-400">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-medium text-[#0db7b9]">
         <Mail class="w-3.5 h-3.5" />
         <span>04 // {lang === 'es' ? 'CONEXIÓN' : 'CONNECT'}</span>
       </div>
       <h2 id="contact-title" class="text-3xl sm:text-4xl font-bold tracking-tight text-white font-sans">
         {t.contact.sectionTitle}
       </h2>
-      <p class="text-zinc-400 text-sm sm:text-base font-sans max-w-xl">
+      <p class="text-zinc-400 text-sm sm:text-base max-w-xl">
         {t.contact.sectionSubtitle}
       </p>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-      <div class="lg:col-span-7 rounded-2xl bg-zinc-950/80 border border-zinc-800 p-8 space-y-6 flex flex-col justify-between">
+      <div class="lg:col-span-8 rounded-2xl bg-zinc-950/80 border border-zinc-800 p-8 space-y-6 flex flex-col justify-between shadow-xl">
         <div class="space-y-4">
-          <h3 class="text-2xl font-bold text-white font-sans">
-            {lang === 'es' ? 'Construyamos algo increíble juntos' : "Let's build something exceptional"}
+          <h3 class="text-2xl font-bold text-white">
+            {lang === 'es' ? 'Construyamos algo de alto impacto' : "Let's build high-impact software"}
           </h3>
-          <p class="text-zinc-400 text-sm font-sans leading-relaxed">
+          <p class="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-2xl">
             {t.contact.directMessage}
           </p>
         </div>
 
-        <div class="space-y-3 pt-4 border-t border-zinc-800/80 font-mono text-xs">
+        <div class="space-y-3 pt-4 border-t border-zinc-800/80 text-xs">
           <div class="p-4 rounded-xl bg-zinc-900/70 border border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-              <div class="p-2 rounded-lg bg-sky-500/10 border border-sky-500/30 text-sky-400">
-                <Mail class="w-4 h-4" />
+              <div class="p-2.5 rounded-xl bg-[#0db7b9]/15 border border-[#0db7b9]/30 text-[#0db7b9]">
+                <Mail class="w-5 h-5" />
               </div>
               <div>
-                <span class="text-zinc-500 block text-[10px] uppercase font-bold">{t.contact.emailLabel}</span>
-                <span class="text-zinc-200 text-xs sm:text-sm font-semibold">{email}</span>
+                <span class="text-zinc-400 block text-[11px] uppercase font-semibold">{t.contact.emailLabel}</span>
+                <span class="text-white text-sm font-bold font-mono">{email}</span>
               </div>
             </div>
 
@@ -54,7 +54,7 @@ const email = 'genafeeboyapur@gmail.com';
                 id="contact-copy-email-btn"
                 type="button"
                 data-email={email}
-                class="px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white text-xs font-mono transition-colors flex items-center gap-1.5 cursor-pointer"
+                class="px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white text-xs font-semibold transition-colors flex items-center gap-1.5 cursor-pointer"
                 aria-label="Copiar email al portapapeles"
               >
                 <Copy class="w-3.5 h-3.5 contact-copy-icon" />
@@ -63,8 +63,8 @@ const email = 'genafeeboyapur@gmail.com';
               </button>
 
               <a
-                href={`mailto:${email}?subject=Hola%20GenaDeev!`}
-                class="px-3 py-2 rounded-lg bg-sky-500 hover:bg-sky-400 text-zinc-950 font-semibold text-xs font-sans transition-colors flex items-center gap-1.5"
+                href={`mailto:${email}?subject=Hola%20Gefy!`}
+                class="px-4 py-2 rounded-lg bg-gradient-to-r from-[#0db7b9] to-[#735ed5] hover:opacity-95 text-white font-semibold text-xs transition-opacity flex items-center gap-1.5"
               >
                 <Send class="w-3.5 h-3.5" />
                 <span>{t.contact.sendEmailBtn}</span>
@@ -74,56 +74,35 @@ const email = 'genafeeboyapur@gmail.com';
         </div>
       </div>
 
-      <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+      <div class="lg:col-span-4 flex flex-col justify-between gap-4">
         <a
-          href="https://github.com/GenaDeev"
+          href="https://github.com/gefydev"
           target="_blank"
           rel="noopener noreferrer"
-          class="group rounded-xl bg-zinc-950/80 border border-zinc-800 hover:border-zinc-700 p-5 flex items-center justify-between transition-all duration-200 hover:-translate-y-0.5"
+          class="group rounded-2xl bg-zinc-950/80 border border-zinc-800 hover:border-[#735ed5]/50 p-6 flex items-center justify-between transition-all duration-200 hover:-translate-y-0.5 shadow-md flex-1"
         >
-          <div class="flex items-center gap-3.5">
-            <div class="p-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 group-hover:text-white group-hover:border-zinc-700 transition-colors">
-              <Github class="w-5 h-5" />
+          <div class="flex items-center gap-4">
+            <div class="p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-200 group-hover:text-white group-hover:border-zinc-700 transition-colors">
+              <Github class="w-6 h-6" />
             </div>
             <div>
-              <p class="font-mono text-sm font-semibold text-zinc-200 group-hover:text-sky-300 transition-colors">GitHub</p>
-              <p class="text-xs font-mono text-zinc-500">@GenaDeev</p>
+              <p class="text-base font-bold text-white group-hover:text-[#0db7b9] transition-colors">GitHub</p>
+              <p class="text-xs font-mono text-zinc-400">@gefydev</p>
             </div>
           </div>
-          <ArrowUpRight class="w-4 h-4 text-zinc-600 group-hover:text-sky-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+          <ArrowUpRight class="w-5 h-5 text-zinc-600 group-hover:text-[#0db7b9] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
         </a>
 
-        <a
-          href="https://x.com/GenaDeev"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="group rounded-xl bg-zinc-950/80 border border-zinc-800 hover:border-zinc-700 p-5 flex items-center justify-between transition-all duration-200 hover:-translate-y-0.5"
-        >
-          <div class="flex items-center gap-3.5">
-            <div class="p-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 group-hover:text-white group-hover:border-zinc-700 transition-colors">
-              <Twitter class="w-5 h-5" />
-            </div>
-            <div>
-              <p class="font-mono text-sm font-semibold text-zinc-200 group-hover:text-sky-300 transition-colors">X (Twitter)</p>
-              <p class="text-xs font-mono text-zinc-500">@GenaDeev</p>
-            </div>
+        <div class="rounded-2xl bg-gradient-to-br from-[#121524] to-zinc-950 border border-zinc-800 p-6 space-y-2">
+          <div class="flex items-center gap-2 text-xs font-semibold text-[#0db7b9]">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>{lang === 'es' ? 'Disponibilidad' : 'Availability'}</span>
           </div>
-          <ArrowUpRight class="w-4 h-4 text-zinc-600 group-hover:text-sky-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-        </a>
-
-        <div class="rounded-xl bg-zinc-950/80 border border-zinc-800 p-5 flex items-center justify-between">
-          <div class="flex items-center gap-3.5">
-            <div class="p-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300">
-              <MessageSquareCode class="w-5 h-5 text-emerald-400" />
-            </div>
-            <div>
-              <p class="font-mono text-sm font-semibold text-zinc-200">Discord</p>
-              <p class="text-xs font-mono text-zinc-500">genadeev</p>
-            </div>
-          </div>
-          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
-            Active
-          </span>
+          <p class="text-xs text-zinc-300 leading-relaxed">
+            {lang === 'es'
+              ? 'Disponible para colaboraciones en código abierto, proyectos de software y oportunidades laborales.'
+              : 'Open for open-source collaborations, software engineering projects, and employment opportunities.'}
+          </p>
         </div>
       </div>
     </div>

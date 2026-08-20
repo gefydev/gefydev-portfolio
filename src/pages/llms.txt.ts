@@ -1,30 +1,31 @@
 import type { APIRoute } from 'astro';
-import { projects } from '../data/projects';
+import { projects, openSourceContributions } from '../data/projects';
 import { techStack } from '../data/stack';
 
 export const GET: APIRoute = async () => {
-  const content = `# GenaDeev (Genaro Febbo Yapur) — Developer Profile
+  const content = `# GefyDev (Genaro Febbo Yapur) — Developer Profile
 
-> 16-year-old Full-Stack & Frontend Developer from Buenos Aires, Argentina. Student at Colegio Nacional de Buenos Aires (CNBA - UBA).
+> Full-Stack & Systems Developer from Buenos Aires, Argentina. Undergraduate Computer Science student at Facultad de Ciencias Exactas y Naturales (Exactas UBA) and Colegio Nacional de Buenos Aires (CNBA) alumnus.
 
 ## Profile Summary
 - Name: Genaro Febbo Yapur
-- Handle: GenaDeev
+- Handle: GefyDev
 - Location: Buenos Aires, Argentina (GMT-3)
-- Education: Colegio Nacional de Buenos Aires (CNBA)
-- Primary Stack: TypeScript, JavaScript, Astro, React, Node.js, Express, Tailwind CSS, Linux
-- Exploring: Rust, Systems Programming
+- Education:
+  - B.S. in Computer Science (Undergraduate) — Exactas UBA (FCEyN)
+  - Secondary School Alumnus — Colegio Nacional de Buenos Aires (CNBA - UBA)
+- Primary Stack: Rust, TypeScript, JavaScript, Astro, React, Node.js, Tailwind CSS, Linux
+- Contact Email: hi@gefy.dev
+- GitHub: https://github.com/gefydev
 
-## Core Web Projects
-${projects.map((p) => `- **${p.name}** (${p.homepageUrl || p.githubUrl}): ${p.description.en} [Stack: ${p.tech.join(', ')}]`).join('\n')}
+## Flagship & Core Projects
+${projects.map((p) => `- **${p.name}** (${p.homepageUrl || p.githubUrl}): ${p.description.en} [Stack: ${p.techTags.map((t) => t.name).join(', ')}]`).join('\n')}
+
+## Open Source Contributions
+${openSourceContributions.map((c) => `- **${c.repo}** by ${c.author} (${c.url}): ${c.description.en}`).join('\n')}
 
 ## Technical Stack
 ${techStack.map((t) => `- **${t.name}** (${t.category}): ${t.description.en}`).join('\n')}
-
-## Links & Socials
-- GitHub: https://github.com/GenaDeev
-- X (Twitter): https://x.com/GenaDeev
-- Email: genafeeboyapur@gmail.com
 `;
 
   return new Response(content.trim(), {

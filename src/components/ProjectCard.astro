@@ -1,6 +1,6 @@
 ---
 import type { Project } from '../data/projects';
-import { ExternalLink, Github, Star, Sparkles } from 'lucide-astro';
+import { ExternalLink, Github, Star, Sparkles, Music, Terminal, TrendingUp, Radio, Map } from 'lucide-astro';
 
 interface Props {
   project: Project;
@@ -11,86 +11,73 @@ const { project, lang } = Astro.props;
 ---
 
 <article 
-  class="group relative flex flex-col justify-between rounded-xl bg-zinc-950/80 border border-zinc-800/80 hover:border-zinc-700 transition-all duration-300 overflow-hidden shadow-xs hover:shadow-xl hover:shadow-sky-500/5 hover:-translate-y-1 project-item"
+  class="group relative flex flex-col justify-between rounded-xl bg-zinc-950/80 border border-zinc-800/80 hover:border-zinc-700 transition-all duration-300 overflow-hidden shadow-xs hover:shadow-xl hover:shadow-[#0db7b9]/5 hover:-translate-y-1 project-item"
   data-category={project.category}
 >
   <div class="p-6 space-y-4">
     <div class="relative w-full h-44 rounded-lg bg-zinc-900/90 border border-zinc-800/80 overflow-hidden group/preview flex flex-col justify-between p-4">
       <div class="absolute inset-0 bg-gradient-to-tr from-zinc-950/80 via-transparent to-zinc-900/30"></div>
       
+      {project.placeholderPattern === 'music' && (
+        <div class="absolute inset-0 opacity-25 flex items-center justify-center pointer-events-none">
+          <div class="w-16 h-16 rounded-2xl bg-[#735ed5]/20 border border-[#735ed5]/40 flex items-center justify-center text-[#735ed5]">
+            <Music class="w-8 h-8" />
+          </div>
+        </div>
+      )}
+
       {project.placeholderPattern === 'crypto' && (
         <div class="absolute inset-0 opacity-25 flex items-center justify-center pointer-events-none">
-          <svg class="w-full h-full text-sky-500" viewBox="0 0 400 150" fill="none" preserveAspectRatio="none">
+          <svg class="w-full h-full text-[#0db7b9]" viewBox="0 0 400 150" fill="none" preserveAspectRatio="none">
             <path d="M0,120 Q80,40 160,90 T320,30 T400,60" stroke="currentColor" stroke-width="3" fill="none" />
             <path d="M0,120 Q80,40 160,90 T320,30 T400,60 L400,150 L0,150 Z" fill="currentColor" fill-opacity="0.1" />
           </svg>
         </div>
       )}
 
-      {project.placeholderPattern === 'maps' && (
-        <div class="absolute inset-0 opacity-20 flex items-center justify-center pointer-events-none">
-          <svg class="w-full h-full text-indigo-400" viewBox="0 0 200 200" fill="none">
-            <circle cx="100" cy="100" r="80" stroke="currentColor" stroke-dasharray="4 4" />
-            <circle cx="100" cy="100" r="50" stroke="currentColor" />
-            <circle cx="100" cy="100" r="20" stroke="currentColor" stroke-dasharray="2 2" />
-            <line x1="0" y1="100" x2="200" y2="100" stroke="currentColor" stroke-opacity="0.5" />
-            <line x1="100" y1="0" x2="100" y2="200" stroke="currentColor" stroke-opacity="0.5" />
-          </svg>
+      {project.placeholderPattern === 'terminal' && (
+        <div class="absolute inset-0 opacity-25 flex flex-col justify-center p-6 font-mono text-xs text-orange-400 pointer-events-none">
+          <p class="font-bold">&gt; genacleaner --adb-connect</p>
+          <p class="text-zinc-500">&gt; debloating system packages...</p>
+          <p class="text-emerald-400">&gt; done [0.04s]</p>
         </div>
       )}
 
       {project.placeholderPattern === 'stream' && (
         <div class="absolute inset-0 opacity-25 flex items-center justify-center pointer-events-none">
-          <div class="w-14 h-14 rounded-full border-2 border-amber-400 flex items-center justify-center">
-            <div class="w-0 h-0 border-y-8 border-y-transparent border-l-12 border-l-amber-400 ml-1"></div>
+          <div class="w-14 h-14 rounded-full border-2 border-purple-400 flex items-center justify-center">
+            <Radio class="w-6 h-6 text-purple-400" />
           </div>
         </div>
       )}
 
-      {project.placeholderPattern === 'game' && (
-        <div class="absolute inset-0 opacity-20 flex items-center justify-center font-mono text-3xl font-bold text-rose-400 tracking-widest pointer-events-none">
-          ✊ ✋ ✌️
-        </div>
-      )}
-
-      {project.placeholderPattern === 'notes' && (
-        <div class="absolute inset-0 opacity-20 flex flex-col gap-2 p-6 pointer-events-none">
-          <div class="h-2 w-3/4 bg-cyan-400 rounded"></div>
-          <div class="h-2 w-1/2 bg-zinc-600 rounded"></div>
-          <div class="h-2 w-5/6 bg-zinc-700 rounded"></div>
-          <div class="h-2 w-2/3 bg-cyan-400/60 rounded"></div>
-        </div>
-      )}
-
-      {project.placeholderPattern === 'terminal' && (
-        <div class="absolute inset-0 opacity-20 flex flex-col p-4 font-mono text-[10px] text-emerald-400 pointer-events-none">
-          <p>&gt; sys.init()</p>
-          <p>&gt; load_module --profile</p>
-          <p>&gt; status: 200 OK</p>
+      {project.placeholderPattern === 'maps' && (
+        <div class="absolute inset-0 opacity-25 flex items-center justify-center pointer-events-none">
+          <Map class="w-16 h-16 text-[#0db7b9]" />
         </div>
       )}
 
       <div class="relative z-10 flex items-center justify-between w-full">
-        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-900/90 border border-zinc-700 text-zinc-300">
-          <span class="w-1.5 h-1.5 rounded-full" style={`background-color: ${project.accentColor};`}></span>
-          {project.name}
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-sans font-semibold bg-zinc-900/90 border border-zinc-700/80 text-zinc-200">
+          <span class="w-2 h-2 rounded-full" style={`background-color: ${project.accentColor};`}></span>
+          <span>{project.name}</span>
         </span>
 
-        {project.featured && (
-          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-sky-500/10 border border-sky-500/30 text-sky-400">
-            <Sparkles class="w-2.5 h-2.5" />
-            {lang === 'es' ? 'Destacado' : 'Featured'}
+        {project.badge && (
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-sans font-medium bg-[#735ed5]/15 border border-[#735ed5]/30 text-purple-300">
+            <Sparkles class="w-3 h-3 text-[#0db7b9]" />
+            <span>{project.badge[lang]}</span>
           </span>
         )}
       </div>
 
-      <div class="relative z-10 flex items-center justify-between text-[11px] font-mono text-zinc-400">
-        <span class="text-zinc-500 truncate max-w-[200px]">
+      <div class="relative z-10 flex items-center justify-between text-xs font-sans text-zinc-400">
+        <span class="text-zinc-400 font-mono text-[11px] truncate max-w-[200px]">
           {project.homepageUrl ? project.homepageUrl.replace('https://', '') : 'github.com'}
         </span>
         {project.stars > 0 && (
-          <span class="flex items-center gap-1 text-amber-400">
-            <Star class="w-3 h-3 fill-amber-400/30" />
+          <span class="flex items-center gap-1 text-amber-400 font-mono text-xs">
+            <Star class="w-3.5 h-3.5 fill-amber-400/30" />
             <span>{project.stars}</span>
           </span>
         )}
@@ -98,15 +85,10 @@ const { project, lang } = Astro.props;
     </div>
 
     <div class="space-y-2">
-      <h3 class="text-lg font-bold text-white font-sans group-hover:text-sky-400 transition-colors flex items-center justify-between">
-        <span>{project.name}</span>
-        {project.badge && (
-          <span class="text-[10px] font-mono font-normal px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
-            {project.badge}
-          </span>
-        )}
+      <h3 class="text-lg font-bold text-white font-sans group-hover:text-[#0db7b9] transition-colors">
+        {project.name}
       </h3>
-      <p class="text-xs text-zinc-400 leading-relaxed font-sans line-clamp-3">
+      <p class="text-sm text-zinc-300 leading-relaxed font-sans line-clamp-3">
         {project.description[lang]}
       </p>
     </div>
@@ -114,9 +96,12 @@ const { project, lang } = Astro.props;
 
   <div class="p-6 pt-0 space-y-4">
     <div class="flex flex-wrap gap-1.5" aria-label="Tecnologías utilizadas">
-      {project.tech.map((item) => (
-        <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-zinc-400 border border-zinc-800/80">
-          {item}
+      {project.techTags.map((tag) => (
+        <span 
+          class="px-2.5 py-0.5 rounded text-[11px] font-sans font-medium border"
+          style={`color: ${tag.color}; background-color: ${tag.bg}; border-color: ${tag.border};`}
+        >
+          {tag.name}
         </span>
       ))}
     </div>
@@ -127,21 +112,21 @@ const { project, lang } = Astro.props;
           href={project.homepageUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/30 text-sky-300 hover:text-sky-200 text-xs font-mono font-medium transition-colors"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#0db7b9]/10 hover:bg-[#0db7b9]/20 border border-[#0db7b9]/30 text-[#0db7b9] hover:text-cyan-200 text-xs font-sans font-medium transition-colors"
           aria-label={`Visitar sitio de ${project.name}`}
         >
           <span>{lang === 'es' ? 'Ver Sitio' : 'Live Demo'}</span>
           <ExternalLink class="w-3.5 h-3.5" />
         </a>
       ) : (
-        <span class="text-[11px] font-mono text-zinc-600">{lang === 'es' ? 'Tool CLI / Script' : 'CLI / Script tool'}</span>
+        <span class="text-xs text-zinc-500 font-sans">{lang === 'es' ? 'CLI / Tool' : 'CLI / Tool'}</span>
       )}
 
       <a
         href={project.githubUrl}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white text-xs font-mono transition-colors ml-auto"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white text-xs font-sans font-medium transition-colors ml-auto"
         aria-label={`Ver repositorio de código fuente de ${project.name}`}
       >
         <Github class="w-3.5 h-3.5" />

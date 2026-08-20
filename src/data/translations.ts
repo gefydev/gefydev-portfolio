@@ -9,6 +9,7 @@ export interface TranslationDict {
     projects: string;
     stack: string;
     about: string;
+    contributions: string;
     contact: string;
     commandPalette: string;
     location: string;
@@ -16,6 +17,7 @@ export interface TranslationDict {
   hero: {
     badge: string;
     greeting: string;
+    name: string;
     roleTitle: string;
     subtitle: string;
     exploreProjects: string;
@@ -28,14 +30,15 @@ export interface TranslationDict {
     sectionTitle: string;
     sectionSubtitle: string;
     filterAll: string;
+    filterRust: string;
     filterAstro: string;
-    filterFullstack: string;
-    filterTools: string;
+    filterWeb: string;
     liveDemo: string;
     viewSource: string;
     stars: string;
-    featured: string;
-    placeholderImageAlt: string;
+    flagship: string;
+    contributionsTitle: string;
+    contributionsSubtitle: string;
   };
   stack: {
     sectionTitle: string;
@@ -52,12 +55,15 @@ export interface TranslationDict {
     bioParagraph1: string;
     bioParagraph2: string;
     bioParagraph3: string;
-    statsYears: string;
-    statsProjects: string;
-    statsCommits: string;
-    educationTitle: string;
-    educationSchool: string;
-    educationDesc: string;
+    universityTitle: string;
+    universityDegree: string;
+    universitySchool: string;
+    universityStatus: string;
+    universityDesc: string;
+    highSchoolTitle: string;
+    highSchoolSchool: string;
+    highSchoolStatus: string;
+    highSchoolDesc: string;
     locationTitle: string;
     locationCity: string;
     localTime: string;
@@ -76,6 +82,7 @@ export interface TranslationDict {
     actions: string;
     close: string;
     goToProjects: string;
+    goToContributions: string;
     goToStack: string;
     goToAbout: string;
     goToContact: string;
@@ -93,9 +100,6 @@ export interface TranslationDict {
     copyEmailBtn: string;
     emailCopied: string;
     githubLabel: string;
-    twitterLabel: string;
-    linkedinLabel: string;
-    discordLabel: string;
     directMessage: string;
     sendEmailBtn: string;
   };
@@ -111,13 +115,14 @@ export interface TranslationDict {
 export const translations: Record<'es' | 'en', TranslationDict> = {
   es: {
     meta: {
-      title: 'GenaDeev — Desarrollador Full-Stack & Frontend Craftsman',
-      description: 'Portfolio de Genaro Febbo Yapur (GenaDeev), desarrollador Full-Stack de 16 años radicado en Buenos Aires, Argentina. Especialista en TypeScript, Astro, React y Node.js.',
-      keywords: 'GenaDeev, Genaro Febbo Yapur, Desarrollador Web, Full Stack Developer, Frontend, Astro, TypeScript, Buenos Aires, Argentina, Portfolio',
-      role: 'Desarrollador Full-Stack & Frontend',
+      title: 'GefyDev (Genaro Febbo Yapur) — Desarrollador Full-Stack & Sistemas',
+      description: 'Portfolio de Genaro Febbo Yapur (GefyDev), estudiante de Ciencias de la Computación en Exactas UBA y egresado del CNBA. Especialista en Rust, TypeScript, Astro y React.',
+      keywords: 'GefyDev, Genaro Febbo Yapur, Desarrollador Web, Rust, Astro, TypeScript, Ciencias de la Computacion, Exactas UBA, CNBA, Buenos Aires, Portfolio',
+      role: 'Desarrollador Full-Stack & Sistemas',
     },
     nav: {
       projects: 'Proyectos',
+      contributions: 'Contribuciones',
       stack: 'Stack',
       about: 'Sobre mí',
       contact: 'Contacto',
@@ -125,60 +130,65 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       location: 'Buenos Aires, AR',
     },
     hero: {
-      badge: '16 años • Estudiante CNBA • Buenos Aires, Argentina',
+      badge: 'Exactas UBA • Egresado CNBA • Buenos Aires, Argentina',
       greeting: 'Hola, soy',
-      roleTitle: 'Desarrollador Full-Stack & Frontend',
-      subtitle: 'Creo plataformas modernas, ecosistemas web ultrarrápidos y herramientas comunitarias con foco obsesivo en rendimiento, arquitectura limpia y experiencia de usuario.',
+      name: 'Genaro Febbo Yapur',
+      roleTitle: 'Desarrollador Full-Stack & Sistemas',
+      subtitle: 'Construyo software de alto rendimiento, clientes de streaming, herramientas de bajo nivel en Rust y plataformas web en Astro. Con foco riguroso en velocidad de ejecución, arquitectura limpia y diseño moderno.',
       exploreProjects: 'Ver Proyectos',
-      contactMe: 'Hablemos',
-      cliCommand: 'npx genadeev',
+      contactMe: 'Contactar',
+      cliCommand: 'npx gefydev',
       copied: '¡Copiado!',
       availableBadge: 'Disponible para proyectos y desafíos',
     },
     projects: {
-      sectionTitle: 'Proyectos Destacados',
-      sectionSubtitle: 'Una selección de herramientas, plataformas en producción y desarrollos de código abierto.',
+      sectionTitle: 'Proyectos Principales',
+      sectionSubtitle: 'Desarrollos destacados en Rust, Astro y tecnologías web con foco en rendimiento nativo y utilidad comunitaria.',
       filterAll: 'Todos',
+      filterRust: 'Rust & CLI',
       filterAstro: 'Astro & React',
-      filterFullstack: 'Full-Stack & APIs',
-      filterTools: 'Herramientas & UI',
-      liveDemo: 'Visitar Sitio',
-      viewSource: 'Código Fuente',
+      filterWeb: 'Web & APIs',
+      liveDemo: 'Visitar Demo',
+      viewSource: 'Código en GitHub',
       stars: 'stars',
-      featured: 'Destacado',
-      placeholderImageAlt: 'Captura de pantalla de vista previa del proyecto',
+      flagship: 'Proyecto Estrella',
+      contributionsTitle: 'Contribuciones de Código Abierto',
+      contributionsSubtitle: 'Participación activa en proyectos de la comunidad de código abierto.',
     },
     stack: {
       sectionTitle: 'Tecnologías & Herramientas',
-      sectionSubtitle: 'Ecosistema de desarrollo moderno que utilizo a diario para construir con máxima velocidad y robustez.',
-      languages: 'Lenguajes',
+      sectionSubtitle: 'Herramientas y lenguajes con los que desarrollo software rápido, seguro y escalable.',
+      languages: 'Lenguajes de Programación',
       frameworks: 'Frameworks & Librerías',
-      tools: 'Herramientas & Entornos',
-      databases: 'Bases de Datos & Backend',
-      systems: 'Sistemas & CI/CD',
+      tools: 'Herramientas de Desarrollo',
+      databases: 'Backend & Bases de Datos',
+      systems: 'Sistemas & Automatización',
     },
     about: {
-      sectionTitle: 'Sobre Mí & Filosofía',
-      sectionSubtitle: 'Apasionado por la ingeniería de software, el aprendizaje profundo y la creación de soluciones útiles.',
-      bioParagraph1: 'Soy Genaro Febbo Yapur, conocido como GenaDeev. Tengo 16 años y soy estudiante del prestigioso Colegio Nacional de Buenos Aires (CNBA). Mi viaje en el desarrollo comenzó por la curiosidad de entender cómo funcionan las cosas por dentro y la emoción de dar vida a ideas que aporten valor a la comunidad.',
-      bioParagraph2: 'Me especializo en el ecosistema TypeScript/JavaScript, utilizando Astro, React, Node.js y Express como pilares principales, además de experimentar activamente con Rust y herramientas de bajo nivel. Disfruto cada etapa del ciclo de vida del software: desde la arquitectura y el diseño visual con fuentes monospace y modernas, hasta la optimización extrema con Lighthouse y el despliegue automatizado.',
-      bioParagraph3: 'No me conformo con hacer que el código funcione: me obsesiona entender el "por qué", optimizar Core Web Vitals, garantizar accesibilidad total y mantener una base de código impecable e idiomática.',
-      statsYears: 'Años programando',
-      statsProjects: 'Proyectos públicos creados',
-      statsCommits: 'Commits y contribuciones',
-      educationTitle: 'Formación Académica',
-      educationSchool: 'Colegio Nacional de Buenos Aires (UBA)',
-      educationDesc: 'Secundario orientado a ciencias exactas y humanidades. Formación analítica, rigurosa y pensamiento crítico.',
-      locationTitle: 'Ubicación & Zona Horaria',
+      sectionTitle: 'Sobre Mí & Trayectoria',
+      sectionSubtitle: 'Pasión por la ciencia de la computación, el código eficiente y el aprendizaje en profundidad.',
+      bioParagraph1: 'Soy Genaro Febbo Yapur, conocido en el entorno de desarrollo como GefyDev. Me apasiona entender el funcionamiento del software a fondo: desde la gestión de memoria y el rendimiento a bajo nivel con Rust, hasta la creación de plataformas web ultrarrápidas con Astro, TypeScript y React.',
+      bioParagraph2: 'Actualmente me encuentro cursando la Licenciatura en Ciencias de la Computación en la Facultad de Ciencias Exactas y Naturales de la Universidad de Buenos Aires (Exactas UBA), tras haberme graduado del prestigioso Colegio Nacional de Buenos Aires (CNBA). Esta formación me brinda una sólida base matemática y analítica para abordar problemas complejos con rigor ingenieril.',
+      bioParagraph3: 'Disfruto construir herramientas útiles tanto para la comunidad estudiantil como para el ecosistema open source, optimizando cada byte y cuidando la estética visual.',
+      universityTitle: 'Educación Universitaria',
+      universityDegree: 'Licenciatura en Ciencias de la Computación',
+      universitySchool: 'Facultad de Ciencias Exactas y Naturales (FCEyN) — UBA',
+      universityStatus: 'En curso (Cursando)',
+      universityDesc: 'Formación universitaria de máxima excelencia en algoritmos, estructuras de datos, teoría de la computación, sistemas operativos y fundamentos matemáticos rigurosos.',
+      highSchoolTitle: 'Educación Secundaria',
+      highSchoolSchool: 'Colegio Nacional de Buenos Aires (CNBA) — UBA',
+      highSchoolStatus: 'Egresado',
+      highSchoolDesc: 'Histórica institución dependiente de la Universidad de Buenos Aires con formación integral de alta exigencia académica, pensamiento crítico y orientación humanista y científica.',
+      locationTitle: 'Ubicación & Horario',
       locationCity: 'Buenos Aires, Argentina (GMT-3)',
       localTime: 'Hora local en Buenos Aires',
     },
     experience: {
-      sectionTitle: 'Experiencia Laboral',
-      sectionSubtitle: 'Trayectoria profesional y colaboraciones.',
+      sectionTitle: 'Experiencia Profesional',
+      sectionSubtitle: 'Trayectoria laboral y colaboraciones.',
       emptyTitle: 'Listo para mi primera oportunidad profesional',
-      emptyDesc: 'Actualmente enfocado en proyectos de código abierto, herramientas comunitarias y formación continua. Con ganas de sumarme a equipos innovadores como desarrollador Frontend o Full-Stack.',
-      openToWorkBadge: 'Buscando pasantías / roles junior',
+      emptyDesc: 'Enfocado en proyectos de código abierto, desarrollo en Rust y desarrollo web moderno. Abierto a propuestas de pasantías y posiciones junior de desarrollo.',
+      openToWorkBadge: 'Abierto a oportunidades / pasantías',
     },
     terminal: {
       title: 'Paleta de Comandos',
@@ -186,32 +196,30 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       navigation: 'Navegación',
       actions: 'Acciones Rápidas',
       close: 'Cerrar [ESC]',
-      goToProjects: 'Ir a sección de Proyectos',
-      goToStack: 'Ver Tecnologías y Herramientas',
-      goToAbout: 'Leer Sobre Mí y Filosofía',
-      goToContact: 'Ir a Contacto y Redes',
-      copyEmail: 'Copiar dirección de email',
+      goToProjects: 'Ir a Proyectos Principales',
+      goToContributions: 'Ver Contribuciones Open Source',
+      goToStack: 'Ver Tecnologías & Herramientas',
+      goToAbout: 'Leer Sobre Mí y Formación',
+      goToContact: 'Ir a Contacto',
+      copyEmail: 'Copiar email (hi@gefy.dev)',
       switchLanguage: 'Cambiar idioma a Inglés (EN)',
-      openGithub: 'Abrir perfil de GitHub (@GenaDeev)',
+      openGithub: 'Abrir GitHub (@gefydev)',
       triggerConfetti: 'Lanzar confeti 🎉',
       emailCopiedNotice: '¡Email copiado al portapapeles!',
     },
     contact: {
-      sectionTitle: 'Contacto & Conexión',
-      sectionSubtitle: '¿Tenés una idea, propuesta de proyecto o simplemente querés charlar sobre tecnología?',
+      sectionTitle: 'Contacto',
+      sectionSubtitle: '¿Querés conversar sobre un proyecto, oportunidad laboral o desarrollo de software?',
       chatPrompt: 'Escribime directamente',
-      emailLabel: 'Email Principal',
+      emailLabel: 'Correo Electrónico',
       copyEmailBtn: 'Copiar Email',
       emailCopied: '¡Copiado!',
       githubLabel: 'GitHub',
-      twitterLabel: 'X (Twitter)',
-      linkedinLabel: 'LinkedIn',
-      discordLabel: 'Discord',
-      directMessage: 'Enviame un mensaje directo por cualquiera de estos canales y te respondo a la brevedad.',
+      directMessage: 'Podés contactarme por correo electrónico o consultar mis repositorios en GitHub. Respondo con rapidez.',
       sendEmailBtn: 'Enviar Correo',
     },
     footer: {
-      builtWith: 'Construido con Astro SSR, TypeScript y Tailwind CSS.',
+      builtWith: 'Desarrollado con Astro SSR, TypeScript y Tailwind CSS.',
       locationBadge: 'Buenos Aires • Argentina',
       rights: 'Todos los derechos reservados.',
       sourceCode: 'Código en GitHub',
@@ -220,13 +228,14 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
   },
   en: {
     meta: {
-      title: 'GenaDeev — Full-Stack Developer & Frontend Craftsman',
-      description: 'Portfolio of Genaro Febbo Yapur (GenaDeev), a 16-year-old Full-Stack developer based in Buenos Aires, Argentina. Specialized in TypeScript, Astro, React, and Node.js.',
-      keywords: 'GenaDeev, Genaro Febbo Yapur, Web Developer, Full Stack Developer, Frontend, Astro, TypeScript, Buenos Aires, Argentina, Portfolio',
-      role: 'Full-Stack & Frontend Developer',
+      title: 'GefyDev (Genaro Febbo Yapur) — Full-Stack & Systems Developer',
+      description: 'Portfolio of Genaro Febbo Yapur (GefyDev), Computer Science undergraduate at Exactas UBA and CNBA alumnus. Specializing in Rust, TypeScript, Astro, and React.',
+      keywords: 'GefyDev, Genaro Febbo Yapur, Software Developer, Rust, Astro, TypeScript, Computer Science, Exactas UBA, CNBA, Buenos Aires, Portfolio',
+      role: 'Full-Stack & Systems Developer',
     },
     nav: {
       projects: 'Projects',
+      contributions: 'Contributions',
       stack: 'Stack',
       about: 'About',
       contact: 'Contact',
@@ -234,60 +243,65 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       location: 'Buenos Aires, AR',
     },
     hero: {
-      badge: '16 y/o • CNBA Student • Buenos Aires, Argentina',
+      badge: 'Exactas UBA • CNBA Alumnus • Buenos Aires, Argentina',
       greeting: 'Hi, I am',
-      roleTitle: 'Full-Stack & Frontend Developer',
-      subtitle: 'I build modern platforms, ultrafast web ecosystems, and community tools with an obsessive focus on performance, clean architecture, and delightful user experience.',
+      name: 'Genaro Febbo Yapur',
+      roleTitle: 'Full-Stack & Systems Developer',
+      subtitle: 'I engineer high-performance software, lightweight streaming clients, low-level Rust tooling, and ultrafast Astro web applications with clean architecture and refined design.',
       exploreProjects: 'Explore Projects',
       contactMe: 'Get in Touch',
-      cliCommand: 'npx genadeev',
+      cliCommand: 'npx gefydev',
       copied: 'Copied!',
       availableBadge: 'Available for projects & opportunities',
     },
     projects: {
-      sectionTitle: 'Featured Projects',
-      sectionSubtitle: 'A curated showcase of production tools, web applications, and open-source contributions.',
+      sectionTitle: 'Core Projects',
+      sectionSubtitle: 'Key software systems engineered with Rust, Astro, and modern web technologies.',
       filterAll: 'All',
+      filterRust: 'Rust & CLI',
       filterAstro: 'Astro & React',
-      filterFullstack: 'Full-Stack & APIs',
-      filterTools: 'Tools & UI',
-      liveDemo: 'Live Preview',
-      viewSource: 'Source Code',
+      filterWeb: 'Web & APIs',
+      liveDemo: 'Live Demo',
+      viewSource: 'Source on GitHub',
       stars: 'stars',
-      featured: 'Featured',
-      placeholderImageAlt: 'Project preview screenshot placeholder',
+      flagship: 'Flagship Project',
+      contributionsTitle: 'Open Source Contributions',
+      contributionsSubtitle: 'Active development and contributions across open-source ecosystems.',
     },
     stack: {
-      sectionTitle: 'Tech Stack & Tooling',
-      sectionSubtitle: 'The modern technologies and tools I leverage daily to engineer high-velocity, reliable software.',
-      languages: 'Languages',
+      sectionTitle: 'Technologies & Tools',
+      sectionSubtitle: 'Languages and tools I use to engineer reliable, memory-efficient software.',
+      languages: 'Programming Languages',
       frameworks: 'Frameworks & Libraries',
       tools: 'Developer Tools',
-      databases: 'Databases & Backend',
+      databases: 'Backend & Databases',
       systems: 'Systems & CI/CD',
     },
     about: {
-      sectionTitle: 'About Me & Philosophy',
-      sectionSubtitle: 'Driven by curiosity, deep first-principles learning, and creating impactful web experiences.',
-      bioParagraph1: "I'm Genaro Febbo Yapur, known online as GenaDeev. I'm a 16-year-old student at the renowned Colegio Nacional de Buenos Aires (CNBA). My journey into software development sparked from wanting to understand what happens under the hood and crafting products that help real people.",
-      bioParagraph2: "I specialize in the TypeScript / JavaScript ecosystem with Astro, React, Node.js, and Express as core pillars, while actively experimenting with Rust and low-level systems. I enjoy every phase of product engineering: from crisp editorial UI design combining monospace aesthetics to Lighthouse 100 optimizations and continuous deployment.",
-      bioParagraph3: "I never settle for code that just 'works'—I dig into the 'why', optimize Core Web Vitals, ensure rigorous accessibility, and write clean, idiomatic code.",
-      statsYears: 'Years coding',
-      statsProjects: 'Public repositories',
-      statsCommits: 'Commits & contributions',
-      educationTitle: 'Education',
-      educationSchool: 'Colegio Nacional de Buenos Aires (UBA)',
-      educationDesc: 'Rigorous high school education emphasizing exact sciences, analytical thinking, and humanistic debate.',
+      sectionTitle: 'About Me & Education',
+      sectionSubtitle: 'Passionate about computer science, algorithm efficiency, and in-depth engineering.',
+      bioParagraph1: "I'm Genaro Febbo Yapur, known in the developer community as GefyDev. I'm fascinated by how systems work under the hood: from memory safety and native efficiency in Rust to building lightning-fast server-rendered web platforms with Astro, TypeScript, and React.",
+      bioParagraph2: "I am currently pursuing a Bachelor's Degree in Computer Science at the prestigious Faculty of Exact and Natural Sciences (Exactas UBA) of the University of Buenos Aires, following my graduation from the historic Colegio Nacional de Buenos Aires (CNBA). This provides me with a deep mathematical foundation and rigorous analytical problem-solving skills.",
+      bioParagraph3: "I enjoy architecting tools that empower communities and open-source ecosystems, optimizing every single byte while crafting enjoyable visual experiences.",
+      universityTitle: 'University Education',
+      universityDegree: 'B.S. in Computer Science',
+      universitySchool: 'Faculty of Exact and Natural Sciences (FCEyN) — UBA',
+      universityStatus: 'In Progress (Undergraduate)',
+      universityDesc: 'Top-tier academic training in algorithm design, data structures, operating systems, automata theory, and rigorous mathematics.',
+      highSchoolTitle: 'Secondary Education',
+      highSchoolSchool: 'Colegio Nacional de Buenos Aires (CNBA) — UBA',
+      highSchoolStatus: 'Alumnus / Graduate',
+      highSchoolDesc: 'Historic preparatory high school affiliated with the University of Buenos Aires, renowned for academic excellence, scientific rigor, and critical debate.',
       locationTitle: 'Location & Timezone',
       locationCity: 'Buenos Aires, Argentina (GMT-3)',
       localTime: 'Current local time in Buenos Aires',
     },
     experience: {
       sectionTitle: 'Work Experience',
-      sectionSubtitle: 'Career milestones and engineering roles.',
-      emptyTitle: 'Eager for my first professional software engineering role',
-      emptyDesc: 'Currently focused on high-impact open source projects, community tools, and continuous skill advancement. Seeking junior full-stack or frontend opportunities and internships.',
-      openToWorkBadge: 'Open for internships / junior roles',
+      sectionSubtitle: 'Career background and collaborations.',
+      emptyTitle: 'Ready for my first professional software engineering role',
+      emptyDesc: 'Focused on open source contributions, low-level Rust tooling, and modern web development. Open to internship and junior engineering opportunities.',
+      openToWorkBadge: 'Open to internships & junior roles',
     },
     terminal: {
       title: 'Command Palette',
@@ -295,32 +309,30 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       navigation: 'Navigation',
       actions: 'Quick Actions',
       close: 'Close [ESC]',
-      goToProjects: 'Jump to Projects section',
+      goToProjects: 'Jump to Core Projects',
+      goToContributions: 'View Open Source Contributions',
       goToStack: 'View Tech Stack & Tools',
-      goToAbout: 'Read About Me & Philosophy',
-      goToContact: 'Go to Contact & Socials',
-      copyEmail: 'Copy email address',
+      goToAbout: 'Read About Me & Education',
+      goToContact: 'Go to Contact',
+      copyEmail: 'Copy email (hi@gefy.dev)',
       switchLanguage: 'Switch language to Spanish (ES)',
-      openGithub: 'Open GitHub profile (@GenaDeev)',
+      openGithub: 'Open GitHub (@gefydev)',
       triggerConfetti: 'Celebrate with confetti 🎉',
       emailCopiedNotice: 'Email copied to clipboard!',
     },
     contact: {
       sectionTitle: 'Get In Touch',
-      sectionSubtitle: 'Have a project idea, opportunity, or just want to chat about tech and web performance?',
-      chatPrompt: 'Drop me a message',
-      emailLabel: 'Primary Email',
+      sectionSubtitle: 'Interested in collaborating on a project or discussing software engineering?',
+      chatPrompt: 'Reach out directly',
+      emailLabel: 'Email Address',
       copyEmailBtn: 'Copy Email',
       emailCopied: 'Copied!',
       githubLabel: 'GitHub',
-      twitterLabel: 'X (Twitter)',
-      linkedinLabel: 'LinkedIn',
-      discordLabel: 'Discord',
-      directMessage: 'Feel free to reach out across any of these channels and I will get back to you promptly.',
+      directMessage: 'Feel free to send me an email or explore my public repositories on GitHub. I respond promptly.',
       sendEmailBtn: 'Send Email',
     },
     footer: {
-      builtWith: 'Crafted with Astro SSR, TypeScript, and Tailwind CSS.',
+      builtWith: 'Engineered with Astro SSR, TypeScript, and Tailwind CSS.',
       locationBadge: 'Buenos Aires • Argentina',
       rights: 'All rights reserved.',
       sourceCode: 'Source on GitHub',

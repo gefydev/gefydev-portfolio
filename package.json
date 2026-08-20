@@ -1,8 +1,8 @@
 {
-  "name": "genadeev-portfolio",
+  "name": "gefydev-portfolio",
   "type": "module",
   "version": "1.0.0",
-  "description": "Portfolio de Genaro Febbo Yapur (GenaDeev) — Full-Stack & Frontend Developer",
+  "description": "Portfolio de Genaro Febbo Yapur (GefyDev) — Full-Stack & Systems Developer",
   "engines": {
     "node": ">=22.12.0"
   },

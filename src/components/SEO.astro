@@ -13,13 +13,13 @@ interface Props {
 const {
   title,
   description,
-  keywords = 'GenaDeev, Genaro Febbo Yapur, Full Stack Developer, Frontend, Astro, TypeScript, Buenos Aires, Argentina',
+  keywords = 'GefyDev, Genaro Febbo Yapur, Desarrollador Web, Rust, Astro, TypeScript, Ciencias de la Computacion, Exactas UBA, CNBA, Buenos Aires, Portfolio',
   lang,
   canonicalUrl = Astro.url.href,
-  image = 'https://genadeev.dev/og-image.png',
+  image = 'https://gefy.dev/logo-white-bg.png',
 } = Astro.props;
 
-const siteUrl = 'https://genadeev.dev';
+const siteUrl = 'https://gefy.dev';
 const esUrl = `${siteUrl}/es`;
 const enUrl = `${siteUrl}/en`;
 const ogLocale = lang === 'es' ? 'es_AR' : 'en_US';
@@ -31,11 +31,11 @@ const structuredData = [
     '@type': 'Person',
     '@id': `${siteUrl}/#person`,
     name: 'Genaro Febbo Yapur',
-    alternateName: ['GenaDeev', 'Genaro Febbo', 'Gena'],
+    alternateName: ['GefyDev', 'Genaro Febbo', 'Gefy'],
     givenName: 'Genaro',
     familyName: 'Febbo Yapur',
     url: siteUrl,
-    jobTitle: lang === 'es' ? 'Desarrollador Full-Stack & Frontend' : 'Full-Stack & Frontend Software Developer',
+    jobTitle: lang === 'es' ? 'Desarrollador Full-Stack & Sistemas' : 'Full-Stack & Systems Software Developer',
     description: description,
     image: image,
     address: {
@@ -49,26 +49,31 @@ const structuredData = [
       alternateName: 'CNBA',
       url: 'https://cnba.uba.ar',
     },
+    affiliation: {
+      '@type': 'EducationalOrganization',
+      name: 'Facultad de Ciencias Exactas y Naturales (FCEyN) — Universidad de Buenos Aires',
+      alternateName: 'Exactas UBA',
+      url: 'https://exactas.uba.ar',
+    },
     sameAs: [
-      'https://github.com/GenaDeev',
+      'https://github.com/gefydev',
       'https://comidolar.com.ar',
-      'https://blackmaps.com.ar',
+      'https://spotifust.comidolar.com.ar',
       'https://cuatrodoce.vercel.app',
-      'https://rockpaperchiappa.vercel.app',
     ],
     knowsAbout: [
+      'Rust',
       'TypeScript',
       'JavaScript',
       'Astro',
       'React',
       'Node.js',
-      'Express',
-      'Rust',
+      'Computer Science',
+      'Data Structures & Algorithms',
       'Tailwind CSS',
       'Linux',
       'Web Performance',
       'Search Engine Optimization (SEO)',
-      'Core Web Vitals',
     ],
   },
   {
@@ -81,7 +86,7 @@ const structuredData = [
       '@type': 'WebSite',
       '@id': `${siteUrl}/#website`,
       url: siteUrl,
-      name: 'GenaDeev Portfolio',
+      name: 'GefyDev Portfolio',
       description: description,
       inLanguage: ['es', 'en'],
     },
@@ -92,7 +97,7 @@ const structuredData = [
   {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: lang === 'es' ? 'Proyectos de Software de GenaDeev' : 'Software Projects by GenaDeev',
+    name: lang === 'es' ? 'Proyectos de Software de GefyDev' : 'Software Projects by GefyDev',
     itemListElement: projects.map((project, index) => ({
       '@type': 'ListItem',
       position: index + 1,
@@ -107,12 +112,11 @@ const structuredData = [
 <title>{title}</title>
 <meta name="description" content={description} />
 <meta name="keywords" content={keywords} />
-<meta name="author" content="Genaro Febbo Yapur (GenaDeev)" />
-<meta name="creator" content="GenaDeev" />
+<meta name="author" content="Genaro Febbo Yapur (GefyDev)" />
+<meta name="creator" content="GefyDev" />
 <meta name="publisher" content="Genaro Febbo Yapur" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-<meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
 <link rel="canonical" href={canonicalUrl} />
 <link rel="alternate" hreflang="es" href={esUrl} />
@@ -125,11 +129,9 @@ const structuredData = [
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonicalUrl} />
-<meta property="og:site_name" content="GenaDeev — Developer Portfolio" />
+<meta property="og:site_name" content="GefyDev — Developer Portfolio" />
 <meta property="og:image" content={image} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="GenaDeev — Full-Stack Developer Portfolio" />
+<meta property="og:image:alt" content="GefyDev — Full-Stack & Systems Developer" />
 <meta property="og:locale" content={ogLocale} />
 <meta property="og:locale:alternate" content={ogLocaleAlt} />
 
@@ -137,11 +139,9 @@ const structuredData = [
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={image} />
-<meta name="twitter:image:alt" content="GenaDeev — Full-Stack Developer Portfolio" />
-<meta name="twitter:creator" content="@GenaDeev" />
-<meta name="twitter:site" content="@GenaDeev" />
+<meta name="twitter:image:alt" content="GefyDev — Full-Stack & Systems Developer" />
 
-<meta name="theme-color" content="#07080c" />
+<meta name="theme-color" content="#06070b" />
 <meta name="color-scheme" content="dark" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="generator" content={Astro.generator} />
