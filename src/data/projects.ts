@@ -28,6 +28,7 @@ export interface Project {
   };
   accentColor: string;
   placeholderPattern: 'music' | 'crypto' | 'terminal' | 'stream' | 'maps';
+  image: string;
 }
 
 export interface OpenSourceContribution {
@@ -35,6 +36,7 @@ export interface OpenSourceContribution {
   author: string;
   url: string;
   stars: number;
+  prsCount?: number;
   role: {
     es: string;
     en: string;
@@ -86,6 +88,7 @@ export const projects: Project[] = [
     },
     accentColor: '#735ed5',
     placeholderPattern: 'music',
+    image: '/images/projects/spotifust.webp',
   },
   {
     id: 'comidolar',
@@ -110,6 +113,7 @@ export const projects: Project[] = [
     },
     accentColor: '#0db7b9',
     placeholderPattern: 'crypto',
+    image: '/images/projects/comidolar.webp',
   },
   {
     id: 'genacleaner',
@@ -133,6 +137,7 @@ export const projects: Project[] = [
     },
     accentColor: '#f97316',
     placeholderPattern: 'terminal',
+    image: '/images/projects/genacleaner.webp',
   },
   {
     id: '412',
@@ -153,6 +158,7 @@ export const projects: Project[] = [
     stars: 0,
     accentColor: '#735ed5',
     placeholderPattern: 'stream',
+    image: '/images/projects/cuatrodoce.webp',
   },
   {
     id: 'blackmaps',
@@ -172,6 +178,7 @@ export const projects: Project[] = [
     stars: 1,
     accentColor: '#0db7b9',
     placeholderPattern: 'maps',
+    image: '/images/projects/blackmaps.webp',
   },
 ];
 
@@ -181,6 +188,7 @@ export const openSourceContributions: OpenSourceContribution[] = [
     author: 'REVENGE977',
     url: 'https://github.com/REVENGE977/stremio-enhanced',
     stars: 819,
+    prsCount: 8,
     role: {
       es: 'Contribuidor Principal',
       en: 'Core Contributor',

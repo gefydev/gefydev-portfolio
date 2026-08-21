@@ -108,6 +108,12 @@ const t = translations[lang];
                   <Sparkles class="w-3 h-3" />
                   <span>{item.role[lang]}</span>
                 </span>
+                {item.prsCount && (
+                  <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 border border-purple-500/30 text-purple-300">
+                    <GitPullRequest class="w-3.5 h-3.5 text-purple-400" />
+                    <span>{item.prsCount} {lang === 'es' ? 'PRs fusionadas' : 'PRs merged'}</span>
+                  </span>
+                )}
                 <span class="flex items-center gap-1 text-xs font-mono text-amber-400">
                   <Star class="w-3.5 h-3.5 fill-amber-400/30" />
                   <span>{item.stars} stars</span>
