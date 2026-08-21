@@ -1,6 +1,6 @@
-# 🚀 GenaDeev — Developer Portfolio
+# 🚀 gefydev — Developer Portfolio
 
-> Portfolio personal de **Genaro Febbo Yapur (GenaDeev)** — Desarrollador Full-Stack & Frontend radicado en Buenos Aires, Argentina.
+> Portfolio personal de **Genaro Febbo Yapur (gefydev)** — Desarrollador Full-Stack & Frontend radicado en Buenos Aires, Argentina.
 
 Construido con **Astro (SSR)**, **TypeScript**, **Tailwind CSS v4** y arquitectura orientada a máximo rendimiento (Lighthouse 100/100), diseño editorial monospace + Geist y soporte completo de internacionalización (Español e Inglés) detectado en servidor.
 
@@ -47,7 +47,7 @@ bun run preview
 ## 📁 Estructura del Proyecto
 
 ```
-genadeev-portfolio/
+gefydev-portfolio/
 ├── .agents/
 │   └── skills/           # 37 skills de UI, SEO y Web Quality
 ├── public/
@@ -96,7 +96,7 @@ genadeev-portfolio/
 
 ## 👤 Contacto & Redes
 
-- **Desarrollador:** Genaro Febbo Yapur (GenaDeev)
+- **Desarrollador:** Genaro Febbo Yapur (gefydev)
 - **Email:** [genafeeboyapur@gmail.com](mailto:genafeeboyapur@gmail.com)
-- **GitHub:** [@GenaDeev](https://github.com/GenaDeev)
-- **X (Twitter):** [@GenaDeev](https://x.com/GenaDeev)
+- **GitHub:** [@gefydev](https://github.com/gefydev)
+- **X (Twitter):** [@gefydev](https://x.com/gefydev)
