@@ -11,6 +11,7 @@ const t = translations[lang];
 const currentYear = new Date().getFullYear();
 const backToTopAria = lang === 'es' ? 'Volver al inicio de la página' : 'Back to top of the page';
 const sourceAria = lang === 'es' ? 'Ver código fuente de este portfolio en GitHub' : 'View portfolio source code on GitHub';
+const linkedinAria = lang === 'es' ? 'Abrir perfil de LinkedIn de GefyDev' : 'Open GefyDev LinkedIn profile';
 ---
 
 <footer class="border-t border-zinc-800/80 bg-[#06070b] py-12 relative font-sans text-xs text-zinc-400">
@@ -34,6 +35,16 @@ const sourceAria = lang === 'es' ? 'Ver código fuente de este portfolio en GitH
         aria-label={sourceAria}
       >
         {t.footer.sourceCode}
+      </a>
+
+      <a
+        href="https://linkedin.com/in/gefydev"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-zinc-400 hover:text-[#0db7b9] transition-colors py-2 focus-visible:text-[#0db7b9]"
+        aria-label={linkedinAria}
+      >
+        {t.footer.linkedin}
       </a>
 
       <button

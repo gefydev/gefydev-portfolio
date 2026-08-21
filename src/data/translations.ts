@@ -89,6 +89,7 @@ export interface TranslationDict {
     copyEmail: string;
     switchLanguage: string;
     openGithub: string;
+    openLinkedin: string;
     triggerConfetti: string;
     emailCopiedNotice: string;
   };
@@ -100,6 +101,7 @@ export interface TranslationDict {
     copyEmailBtn: string;
     emailCopied: string;
     githubLabel: string;
+    linkedinLabel: string;
     directMessage: string;
     sendEmailBtn: string;
   };
@@ -108,6 +110,7 @@ export interface TranslationDict {
     locationBadge: string;
     rights: string;
     sourceCode: string;
+    linkedin: string;
     backToTop: string;
   };
 }
@@ -204,6 +207,7 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       copyEmail: 'Copiar email (hi@gefy.dev)',
       switchLanguage: 'Cambiar idioma a Inglés (EN)',
       openGithub: 'Abrir GitHub (@gefydev)',
+      openLinkedin: 'Abrir LinkedIn (/in/gefydev)',
       triggerConfetti: 'Lanzar confeti 🎉',
       emailCopiedNotice: '¡Email copiado al portapapeles!',
     },
@@ -215,7 +219,8 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       copyEmailBtn: 'Copiar Email',
       emailCopied: '¡Copiado!',
       githubLabel: 'GitHub',
-      directMessage: 'Podés contactarme por correo electrónico o consultar mis repositorios en GitHub. Respondo con rapidez.',
+      linkedinLabel: 'LinkedIn',
+      directMessage: 'Podés contactarme por correo electrónico, conectar en LinkedIn o consultar mis repositorios en GitHub. Respondo con rapidez.',
       sendEmailBtn: 'Enviar Correo',
     },
     footer: {
@@ -223,6 +228,7 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       locationBadge: 'Buenos Aires • Argentina',
       rights: 'Todos los derechos reservados.',
       sourceCode: 'Código en GitHub',
+      linkedin: 'LinkedIn',
       backToTop: 'Volver arriba',
     },
   },
@@ -317,6 +323,7 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       copyEmail: 'Copy email (hi@gefy.dev)',
       switchLanguage: 'Switch language to Spanish (ES)',
       openGithub: 'Open GitHub (@gefydev)',
+      openLinkedin: 'Open LinkedIn (/in/gefydev)',
       triggerConfetti: 'Celebrate with confetti 🎉',
       emailCopiedNotice: 'Email copied to clipboard!',
     },
@@ -328,7 +335,8 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       copyEmailBtn: 'Copy Email',
       emailCopied: 'Copied!',
       githubLabel: 'GitHub',
-      directMessage: 'Feel free to send me an email or explore my public repositories on GitHub. I respond promptly.',
+      linkedinLabel: 'LinkedIn',
+      directMessage: 'Feel free to send me an email, connect on LinkedIn, or explore my public repositories on GitHub. I respond promptly.',
       sendEmailBtn: 'Send Email',
     },
     footer: {
@@ -336,6 +344,7 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       locationBadge: 'Buenos Aires • Argentina',
       rights: 'All rights reserved.',
       sourceCode: 'Source on GitHub',
+      linkedin: 'LinkedIn',
       backToTop: 'Back to top',
     },
   },

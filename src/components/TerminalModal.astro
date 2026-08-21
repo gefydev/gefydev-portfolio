@@ -1,6 +1,6 @@
 ---
 import { translations } from '../data/translations';
-import { Terminal, Search, FolderGit2, Cpu, User, Mail, Globe, Github, Sparkles, X, GitPullRequest, Check } from 'lucide-astro';
+import { Terminal, Search, FolderGit2, Cpu, User, Mail, Globe, Github, Linkedin, Sparkles, X, GitPullRequest, Check } from 'lucide-astro';
 
 interface Props {
   lang: 'es' | 'en';
@@ -160,6 +160,19 @@ const closeAria = lang === 'es' ? 'Cerrar paleta de comandos' : 'Close command p
           <span>{t.terminal.openGithub}</span>
         </div>
         <span class="text-[11px] font-mono text-zinc-400">@gefydev</span>
+      </button>
+
+      <button
+        type="button"
+        class="terminal-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+        data-action="open-url"
+        data-url="https://linkedin.com/in/gefydev"
+      >
+        <div class="flex items-center gap-2.5">
+          <Linkedin class="w-4 h-4 text-[#0db7b9] shrink-0" />
+          <span>{t.terminal.openLinkedin}</span>
+        </div>
+        <span class="text-[11px] font-mono text-zinc-400">/in/gefydev</span>
       </button>
 
       <button

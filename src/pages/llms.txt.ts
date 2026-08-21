@@ -25,6 +25,7 @@ ${techStack.map((t) => `- **${t.name}** (${t.level.toUpperCase()}): ${t.descript
 
 ## Developer Links & Social
 - [GitHub Profile](https://github.com/gefydev): Official open-source repositories and contributions.
+- [LinkedIn Profile](https://linkedin.com/in/gefydev): Professional network profile and background.
 - [Email Contact](mailto:hi@gefy.dev): Direct professional communication channel.
 - [XML Sitemap](${siteUrl}/sitemap.xml): Complete machine-readable URL index.
 - [Robots Directive](${siteUrl}/robots.txt): Web crawler directives and sitemap declaration.
