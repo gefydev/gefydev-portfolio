@@ -62,6 +62,8 @@ export const techBadgeStyles: Record<string, TechTag> = {
   CI: { name: 'GitHub Actions', color: '#818cf8', bg: 'rgba(129, 140, 248, 0.12)', border: 'rgba(129, 140, 248, 0.3)' },
   API: { name: 'REST API', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.12)', border: 'rgba(236, 72, 153, 0.3)' },
   Leaflet: { name: 'Leaflet Maps', color: '#84cc16', bg: 'rgba(132, 204, 22, 0.12)', border: 'rgba(132, 204, 22, 0.3)' },
+  Iced: { name: 'Iced (GUI)', color: '#22d3ee', bg: 'rgba(34, 211, 238, 0.12)', border: 'rgba(34, 211, 238, 0.3)' },
+  Rodio: { name: 'Rodio (Audio)', color: '#a78bfa', bg: 'rgba(167, 139, 250, 0.12)', border: 'rgba(167, 139, 250, 0.3)' },
 };
 
 export const projects: Project[] = [
@@ -80,7 +82,7 @@ export const projects: Project[] = [
     },
     homepageUrl: 'https://spotifust.comidolar.com.ar',
     githubUrl: 'https://github.com/gefydev/spotifust',
-    techTags: [techBadgeStyles.Rust, techBadgeStyles.TypeScript, techBadgeStyles.Tailwind],
+    techTags: [techBadgeStyles.Rust, techBadgeStyles.Iced, techBadgeStyles.Rodio],
     stars: 2,
     badge: {
       es: '⭐ Proyecto Estrella',
