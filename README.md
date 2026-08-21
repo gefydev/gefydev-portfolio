@@ -51,8 +51,11 @@ genadeev-portfolio/
 ├── .agents/
 │   └── skills/           # 37 skills de UI, SEO y Web Quality
 ├── public/
-│   ├── favicon.svg       # Favicon SVG vectorial
-│   ├── og-image.svg      # Imagen OpenGraph para redes
+│   ├── favicon-32.png    # Favicon PNG (32x32)
+│   ├── favicon-192.png   # Favicon PNG (192x192)
+│   ├── favicon-512.png   # Favicon PNG (512x512)
+│   ├── apple-touch-icon.png # Icono para dispositivos Apple (180x180)
+│   ├── og-image.png      # Imagen OpenGraph para redes
 │   └── favicon.ico
 ├── src/
 │   ├── components/
