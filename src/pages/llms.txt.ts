@@ -3,53 +3,36 @@ import { projects, openSourceContributions } from '../data/projects';
 import { techStack } from '../data/stack';
 
 export const GET: APIRoute = async () => {
-  const content = `# GefyDev (Genaro Febbo Yapur) — Developer Knowledge Base & Profile
+  const siteUrl = 'https://gefy.dev';
+
+  const content = `# GefyDev (Genaro Febbo Yapur)
 
 > Full-Stack & Systems Developer from Buenos Aires, Argentina. Undergraduate Computer Science student at Faculty of Exact and Natural Sciences — University of Buenos Aires (FCEyN) and Colegio Nacional de Buenos Aires (CNBA) alumnus.
 
-## Core Identity & Quick Facts
-- Canonical URL: https://gefy.dev
-- Developer Handle: GefyDev / @gefydev
-- Full Name: Genaro Febbo Yapur
-- Primary Email: hi@gefy.dev
-- GitHub Profile: https://github.com/gefydev
-- Interactive Terminal Card (CLI): npx gefydev
-- Location & Timezone: Buenos Aires, Argentina (America/Argentina/Buenos_Aires / GMT-3)
-- Languages: Spanish (Native), English (Professional Working Proficiency)
-- Status: Available for open-source collaborations, software engineering roles, and challenging technical projects.
+## Main Pages
+- [Inicio en Español](${siteUrl}/es): Portfolio principal de Genaro Febbo Yapur (GefyDev) en Español.
+- [English Portfolio](${siteUrl}/en): Primary developer portfolio of Genaro Febbo Yapur (GefyDev) in English.
+- [Canonical Site](${siteUrl}/): Root portfolio entrypoint with automatic locale routing.
 
-## Academic & Institutional Affiliations
-- University Education (Undergraduate / Cursando):
-  - Degree: Licenciatura en Ciencias de la Computación (B.S. in Computer Science)
-  - Institution: Facultad de Ciencias Exactas y Naturales (FCEyN) — Universidad de Buenos Aires (University of Buenos Aires)
-  - Core Focus: High-performance computing, memory management, algorithm complexity, data structures, discrete mathematics, and operating systems.
-- Secondary Education (Egresado / Alumnus):
-  - Institution: Colegio Nacional de Buenos Aires (CNBA) — Universidad de Buenos Aires
-  - Core Focus: Academic rigor, analytical thinking, scientific debate, and comprehensive humanistic/scientific foundations.
-
-## Flagship & Core Projects (Ordered by Priority)
-${projects.map((p, i) => `### ${i + 1}. ${p.name}
-- English: ${p.description.en}
-- Spanish: ${p.description.es}
-- Category: ${p.category}
-- Tech Stack: ${p.techTags.map((t) => t.name).join(', ')}
-- Repository: ${p.githubUrl}
-${p.homepageUrl ? `- Live Website: ${p.homepageUrl}` : ''}`).join('\n\n')}
+## Featured Software Projects
+${projects.map((p) => `- [${p.name}](${p.homepageUrl || p.githubUrl}): ${p.description.en} (Repository: [GitHub](${p.githubUrl}))`).join('\n')}
 
 ## Open Source Contributions
-${openSourceContributions.map((c) => `### ${c.repo} (by ${c.author})
-- Role: ${c.role.en} / ${c.role.es}
-- Summary: ${c.description.en}
-- Technologies: ${c.techTags.map((t) => t.name).join(', ')}
-- Repository: ${c.url}`).join('\n\n')}
+${openSourceContributions.map((c) => `- [${c.author}/${c.repo}](${c.url}): ${c.description.en} (Role: ${c.role.en}, Stars: ${c.stars})`).join('\n')}
 
-## Technical Competencies & Tooling
-${techStack.map((t) => `- **${t.name}** [${t.level.toUpperCase()}]: ${t.description.en} / ${t.description.es}`).join('\n')}
+## Technical Competencies
+${techStack.map((t) => `- **${t.name}** (${t.level.toUpperCase()}): ${t.description.en}`).join('\n')}
+
+## Developer Links & Social
+- [GitHub Profile](https://github.com/gefydev): Official open-source repositories and contributions.
+- [Email Contact](mailto:hi@gefy.dev): Direct professional communication channel.
+- [XML Sitemap](${siteUrl}/sitemap.xml): Complete machine-readable URL index.
+- [Robots Directive](${siteUrl}/robots.txt): Web crawler directives and sitemap declaration.
 `;
 
   return new Response(content.trim(), {
     headers: {
-      'Content-Type': 'text/plain; charset=utf-8',
+      'Content-Type': 'text/markdown; charset=utf-8',
       'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
     },
   });
