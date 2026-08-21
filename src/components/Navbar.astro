@@ -25,7 +25,7 @@ const menuAriaLabel = lang === 'es' ? 'Alternar menú de navegación móvil' : '
         aria-label="GefyDev Home"
       >
         <img 
-          src="/logo-white-bg.webp" 
+          src="/images/logo-white-bg.webp" 
           alt="GefyDev Logo" 
           class="w-7 h-7 rounded-md object-contain shadow-xs group-hover:scale-105 transition-transform" 
           width="28" 
@@ -76,7 +76,7 @@ const menuAriaLabel = lang === 'es' ? 'Alternar menú de navegación móvil' : '
       >
         <Globe class="w-3.5 h-3.5 text-zinc-400" />
         <span class="font-bold font-mono text-[11px]">{lang.toUpperCase()}</span>
-        <span class="text-zinc-500 text-[10px] font-mono">/ {otherLang.toUpperCase()}</span>
+        <span class="text-zinc-400 text-[10px] font-mono">/ {otherLang.toUpperCase()}</span>
       </a>
 
       <button
@@ -146,6 +146,7 @@ const menuAriaLabel = lang === 'es' ? 'Alternar menú de navegación móvil' : '
 
   function updateAllClocks() {
     try {
+      if (document.hidden) return;
       const now = new Date();
       const timeStr = timeFormatter.format(now);
       const targets = document.querySelectorAll('#nav-live-clock, #mobile-live-clock, #about-live-clock');
@@ -188,20 +189,6 @@ const menuAriaLabel = lang === 'es' ? 'Alternar menú de navegación móvil' : '
       link.addEventListener('click', closeMobileMenu);
     });
 
-    document.addEventListener('click', (e) => {
-      if (drawer && !drawer.classList.contains('hidden')) {
-        if (!drawer.contains(e.target as Node) && !mobileBtn?.contains(e.target as Node)) {
-          closeMobileMenu();
-        }
-      }
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && drawer && !drawer.classList.contains('hidden')) {
-        closeMobileMenu();
-      }
-    });
-
     const langToggle = document.getElementById('lang-toggle-btn');
     langToggle?.addEventListener('click', () => {
       const targetLang = langToggle.getAttribute('data-target-lang');
@@ -222,6 +209,32 @@ const menuAriaLabel = lang === 'es' ? 'Alternar menú de navegación móvil' : '
       window.dispatchEvent(new CustomEvent('toggle-terminal'));
     });
   }
+
+  document.addEventListener('click', (e) => {
+    const drawer = document.getElementById('mobile-menu-drawer');
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    if (drawer && !drawer.classList.contains('hidden')) {
+      if (!drawer.contains(e.target as Node) && !mobileBtn?.contains(e.target as Node)) {
+        drawer.classList.add('hidden');
+        mobileBtn?.setAttribute('aria-expanded', 'false');
+        mobileBtn?.querySelector('.menu-open-icon')?.classList.remove('hidden');
+        mobileBtn?.querySelector('.menu-close-icon')?.classList.add('hidden');
+      }
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const drawer = document.getElementById('mobile-menu-drawer');
+      const mobileBtn = document.getElementById('mobile-menu-btn');
+      if (drawer && !drawer.classList.contains('hidden')) {
+        drawer.classList.add('hidden');
+        mobileBtn?.setAttribute('aria-expanded', 'false');
+        mobileBtn?.querySelector('.menu-open-icon')?.classList.remove('hidden');
+        mobileBtn?.querySelector('.menu-close-icon')?.classList.add('hidden');
+      }
+    }
+  });
 
   document.addEventListener('astro:page-load', initNavbar);
   document.addEventListener('astro:before-swap', () => {

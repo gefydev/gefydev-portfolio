@@ -39,19 +39,19 @@ const closeAria = lang === 'es' ? 'Cerrar paleta de comandos' : 'Close command p
     </div>
 
     <div class="relative flex items-center px-4 py-3 border-b border-zinc-800/80">
-      <Search class="w-4 h-4 text-zinc-500 mr-3 shrink-0" />
+      <Search class="w-4 h-4 text-zinc-400 mr-3 shrink-0" />
       <input
         id="terminal-search-input"
         type="text"
         placeholder={t.terminal.searchPlaceholder}
-        class="w-full bg-transparent text-zinc-100 placeholder:text-zinc-500 focus:outline-hidden text-sm"
+        class="w-full bg-transparent text-zinc-100 placeholder:text-zinc-400 focus:outline-hidden text-sm"
         autocomplete="off"
         spellcheck="false"
       />
     </div>
 
     <div id="terminal-list" class="max-h-80 overflow-y-auto p-2 space-y-1">
-      <div class="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+      <div class="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
         {t.terminal.navigation}
       </div>
 
@@ -120,7 +120,7 @@ const closeAria = lang === 'es' ? 'Cerrar paleta de comandos' : 'Close command p
         <kbd class="text-[10px] font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-400">#contact</kbd>
       </button>
 
-      <div class="px-3 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+      <div class="px-3 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
         {t.terminal.actions}
       </div>
 
@@ -133,7 +133,7 @@ const closeAria = lang === 'es' ? 'Cerrar paleta de comandos' : 'Close command p
           <Mail class="w-4 h-4 text-amber-400 shrink-0" />
           <span class="copy-email-text">{t.terminal.copyEmail}</span>
         </div>
-        <span class="text-[11px] font-mono text-zinc-500">hi@gefy.dev</span>
+        <span class="text-[11px] font-mono text-zinc-400">hi@gefy.dev</span>
       </button>
 
       <button
@@ -159,7 +159,7 @@ const closeAria = lang === 'es' ? 'Cerrar paleta de comandos' : 'Close command p
           <Github class="w-4 h-4 text-zinc-300 shrink-0" />
           <span>{t.terminal.openGithub}</span>
         </div>
-        <span class="text-[11px] font-mono text-zinc-500">@gefydev</span>
+        <span class="text-[11px] font-mono text-zinc-400">@gefydev</span>
       </button>
 
       <button
@@ -175,7 +175,7 @@ const closeAria = lang === 'es' ? 'Cerrar paleta de comandos' : 'Close command p
       </button>
     </div>
 
-    <div class="px-4 py-2.5 border-t border-zinc-800/80 bg-zinc-900/40 flex items-center justify-between text-xs text-zinc-500">
+    <div class="px-4 py-2.5 border-t border-zinc-800/80 bg-zinc-900/40 flex items-center justify-between text-xs text-zinc-400">
       <span>{t.terminal.close}</span>
       <span class="font-mono text-[11px]">[↵] {lang === 'es' ? 'Ejecutar' : 'Select'}</span>
     </div>
@@ -188,24 +188,29 @@ const closeAria = lang === 'es' ? 'Cerrar paleta de comandos' : 'Close command p
 </div>
 
 <script>
+  let terminalInitialized = false;
+
   function initTerminal() {
     const modal = document.getElementById('terminal-modal');
     const input = document.getElementById('terminal-search-input') as HTMLInputElement | null;
     const closeBtn = document.getElementById('close-terminal-btn');
-    const items = document.querySelectorAll<HTMLButtonElement>('.terminal-item');
+    const items = Array.from(document.querySelectorAll<HTMLButtonElement>('.terminal-item'));
     const toast = document.getElementById('terminal-toast');
 
     let selectedIndex = 0;
     let lastActiveElement: HTMLElement | null = null;
+    let filterRaf: number | null = null;
 
     function openTerminal() {
       lastActiveElement = document.activeElement as HTMLElement | null;
       modal?.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
-      input?.focus();
       if (input) input.value = '';
       filterItems('');
       updateSelection(0);
+      requestAnimationFrame(() => {
+        input?.focus();
+      });
     }
 
     function closeTerminal() {
@@ -217,74 +222,37 @@ const closeAria = lang === 'es' ? 'Cerrar paleta de comandos' : 'Close command p
     }
 
     function updateSelection(index: number) {
-      const visibleItems = Array.from(items).filter((i) => i.style.display !== 'none');
+      const visibleItems = items.filter((i) => i.style.display !== 'none');
       if (visibleItems.length === 0) return;
 
       selectedIndex = Math.max(0, Math.min(index, visibleItems.length - 1));
 
       visibleItems.forEach((item, idx) => {
-        if (idx === selectedIndex) {
-          item.classList.add('bg-zinc-900', 'text-white');
+        const isSel = idx === selectedIndex;
+        item.classList.toggle('bg-zinc-900', isSel);
+        item.classList.toggle('text-white', isSel);
+        if (isSel) {
           item.scrollIntoView({ block: 'nearest' });
-        } else {
-          item.classList.remove('bg-zinc-900', 'text-white');
         }
       });
     }
 
     function filterItems(query: string) {
-      const q = query.toLowerCase().trim();
-      items.forEach((item) => {
-        const text = item.textContent?.toLowerCase() || '';
-        if (!q || text.includes(q)) {
-          item.style.display = 'flex';
-        } else {
-          item.style.display = 'none';
-        }
+      if (filterRaf) cancelAnimationFrame(filterRaf);
+      filterRaf = requestAnimationFrame(() => {
+        const q = query.toLowerCase().trim();
+        items.forEach((item) => {
+          const text = item.textContent?.toLowerCase() || '';
+          item.style.display = (!q || text.includes(q)) ? 'flex' : 'none';
+        });
+        updateSelection(0);
       });
-      updateSelection(0);
     }
 
     input?.addEventListener('input', (e) => {
       filterItems((e.target as HTMLInputElement).value);
     });
 
-    window.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        if (modal?.classList.contains('hidden')) {
-          openTerminal();
-        } else {
-          closeTerminal();
-        }
-      } else if (e.key === 'Escape' && !modal?.classList.contains('hidden')) {
-        closeTerminal();
-      } else if (!modal?.classList.contains('hidden')) {
-        const visibleItems = Array.from(items).filter((i) => i.style.display !== 'none');
-        if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          updateSelection(selectedIndex + 1);
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          updateSelection(selectedIndex - 1);
-        } else if (e.key === 'Enter') {
-          e.preventDefault();
-          if (visibleItems[selectedIndex]) {
-            visibleItems[selectedIndex].click();
-          }
-        } else if (e.key === 'Tab') {
-          e.preventDefault();
-          const focusable = [input, closeBtn, ...visibleItems].filter(Boolean) as HTMLElement[];
-          const currentIndex = focusable.indexOf(document.activeElement as HTMLElement);
-          const nextIndex = e.shiftKey
-            ? (currentIndex - 1 + focusable.length) % focusable.length
-            : (currentIndex + 1) % focusable.length;
-          focusable[nextIndex]?.focus();
-        }
-      }
-    });
-
-    window.addEventListener('toggle-terminal', openTerminal);
     closeBtn?.addEventListener('click', closeTerminal);
 
     modal?.addEventListener('click', (e) => {
@@ -294,7 +262,7 @@ const closeAria = lang === 'es' ? 'Cerrar paleta de comandos' : 'Close command p
     });
 
     items.forEach((item) => {
-      item.addEventListener('click', async () => {
+      item.addEventListener('click', () => {
         const action = item.getAttribute('data-action');
         if (action === 'navigate') {
           const target = item.getAttribute('data-target');
@@ -303,7 +271,9 @@ const closeAria = lang === 'es' ? 'Cerrar paleta de comandos' : 'Close command p
             window.location.hash = target;
           }
         } else if (action === 'copy-email') {
-          await navigator.clipboard.writeText('hi@gefy.dev');
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText('hi@gefy.dev').catch(() => {});
+          }
           closeTerminal();
           if (toast) {
             toast.classList.remove('hidden');
@@ -325,19 +295,81 @@ const closeAria = lang === 'es' ? 'Cerrar paleta de comandos' : 'Close command p
           closeTerminal();
           const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           if (!prefersReducedMotion) {
-            try {
-              const { default: confetti } = await import('canvas-confetti');
-              confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#0db7b9', '#735ed5', '#22d3ee', '#8b5cf6'],
-              });
-            } catch {}
+            const runConfetti = async () => {
+              try {
+                const { default: confetti } = await import('canvas-confetti');
+                confetti({
+                  particleCount: 100,
+                  spread: 70,
+                  origin: { y: 0.6 },
+                  colors: ['#0db7b9', '#735ed5', '#22d3ee', '#8b5cf6'],
+                });
+              } catch {}
+            };
+            if ('requestIdleCallback' in window) {
+              requestIdleCallback(runConfetti);
+            } else {
+              requestAnimationFrame(runConfetti);
+            }
           }
         }
       });
     });
+
+    if (!terminalInitialized) {
+      terminalInitialized = true;
+
+      window.addEventListener('toggle-terminal', () => {
+        const curModal = document.getElementById('terminal-modal');
+        if (curModal?.classList.contains('hidden')) {
+          openTerminal();
+        } else {
+          closeTerminal();
+        }
+      });
+
+      window.addEventListener('keydown', (e) => {
+        const curModal = document.getElementById('terminal-modal');
+        const isHidden = curModal?.classList.contains('hidden');
+
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          if (isHidden) {
+            openTerminal();
+          } else {
+            closeTerminal();
+          }
+        } else if (e.key === 'Escape' && !isHidden) {
+          closeTerminal();
+        } else if (!isHidden) {
+          const curItems = Array.from(document.querySelectorAll<HTMLButtonElement>('.terminal-item'));
+          const visibleItems = curItems.filter((i) => i.style.display !== 'none');
+          const curInput = document.getElementById('terminal-search-input') as HTMLInputElement | null;
+          const curCloseBtn = document.getElementById('close-terminal-btn');
+
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            updateSelection(selectedIndex + 1);
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            updateSelection(selectedIndex - 1);
+          } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (visibleItems[selectedIndex]) {
+              visibleItems[selectedIndex].click();
+            }
+          } else if (e.key === 'Tab') {
+            e.preventDefault();
+            const focusable = [curInput, curCloseBtn, ...visibleItems].filter(Boolean) as HTMLElement[];
+            const currentIndex = focusable.indexOf(document.activeElement as HTMLElement);
+            const nextIndex = e.shiftKey
+              ? (currentIndex - 1 + focusable.length) % focusable.length
+              : (currentIndex + 1) % focusable.length;
+            focusable[nextIndex]?.focus();
+          }
+        }
+      });
+    }
   }
 
   document.addEventListener('astro:page-load', initTerminal);

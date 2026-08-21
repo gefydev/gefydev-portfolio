@@ -152,32 +152,32 @@ const t = translations[lang];
 
 <script>
   function initProjects() {
-    const filterBtns = document.querySelectorAll<HTMLButtonElement>('.project-filter-btn');
-    const projectItems = document.querySelectorAll<HTMLElement>('.project-item');
+    const filterContainer = document.querySelector('[role="tablist"]');
+    if (!filterContainer || (filterContainer as HTMLElement).dataset.bound) return;
+    (filterContainer as HTMLElement).dataset.bound = 'true';
+
+    const filterBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.project-filter-btn'));
+    const projectItems = Array.from(document.querySelectorAll<HTMLElement>('.project-item'));
 
     function setActiveTab(selectedBtn: HTMLButtonElement) {
-      filterBtns.forEach((b) => {
-        b.classList.remove('bg-[#0db7b9]', 'text-zinc-950', 'font-bold');
-        b.classList.add('text-zinc-400', 'font-medium');
-        b.setAttribute('aria-selected', 'false');
-        b.setAttribute('tabindex', '-1');
-      });
-
-      selectedBtn.classList.add('bg-[#0db7b9]', 'text-zinc-950', 'font-bold');
-      selectedBtn.classList.remove('text-zinc-400', 'font-medium');
-      selectedBtn.setAttribute('aria-selected', 'true');
-      selectedBtn.setAttribute('tabindex', '0');
-      selectedBtn.focus();
-
       const filter = selectedBtn.getAttribute('data-filter');
 
-      projectItems.forEach((item) => {
-        const category = item.getAttribute('data-category');
-        if (filter === 'all' || category === filter) {
-          item.style.display = 'flex';
-        } else {
-          item.style.display = 'none';
-        }
+      filterBtns.forEach((b) => {
+        const isSelected = b === selectedBtn;
+        b.classList.toggle('bg-[#0db7b9]', isSelected);
+        b.classList.toggle('text-zinc-950', isSelected);
+        b.classList.toggle('font-bold', isSelected);
+        b.classList.toggle('text-zinc-400', !isSelected);
+        b.classList.toggle('font-medium', !isSelected);
+        b.setAttribute('aria-selected', String(isSelected));
+        b.setAttribute('tabindex', isSelected ? '0' : '-1');
+      });
+
+      requestAnimationFrame(() => {
+        projectItems.forEach((item) => {
+          const category = item.getAttribute('data-category');
+          item.style.display = (filter === 'all' || category === filter) ? 'flex' : 'none';
+        });
       });
     }
 
@@ -190,16 +190,20 @@ const t = translations[lang];
           e.preventDefault();
           nextIndex = (index + 1) % filterBtns.length;
           setActiveTab(filterBtns[nextIndex]);
+          filterBtns[nextIndex].focus();
         } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
           e.preventDefault();
           nextIndex = (index - 1 + filterBtns.length) % filterBtns.length;
           setActiveTab(filterBtns[nextIndex]);
+          filterBtns[nextIndex].focus();
         } else if (e.key === 'Home') {
           e.preventDefault();
           setActiveTab(filterBtns[0]);
+          filterBtns[0].focus();
         } else if (e.key === 'End') {
           e.preventDefault();
           setActiveTab(filterBtns[filterBtns.length - 1]);
+          filterBtns[filterBtns.length - 1].focus();
         }
       });
     });

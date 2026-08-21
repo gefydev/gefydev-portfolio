@@ -6,15 +6,36 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   if (
     pathname.startsWith('/_astro') ||
+    pathname.startsWith('/images') ||
     pathname.startsWith('/favicon') ||
     pathname.endsWith('.png') ||
     pathname.endsWith('.webp') ||
     pathname.endsWith('.svg') ||
     pathname.endsWith('.ico') ||
+    pathname.endsWith('.woff2')
+  ) {
+    const response = await next();
+    if (pathname.startsWith('/_astro')) {
+      response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+      response.headers.set('CDN-Cache-Control', 'max-age=31536000, immutable');
+      response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=31536000, immutable');
+    } else {
+      response.headers.set('Cache-Control', 'public, max-age=86400, s-maxage=2592000, stale-while-revalidate=604800');
+      response.headers.set('CDN-Cache-Control', 'max-age=2592000, stale-while-revalidate=604800');
+      response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=2592000, stale-while-revalidate=604800');
+    }
+    return response;
+  }
+
+  if (
     pathname.endsWith('.xml') ||
     pathname.endsWith('.txt')
   ) {
-    return next();
+    const response = await next();
+    response.headers.set('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400');
+    response.headers.set('CDN-Cache-Control', 'max-age=604800, stale-while-revalidate=86400');
+    response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=604800, stale-while-revalidate=86400');
+    return response;
   }
 
   let lang: 'es' | 'en' = 'es';
@@ -55,6 +76,15 @@ export const onRequest = defineMiddleware(async (context, next) => {
   context.locals.lang = lang;
 
   const response = await next();
+  response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=86400, stale-while-revalidate=604800');
+  response.headers.set('CDN-Cache-Control', 'max-age=86400, stale-while-revalidate=604800');
+  response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400, stale-while-revalidate=604800');
   response.headers.set('Vary', 'Accept-Language, Cookie');
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  response.headers.set('Link', '</images/logo-white-bg.webp>; rel=preload; as=image');
+
   return response;
 });

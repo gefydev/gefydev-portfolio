@@ -46,7 +46,7 @@ const copyCmdAria = lang === 'es' ? 'Copiar comando npx gefydev' : 'Copy command
           <div class="relative flex items-center rounded-xl bg-zinc-950/90 border border-zinc-800 hover:border-[#0db7b9]/40 transition-colors p-1.5 text-xs text-zinc-300 max-w-md group">
             <div class="flex items-center gap-2 px-3 py-2 text-zinc-400 border-r border-zinc-800/80 font-mono">
               <Terminal class="w-3.5 h-3.5 text-[#0db7b9]" />
-              <span class="text-zinc-500">$</span>
+              <span class="text-zinc-400">$</span>
             </div>
             <code id="hero-cmd-text" class="px-3 py-2 text-cyan-300 font-mono text-xs flex-1 select-all">npx gefydev</code>
             <button
@@ -92,7 +92,7 @@ const copyCmdAria = lang === 'es' ? 'Copiar comando npx gefydev' : 'Copy command
           <div class="relative rounded-2xl bg-zinc-950/90 border border-zinc-800 p-5 space-y-4 shadow-xl">
             <div class="relative aspect-square rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800/80 overflow-hidden flex flex-col items-center justify-center text-center p-6 group/avatar">
               <img
-                src="/logo-white-bg.webp"
+                src="/images/logo-white-bg.webp"
                 alt="GefyDev Official Logo"
                 class="w-28 h-28 rounded-2xl object-contain shadow-md mb-3 group-hover/avatar:scale-105 transition-transform"
                 width="112"
@@ -144,34 +144,50 @@ const copyCmdAria = lang === 'es' ? 'Copiar comando npx gefydev' : 'Copy command
 <script>
   function initHero() {
     const copyBtn = document.getElementById('hero-copy-cmd');
-    const copyIcon = copyBtn?.querySelector('.copy-icon');
-    const checkIcon = copyBtn?.querySelector('.check-icon');
-    const copyLabel = copyBtn?.querySelector('.copy-label');
+    if (!copyBtn || copyBtn.dataset.bound) return;
+    copyBtn.dataset.bound = 'true';
 
-    copyBtn?.addEventListener('click', async () => {
+    const copyIcon = copyBtn.querySelector('.copy-icon');
+    const checkIcon = copyBtn.querySelector('.check-icon');
+    const copyLabel = copyBtn.querySelector('.copy-label');
+
+    copyBtn.addEventListener('click', () => {
       try {
-        await navigator.clipboard.writeText('npx gefydev');
         copyIcon?.classList.add('hidden');
         checkIcon?.classList.remove('hidden');
         if (copyLabel) copyLabel.textContent = '¡Listo!';
 
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText('npx gefydev').catch(() => {});
+        }
+
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!prefersReducedMotion) {
-          try {
-            const { default: confetti } = await import('canvas-confetti');
-            confetti({
-              particleCount: 35,
-              spread: 60,
-              origin: { y: 0.8 },
-              colors: ['#0db7b9', '#735ed5', '#22d3ee', '#8b5cf6'],
-            });
-          } catch {}
+          const triggerConfetti = async () => {
+            try {
+              const { default: confetti } = await import('canvas-confetti');
+              confetti({
+                particleCount: 35,
+                spread: 60,
+                origin: { y: 0.8 },
+                colors: ['#0db7b9', '#735ed5', '#22d3ee', '#8b5cf6'],
+              });
+            } catch {}
+          };
+
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(triggerConfetti);
+          } else {
+            requestAnimationFrame(triggerConfetti);
+          }
         }
 
         setTimeout(() => {
           copyIcon?.classList.remove('hidden');
           checkIcon?.classList.add('hidden');
-          if (copyLabel) copyLabel.textContent = copyBtn.getAttribute('aria-label')?.includes('Copy') ? 'Copy' : 'Copiar';
+          if (copyLabel) {
+            copyLabel.textContent = copyBtn.getAttribute('aria-label')?.includes('Copy') ? 'Copy' : 'Copiar';
+          }
         }, 2500);
       } catch {}
     });

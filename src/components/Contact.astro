@@ -116,26 +116,32 @@ const githubAria = lang === 'es' ? 'Abrir perfil de GitHub de GefyDev' : 'Open G
 <script>
   function initContact() {
     const copyBtn = document.getElementById('contact-copy-email-btn');
-    const copyIcon = copyBtn?.querySelector('.contact-copy-icon');
-    const checkIcon = copyBtn?.querySelector('.contact-check-icon');
-    const copyLabel = copyBtn?.querySelector('.contact-copy-label');
+    if (!copyBtn || copyBtn.dataset.bound) return;
+    copyBtn.dataset.bound = 'true';
 
-    copyBtn?.addEventListener('click', async () => {
+    const copyIcon = copyBtn.querySelector('.contact-copy-icon');
+    const checkIcon = copyBtn.querySelector('.contact-check-icon');
+    const copyLabel = copyBtn.querySelector('.contact-copy-label');
+
+    copyBtn.addEventListener('click', () => {
       const email = copyBtn.getAttribute('data-email');
       if (!email) return;
 
-      try {
-        await navigator.clipboard.writeText(email);
-        copyIcon?.classList.add('hidden');
-        checkIcon?.classList.remove('hidden');
-        if (copyLabel) copyLabel.textContent = '¡Copiado!';
+      copyIcon?.classList.add('hidden');
+      checkIcon?.classList.remove('hidden');
+      if (copyLabel) copyLabel.textContent = '¡Copiado!';
 
-        setTimeout(() => {
-          copyIcon?.classList.remove('hidden');
-          checkIcon?.classList.add('hidden');
-          if (copyLabel) copyLabel.textContent = copyBtn.getAttribute('aria-label')?.includes('Copy') ? 'Copy Email' : 'Copiar Email';
-        }, 2500);
-      } catch {}
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(email).catch(() => {});
+      }
+
+      setTimeout(() => {
+        copyIcon?.classList.remove('hidden');
+        checkIcon?.classList.add('hidden');
+        if (copyLabel) {
+          copyLabel.textContent = copyBtn.getAttribute('aria-label')?.includes('Copy') ? 'Copy Email' : 'Copiar Email';
+        }
+      }, 2500);
     });
   }
 

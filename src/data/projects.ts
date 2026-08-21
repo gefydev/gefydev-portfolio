@@ -54,10 +54,10 @@ export const techBadgeStyles: Record<string, TechTag> = {
   React: { name: 'React', color: '#0db7b9', bg: 'rgba(13, 183, 185, 0.12)', border: 'rgba(13, 183, 185, 0.3)' },
   Tailwind: { name: 'Tailwind CSS', color: '#06b6d4', bg: 'rgba(6, 182, 212, 0.12)', border: 'rgba(6, 182, 212, 0.3)' },
   Node: { name: 'Node.js', color: '#22c55e', bg: 'rgba(34, 197, 94, 0.12)', border: 'rgba(34, 197, 94, 0.3)' },
-  TUI: { name: 'TUI / Terminal', color: '#a855f7', bg: 'rgba(168, 85, 247, 0.12)', border: 'rgba(168, 85, 247, 0.3)' },
+  TUI: { name: 'TUI / Terminal', color: '#c084fc', bg: 'rgba(192, 132, 252, 0.12)', border: 'rgba(192, 132, 252, 0.3)' },
   ADB: { name: 'ADB / Android', color: '#10b981', bg: 'rgba(16, 185, 129, 0.12)', border: 'rgba(16, 185, 129, 0.3)' },
-  Electron: { name: 'Electron', color: '#735ed5', bg: 'rgba(115, 94, 213, 0.12)', border: 'rgba(115, 94, 213, 0.3)' },
-  CI: { name: 'GitHub Actions', color: '#6366f1', bg: 'rgba(99, 102, 241, 0.12)', border: 'rgba(99, 102, 241, 0.3)' },
+  Electron: { name: 'Electron', color: '#a78bfa', bg: 'rgba(167, 139, 250, 0.12)', border: 'rgba(167, 139, 250, 0.3)' },
+  CI: { name: 'GitHub Actions', color: '#818cf8', bg: 'rgba(129, 140, 248, 0.12)', border: 'rgba(129, 140, 248, 0.3)' },
   API: { name: 'REST API', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.12)', border: 'rgba(236, 72, 153, 0.3)' },
   Leaflet: { name: 'Leaflet Maps', color: '#84cc16', bg: 'rgba(132, 204, 22, 0.12)', border: 'rgba(132, 204, 22, 0.3)' },
 };
