@@ -99,12 +99,13 @@ const copyCmdAria = lang === 'es' ? 'Copiar comando npx gefydev' : 'Copy command
                 height="112"
                 loading="eager"
                 decoding="async"
+                fetchpriority="high"
               />
               <p class="text-sm font-bold text-white">Genaro Febbo Yapur</p>
               <p class="text-xs font-mono text-[#0db7b9]">@gefydev</p>
 
               <div class="absolute top-3 right-3 px-2 py-0.5 rounded text-[10px] font-medium bg-[#735ed5]/20 border border-[#735ed5]/40 text-purple-300">
-                Exactas UBA
+                {lang === 'es' ? 'U. de Buenos Aires' : 'Univ. of Buenos Aires'}
               </div>
             </div>
 
@@ -114,7 +115,7 @@ const copyCmdAria = lang === 'es' ? 'Copiar comando npx gefydev' : 'Copy command
                   <GraduationCap class="w-4 h-4 text-purple-400" />
                   <span class="font-medium">{lang === 'es' ? 'Universidad' : 'University'}</span>
                 </span>
-                <span class="font-semibold text-white">Exactas UBA</span>
+                <span class="font-semibold text-white">{lang === 'es' ? 'U. de Buenos Aires' : 'Univ. of Buenos Aires'}</span>
               </div>
 
               <div class="flex items-center justify-between py-2 px-3 rounded-lg bg-zinc-900/60 border border-zinc-800/60 text-zinc-300">
