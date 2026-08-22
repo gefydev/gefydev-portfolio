@@ -80,7 +80,7 @@ export const projects: Project[] = [
       es: 'Proyecto estrella. Un cliente de Spotify desarrollado desde cero en Rust priorizando velocidad instantánea, mínimo uso de memoria y rendimiento nativo sin la sobrecarga de clientes pesados.',
       en: 'Flagship project. A lightweight Spotify client built from scratch in Rust, engineered for minimal memory footprint, instant startup, and blazing fast audio streaming.',
     },
-    homepageUrl: 'https://spotifust.comidolar.com.ar',
+    homepageUrl: 'https://spotifust.gefy.dev',
     githubUrl: 'https://github.com/gefydev/spotifust',
     techTags: [techBadgeStyles.Rust, techBadgeStyles.Iced, techBadgeStyles.Rodio],
     stars: 2,
