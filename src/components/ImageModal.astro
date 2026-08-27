@@ -1,0 +1,242 @@
+---
+import { translations } from "../data/translations";
+import { X, ExternalLink, Github, Sparkles } from "lucide-astro";
+
+interface Props {
+    lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+const closeAria =
+    lang === "es" ? "Cerrar visor de imagen" : "Close image viewer";
+---
+
+<div
+    id="project-image-modal"
+    class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300 ease-out bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 md:p-8"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-project-title"
+    aria-hidden="true"
+>
+    <div
+        id="project-image-card"
+        class="relative w-full max-w-4xl max-h-[90vh] flex flex-col rounded-2xl bg-zinc-950 border border-zinc-800/90 shadow-2xl shadow-black/80 overflow-hidden transform scale-95 transition-all duration-300 ease-out font-sans"
+    >
+        <div
+            class="flex items-center justify-between px-5 py-3.5 border-b border-zinc-800/80 bg-zinc-900/70"
+        >
+            <div class="flex items-center gap-3 min-w-0">
+                <span
+                    class="w-2.5 h-2.5 rounded-full bg-[#0db7b9] shadow-[0_0_8px_rgba(13,183,185,0.6)]"
+                ></span>
+                <h3
+                    id="modal-project-title"
+                    class="text-sm sm:text-base font-bold text-white truncate"
+                >
+                </h3>
+                <span
+                    id="modal-project-badge"
+                    class="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#735ed5]/20 border border-[#735ed5]/40 text-purple-300"
+                >
+                    <Sparkles class="w-3 h-3 text-[#0db7b9]" />
+                    <span id="modal-project-badge-text"></span>
+                </span>
+            </div>
+
+            <button
+                id="close-image-modal-btn"
+                type="button"
+                class="p-2 min-w-[36px] min-h-[36px] rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors flex items-center justify-center cursor-pointer"
+                aria-label={closeAria}
+            >
+                <X class="w-4 h-4" />
+            </button>
+        </div>
+
+        <div
+            class="relative w-full flex-1 bg-zinc-950 flex items-center justify-center p-2 sm:p-4 overflow-hidden"
+        >
+            <div
+                class="relative w-full max-h-[55vh] flex items-center justify-center rounded-xl overflow-hidden bg-zinc-900/60 border border-zinc-800/60"
+            >
+                <img
+                    id="modal-project-image"
+                    src=""
+                    alt=""
+                    class="w-full h-auto max-h-[55vh] object-contain rounded-lg transition-transform duration-300"
+                    loading="eager"
+                    decoding="async"
+                />
+            </div>
+        </div>
+
+        <div
+            class="px-5 py-4 border-t border-zinc-800/80 bg-zinc-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+        >
+            <p
+                id="modal-project-desc"
+                class="text-xs sm:text-sm text-zinc-300 leading-relaxed max-w-xl line-clamp-2 sm:line-clamp-none"
+            >
+            </p>
+
+            <div class="flex items-center gap-2.5 shrink-0">
+                <a
+                    id="modal-project-live"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hidden items-center gap-1.5 px-4 py-2 min-h-[38px] rounded-xl bg-[#0db7b9] hover:bg-[#0db7b9]/90 text-zinc-950 font-bold text-xs transition-colors cursor-pointer active:scale-[0.98]"
+                >
+                    <span>{lang === "es" ? "Ver Sitio" : "Live Preview"}</span>
+                    <ExternalLink class="w-3.5 h-3.5" />
+                </a>
+
+                <a
+                    id="modal-project-github"
+                    href="#"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="hidden items-center gap-1.5 px-4 py-2 min-h-[38px] rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs transition-colors cursor-pointer active:scale-[0.98]"
+                >
+                    <Github class="w-3.5 h-3.5" />
+                    <span>{lang === "es" ? "Código" : "Source"}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function initImageModal() {
+        const modal = document.getElementById("project-image-modal");
+        const card = document.getElementById("project-image-card");
+        const closeBtn = document.getElementById("close-image-modal-btn");
+        const modalTitle = document.getElementById("modal-project-title");
+        const modalBadge = document.getElementById("modal-project-badge");
+        const modalBadgeText = document.getElementById(
+            "modal-project-badge-text",
+        );
+        const modalImg = document.getElementById(
+            "modal-project-image",
+        ) as HTMLImageElement | null;
+        const modalDesc = document.getElementById("modal-project-desc");
+        const modalLive = document.getElementById(
+            "modal-project-live",
+        ) as HTMLAnchorElement | null;
+        const modalGithub = document.getElementById(
+            "modal-project-github",
+        ) as HTMLAnchorElement | null;
+
+        let lastFocusedElement: HTMLElement | null = null;
+
+        function openModal(data: {
+            title: string;
+            image: string;
+            desc: string;
+            badge?: string;
+            liveUrl?: string;
+            githubUrl?: string;
+        }) {
+            if (!modal || !card) return;
+            lastFocusedElement = document.activeElement as HTMLElement | null;
+
+            if (modalTitle) modalTitle.textContent = data.title;
+            if (modalImg) {
+                modalImg.src = data.image;
+                modalImg.alt = `Screenshot en alta resolución de ${data.title}`;
+            }
+            if (modalDesc) modalDesc.textContent = data.desc;
+
+            if (data.badge && modalBadge && modalBadgeText) {
+                modalBadgeText.textContent = data.badge;
+                modalBadge.classList.remove("hidden");
+                modalBadge.classList.add("inline-flex");
+            } else if (modalBadge) {
+                modalBadge.classList.add("hidden");
+                modalBadge.classList.remove("inline-flex");
+            }
+
+            if (modalLive) {
+                if (data.liveUrl) {
+                    modalLive.href = data.liveUrl;
+                    modalLive.classList.remove("hidden");
+                    modalLive.classList.add("inline-flex");
+                } else {
+                    modalLive.classList.add("hidden");
+                    modalLive.classList.remove("inline-flex");
+                }
+            }
+
+            if (modalGithub) {
+                if (data.githubUrl) {
+                    modalGithub.href = data.githubUrl;
+                    modalGithub.classList.remove("hidden");
+                    modalGithub.classList.add("inline-flex");
+                } else {
+                    modalGithub.classList.add("hidden");
+                    modalGithub.classList.remove("inline-flex");
+                }
+            }
+
+            modal.classList.remove("hidden");
+            modal.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+
+            // Force layout recalculation so the transition starts from opacity 0 & scale 95
+            void modal.offsetWidth;
+
+            requestAnimationFrame(() => {
+                modal.classList.remove("opacity-0");
+                modal.classList.add("opacity-100");
+                card.classList.remove("scale-95");
+                card.classList.add("scale-100");
+                closeBtn?.focus();
+            });
+        }
+
+        function closeModal() {
+            if (!modal || !card) return;
+
+            modal.classList.remove("opacity-100");
+            modal.classList.add("opacity-0");
+            card.classList.remove("scale-100");
+            card.classList.add("scale-95");
+
+            setTimeout(() => {
+                modal.classList.add("hidden");
+                modal.setAttribute("aria-hidden", "true");
+                document.body.style.overflow = "";
+                if (lastFocusedElement) {
+                    lastFocusedElement.focus();
+                }
+            }, 300);
+        }
+
+        closeBtn?.addEventListener("click", closeModal);
+
+        modal?.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (
+                e.key === "Escape" &&
+                modal &&
+                !modal.classList.contains("hidden")
+            ) {
+                closeModal();
+            }
+        });
+
+        window.addEventListener("open-project-modal", ((e: CustomEvent) => {
+            if (e.detail) {
+                openModal(e.detail);
+            }
+        }) as EventListener);
+    }
+
+    document.addEventListener("astro:page-load", initImageModal);
+</script>

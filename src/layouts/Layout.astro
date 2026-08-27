@@ -4,6 +4,7 @@ import SEO from "../components/SEO.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import TerminalModal from "../components/TerminalModal.astro";
+import ImageModal from "../components/ImageModal.astro";
 import { translations } from "../data/translations";
 import "../styles/global.css";
 
@@ -103,5 +104,6 @@ const noindex = Astro.props.noindex || false;
 
         <Footer lang={lang} />
         <TerminalModal lang={lang} />
+        <ImageModal lang={lang} />
     </body>
 </html>

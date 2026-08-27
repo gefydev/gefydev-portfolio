@@ -1,110 +1,211 @@
 ---
-import type { Project } from '../data/projects';
-import { ExternalLink, Github, Star, Sparkles } from 'lucide-astro';
+import type { Project } from "../data/projects";
+import { ExternalLink, Github, Star, Sparkles, Maximize2 } from "lucide-astro";
 
 interface Props {
-  project: Project;
-  lang: 'es' | 'en';
+    project: Project;
+    lang: "es" | "en";
 }
 
 const { project, lang } = Astro.props;
-const liveDemoAria = lang === 'es' ? `Visitar demo en vivo de ${project.name}` : `Visit live demo of ${project.name}`;
-const sourceCodeAria = lang === 'es' ? `Ver código fuente de ${project.name} en GitHub` : `View source code of ${project.name} on GitHub`;
-const techAria = lang === 'es' ? 'Tecnologías utilizadas' : 'Technologies used';
+const liveDemoAria =
+    lang === "es"
+        ? `Visitar demo en vivo de ${project.name}`
+        : `Visit live demo of ${project.name}`;
+const sourceCodeAria =
+    lang === "es"
+        ? `Ver código fuente de ${project.name} en GitHub`
+        : `View source code of ${project.name} on GitHub`;
+const viewImageAria =
+    lang === "es"
+        ? `Ver imagen de ${project.name} en pantalla completa`
+        : `View ${project.name} image in fullscreen`;
+const techAria = lang === "es" ? "Tecnologías utilizadas" : "Technologies used";
 ---
 
-<article 
-  class="group relative flex flex-col justify-between rounded-xl bg-zinc-950/80 border border-zinc-800/80 hover:border-zinc-700 transition-all duration-300 overflow-hidden shadow-xs hover:shadow-xl hover:shadow-[#0db7b9]/5 hover:-translate-y-1 project-item"
-  data-category={project.category}
+<article
+    class="group relative flex flex-col justify-between rounded-2xl bg-zinc-950/90 border border-zinc-800/80 hover:border-zinc-700 transition-all duration-300 overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-[#0db7b9]/5 hover:-translate-y-1 project-item"
+    data-category={project.category}
 >
-  <div class="p-6 space-y-4">
-    <div class="relative w-full h-44 rounded-lg bg-zinc-900 border border-zinc-800/80 overflow-hidden group/preview flex flex-col justify-between p-4">
-      <img
-        src={project.image}
-        alt={`Screenshot de ${project.name}`}
-        class="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover/preview:scale-105"
-        width="800"
-        height="440"
-        loading="lazy"
-        decoding="async"
-      />
-      <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/40 to-zinc-950/20 pointer-events-none"></div>
-
-      <div class="relative z-10 flex items-center justify-between w-full">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-sans font-semibold bg-zinc-950/90 border border-zinc-700/80 text-zinc-200 backdrop-blur-xs">
-          <span class="w-2 h-2 rounded-full" style={`background-color: ${project.accentColor};`}></span>
-          <span>{project.name}</span>
-        </span>
-
-        {project.badge && (
-          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-sans font-medium bg-[#735ed5]/25 border border-[#735ed5]/40 text-purple-300 backdrop-blur-xs">
-            <Sparkles class="w-3 h-3 text-[#0db7b9]" />
-            <span>{project.badge[lang]}</span>
-          </span>
-        )}
-      </div>
-
-      <div class="relative z-10 flex items-center justify-between text-xs font-sans text-zinc-300">
-        <span class="text-zinc-300 font-mono text-[11px] truncate max-w-[200px] bg-zinc-950/80 px-2 py-0.5 rounded border border-zinc-800 backdrop-blur-xs">
-          {project.homepageUrl ? project.homepageUrl.replace('https://', '') : 'github.com'}
-        </span>
-        {project.stars > 0 && (
-          <span class="flex items-center gap-1 text-amber-400 font-mono text-xs bg-zinc-950/80 px-2 py-0.5 rounded border border-zinc-800 backdrop-blur-xs">
-            <Star class="w-3.5 h-3.5 fill-amber-400/30" />
-            <span>{project.stars}</span>
-          </span>
-        )}
-      </div>
-    </div>
-
-    <div class="space-y-2">
-      <h3 class="text-lg font-bold text-white font-sans group-hover:text-[#0db7b9] transition-colors">
-        {project.name}
-      </h3>
-      <p class="text-sm text-zinc-300 leading-relaxed font-sans line-clamp-3">
-        {project.description[lang]}
-      </p>
-    </div>
-  </div>
-
-  <div class="p-6 pt-0 space-y-4">
-    <div class="flex flex-wrap gap-1.5" aria-label={techAria}>
-      {project.techTags.map((tag) => (
-        <span 
-          class="px-2.5 py-0.5 rounded text-[11px] font-sans font-medium border"
-          style={`color: ${tag.color}; background-color: ${tag.bg}; border-color: ${tag.border};`}
+    <div class="p-6 space-y-4">
+        <!-- Image Box with interactive preview and Fullscreen trigger -->
+        <div
+            class="relative w-full h-48 rounded-xl bg-zinc-900 border border-zinc-800/80 overflow-hidden group/preview flex flex-col justify-between p-4 cursor-pointer project-card-media"
         >
-          {tag.name}
-        </span>
-      ))}
+            <img
+                src={project.image}
+                alt={`Screenshot de ${project.name}`}
+                class="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover/preview:scale-105"
+                width="800"
+                height="440"
+                loading="lazy"
+                decoding="async"
+            />
+            <div
+                class="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/40 to-zinc-950/20 pointer-events-none"
+            >
+            </div>
+
+            <!-- Top info & Zoom button -->
+            <div class="relative z-10 flex items-center justify-between w-full">
+                <span
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-sans font-semibold bg-zinc-950/90 border border-zinc-700/80 text-zinc-200 backdrop-blur-xs"
+                >
+                    <span
+                        class="w-2 h-2 rounded-full"
+                        style={`background-color: ${project.accentColor};`}
+                    ></span>
+                    <span>{project.name}</span>
+                </span>
+
+                <button
+                    type="button"
+                    class="project-fullscreen-btn p-2 rounded-lg bg-zinc-950/80 hover:bg-[#0db7b9] hover:text-zinc-950 text-zinc-300 border border-zinc-700/80 backdrop-blur-xs transition-all shadow-md cursor-pointer opacity-90 sm:opacity-0 group-hover/preview:opacity-100 focus-visible:opacity-100"
+                    data-title={project.name}
+                    data-image={project.image}
+                    data-desc={project.description[lang]}
+                    data-badge={project.badge ? project.badge[lang] : ""}
+                    data-live={project.homepageUrl || ""}
+                    data-github={project.githubUrl}
+                    aria-label={viewImageAria}
+                >
+                    <Maximize2 class="w-3.5 h-3.5" />
+                </button>
+            </div>
+
+            <!-- Bottom badges on image -->
+            <div
+                class="relative z-10 flex items-center justify-between text-xs font-sans text-zinc-300"
+            >
+                <span
+                    class="text-zinc-300 font-mono text-[11px] truncate max-w-[180px] bg-zinc-950/85 px-2 py-0.5 rounded border border-zinc-800 backdrop-blur-xs"
+                >
+                    {
+                        project.homepageUrl
+                            ? project.homepageUrl.replace("https://", "")
+                            : "github.com"
+                    }
+                </span>
+                {
+                    project.stars > 0 && (
+                        <span class="flex items-center gap-1 text-amber-400 font-mono text-xs bg-zinc-950/85 px-2 py-0.5 rounded border border-zinc-800 backdrop-blur-xs">
+                            <Star class="w-3.5 h-3.5 fill-amber-400/30" />
+                            <span>{project.stars}</span>
+                        </span>
+                    )
+                }
+            </div>
+        </div>
+
+        <div class="space-y-2">
+            <div class="flex items-center justify-between gap-2">
+                <h3
+                    class="text-lg font-bold text-white font-sans group-hover:text-[#0db7b9] transition-colors"
+                >
+                    {project.name}
+                </h3>
+                {
+                    project.badge && (
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-sans font-medium bg-[#735ed5]/20 border border-[#735ed5]/40 text-purple-300">
+                            <Sparkles class="w-3 h-3 text-[#0db7b9]" />
+                            <span>{project.badge[lang]}</span>
+                        </span>
+                    )
+                }
+            </div>
+            <p
+                class="text-sm text-zinc-300 leading-relaxed font-sans line-clamp-3"
+            >
+                {project.description[lang]}
+            </p>
+        </div>
     </div>
 
-    <div class="pt-3 border-t border-zinc-800/80 flex items-center justify-between gap-3">
-      {project.homepageUrl ? (
-        <a
-          href={project.homepageUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-lg bg-[#0db7b9]/10 hover:bg-[#0db7b9]/20 border border-[#0db7b9]/30 text-[#0db7b9] hover:text-cyan-200 text-xs font-sans font-medium transition-colors active:scale-[0.98]"
-          aria-label={liveDemoAria}
+    <div class="p-6 pt-0 space-y-4">
+        <div class="flex flex-wrap gap-1.5" aria-label={techAria}>
+            {
+                project.techTags.map((tag) => (
+                    <span
+                        class="px-2.5 py-0.5 rounded text-[11px] font-sans font-medium border"
+                        style={`color: ${tag.color}; background-color: ${tag.bg}; border-color: ${tag.border};`}
+                    >
+                        {tag.name}
+                    </span>
+                ))
+            }
+        </div>
+
+        <div
+            class="pt-3 border-t border-zinc-800/80 flex items-center justify-between gap-3"
         >
-          <span>{lang === 'es' ? 'Ver Sitio' : 'Live Demo'}</span>
-          <ExternalLink class="w-3.5 h-3.5" />
-        </a>
-      ) : (
-        <span class="text-xs text-zinc-400 font-sans">{lang === 'es' ? 'CLI / Tool' : 'CLI / Tool'}</span>
-      )}
+            {
+                project.homepageUrl ? (
+                    <a
+                        href={project.homepageUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-xl bg-[#0db7b9]/10 hover:bg-[#0db7b9]/20 border border-[#0db7b9]/30 text-[#0db7b9] hover:text-cyan-200 text-xs font-sans font-semibold transition-colors active:scale-[0.98]"
+                        aria-label={liveDemoAria}
+                    >
+                        <span>{lang === "es" ? "Ver Sitio" : "Live Demo"}</span>
+                        <ExternalLink class="w-3.5 h-3.5" />
+                    </a>
+                ) : (
+                    <span class="text-xs text-zinc-500 font-mono">
+                        CLI / Tool
+                    </span>
+                )
+            }
 
-      <a
-        href={project.githubUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white text-xs font-sans font-medium transition-colors ml-auto active:scale-[0.98]"
-        aria-label={sourceCodeAria}
-      >
-        <Github class="w-3.5 h-3.5" />
-        <span>{lang === 'es' ? 'Código' : 'Source'}</span>
-      </a>
+            <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 px-3.5 py-2 min-h-[38px] rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white text-xs font-sans font-semibold transition-colors ml-auto active:scale-[0.98]"
+                aria-label={sourceCodeAria}
+            >
+                <Github class="w-3.5 h-3.5" />
+                <span>{lang === "es" ? "Código" : "Source"}</span>
+            </a>
+        </div>
     </div>
-  </div>
 </article>
+
+<script>
+    function initProjectCards() {
+        document.querySelectorAll(".project-card-media").forEach((media) => {
+            if ((media as HTMLElement).dataset.bound) return;
+            (media as HTMLElement).dataset.bound = "true";
+
+            const btn = media.querySelector(
+                ".project-fullscreen-btn",
+            ) as HTMLButtonElement | null;
+            if (!btn) return;
+
+            const triggerModal = (e: Event) => {
+                e.stopPropagation();
+                window.dispatchEvent(
+                    new CustomEvent("open-project-modal", {
+                        detail: {
+                            title: btn.dataset.title || "",
+                            image: btn.dataset.image || "",
+                            desc: btn.dataset.desc || "",
+                            badge: btn.dataset.badge || "",
+                            liveUrl: btn.dataset.live || "",
+                            githubUrl: btn.dataset.github || "",
+                        },
+                    }),
+                );
+            };
+
+            btn.addEventListener("click", triggerModal);
+            media.addEventListener("click", (e) => {
+                if (e.target !== btn && !btn.contains(e.target as Node)) {
+                    triggerModal(e);
+                }
+            });
+        });
+    }
+
+    document.addEventListener("astro:page-load", initProjectCards);
+</script>
