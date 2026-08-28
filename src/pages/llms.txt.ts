@@ -21,7 +21,7 @@ ${projects.map((p) => `- [${p.name}](${p.homepageUrl || p.githubUrl}): ${p.descr
 ${openSourceContributions.map((c) => `- [${c.author}/${c.repo}](${c.url}): ${c.description.en} (Role: ${c.role.en}, Stars: ${c.stars})`).join('\n')}
 
 ## Technical Competencies
-${techStack.map((t) => `- **${t.name}** (${t.level.toUpperCase()}): ${t.description.en}`).join('\n')}
+${techStack.map((t) => `- **${t.name}** (${t.roleBadge.en}): ${t.description.en}`).join('\n')}
 
 ## Developer Links & Social
 - [GitHub Profile](https://github.com/gefydev): Official open-source repositories and contributions.
