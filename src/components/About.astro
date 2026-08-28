@@ -3,9 +3,12 @@ import { translations } from "../data/translations";
 import {
     User,
     GraduationCap,
+    School,
+    Code2,
     CheckCircle2,
     Clock,
     BookOpen,
+    Sparkles,
 } from "lucide-astro";
 
 interface Props {
@@ -60,14 +63,21 @@ const t = translations[lang];
                     {t.about.bioParagraph3}
                 </p>
 
+                <!-- Bento Stat Grid (Uniform styling & vertically centered) -->
                 <div
-                    class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-zinc-800/80 text-center"
+                    class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-6 border-t border-zinc-800/80"
                 >
+                    <!-- Card 1: UBA Exactas -->
                     <div
-                        class="rounded-xl bg-zinc-900/60 border border-zinc-800 p-4 flex flex-col justify-center"
+                        class="group relative rounded-2xl bg-zinc-950/80 border border-zinc-800 hover:border-[#0db7b9]/50 p-4 sm:p-5 flex flex-col items-center justify-center text-center transition-all duration-300 hover:-translate-y-0.5 shadow-md h-full min-h-[160px]"
                     >
+                        <div
+                            class="w-9 h-9 rounded-xl bg-[#0db7b9]/15 border border-[#0db7b9]/30 text-[#0db7b9] flex items-center justify-center mb-2.5 transition-transform duration-300 group-hover:scale-110 shrink-0"
+                        >
+                            <GraduationCap class="w-4 h-4" />
+                        </div>
                         <p
-                            class="text-sm sm:text-base font-bold text-[#0db7b9] leading-snug"
+                            class="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors leading-snug"
                         >
                             {
                                 lang === "es"
@@ -75,41 +85,90 @@ const t = translations[lang];
                                     : "Univ. of Buenos Aires"
                             }
                         </p>
-                        <p class="text-[11px] text-zinc-400 mt-1">
+                        <p class="text-xs text-zinc-400 font-mono mt-1">
                             {
                                 lang === "es"
-                                    ? "Ciencias Computación"
-                                    : "Computer Science"
+                                    ? "Exactas (Computación)"
+                                    : "Computer Science (FCEN)"
                             }
                         </p>
+                        <span
+                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-[#0db7b9]/10 border border-[#0db7b9]/25 text-cyan-300 mt-2.5"
+                        >
+                            <span
+                                class="w-1.5 h-1.5 rounded-full bg-[#0db7b9] animate-pulse"
+                            ></span>
+                            <span
+                                >{
+                                    lang === "es" ? "En curso" : "Undergraduate"
+                                }</span
+                            >
+                        </span>
                     </div>
 
+                    <!-- Card 2: CNBA -->
                     <div
-                        class="rounded-xl bg-zinc-900/60 border border-zinc-800 p-4"
+                        class="group relative rounded-2xl bg-zinc-950/80 border border-zinc-800 hover:border-purple-500/50 p-4 sm:p-5 flex flex-col items-center justify-center text-center transition-all duration-300 hover:-translate-y-0.5 shadow-md h-full min-h-[160px]"
                     >
+                        <div
+                            class="w-9 h-9 rounded-xl bg-[#735ed5]/15 border border-[#735ed5]/30 text-purple-300 flex items-center justify-center mb-2.5 transition-transform duration-300 group-hover:scale-110 shrink-0"
+                        >
+                            <School class="w-4 h-4" />
+                        </div>
                         <p
-                            class="text-xl sm:text-2xl font-bold text-purple-300"
+                            class="text-sm font-bold text-white group-hover:text-purple-300 transition-colors leading-snug"
                         >
                             CNBA
                         </p>
-                        <p class="text-xs text-zinc-400 mt-1">
-                            {lang === "es" ? "Egresado" : "Alumnus"}
-                        </p>
-                    </div>
-
-                    <div
-                        class="rounded-xl bg-zinc-900/60 border border-zinc-800 p-4"
-                    >
-                        <p class="text-xl sm:text-2xl font-bold text-cyan-400">
-                            TypeScript & React
-                        </p>
-                        <p class="text-xs text-zinc-400 mt-1">
+                        <p class="text-xs text-zinc-400 font-mono mt-1">
                             {
                                 lang === "es"
-                                    ? "Stack Principal"
-                                    : "Core Web Stack"
+                                    ? "Col. Nac. Buenos Aires"
+                                    : "Col. Nac. Buenos Aires"
                             }
                         </p>
+                        <span
+                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-[#735ed5]/10 border border-[#735ed5]/25 text-purple-300 mt-2.5"
+                        >
+                            <Sparkles class="w-2.5 h-2.5" />
+                            <span>{lang === "es" ? "Egresado" : "Alumnus"}</span
+                            >
+                        </span>
+                    </div>
+
+                    <!-- Card 3: Core Stack -->
+                    <div
+                        class="group relative rounded-2xl bg-zinc-950/80 border border-zinc-800 hover:border-cyan-500/50 p-4 sm:p-5 flex flex-col items-center justify-center text-center transition-all duration-300 hover:-translate-y-0.5 shadow-md h-full min-h-[160px]"
+                    >
+                        <div
+                            class="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-2.5 transition-transform duration-300 group-hover:scale-110 shrink-0"
+                        >
+                            <Code2 class="w-4 h-4" />
+                        </div>
+                        <p
+                            class="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors leading-snug"
+                        >
+                            TypeScript & React
+                        </p>
+                        <p class="text-xs text-zinc-400 font-mono mt-1">
+                            {
+                                lang === "es"
+                                    ? "Full-Stack & Web"
+                                    : "Full-Stack & Web"
+                            }
+                        </p>
+                        <span
+                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-cyan-500/10 border border-cyan-500/25 text-cyan-300 mt-2.5"
+                        >
+                            <Sparkles class="w-2.5 h-2.5" />
+                            <span
+                                >{
+                                    lang === "es"
+                                        ? "Stack Principal"
+                                        : "Core Stack"
+                                }</span
+                            >
+                        </span>
                     </div>
                 </div>
             </div>
