@@ -29,6 +29,7 @@ export interface Project {
   accentColor: string;
   placeholderPattern: 'music' | 'crypto' | 'terminal' | 'stream' | 'maps';
   image: string;
+  imageFull?: string;
 }
 
 export interface OpenSourceContribution {
@@ -91,6 +92,7 @@ export const projects: Project[] = [
     accentColor: '#735ed5',
     placeholderPattern: 'music',
     image: '/images/projects/spotifust.webp',
+    imageFull: '/images/projects/spotifust-full.webp',
   },
   {
     id: 'comidolar',
@@ -116,6 +118,7 @@ export const projects: Project[] = [
     accentColor: '#0db7b9',
     placeholderPattern: 'crypto',
     image: '/images/projects/comidolar.webp',
+    imageFull: '/images/projects/comidolar-full.webp',
   },
   {
     id: 'genacleaner',
@@ -140,6 +143,7 @@ export const projects: Project[] = [
     accentColor: '#f97316',
     placeholderPattern: 'terminal',
     image: '/images/projects/genacleaner.webp',
+    imageFull: '/images/projects/genacleaner-full.webp',
   },
   {
     id: '412',
@@ -161,6 +165,7 @@ export const projects: Project[] = [
     accentColor: '#735ed5',
     placeholderPattern: 'stream',
     image: '/images/projects/cuatrodoce.webp',
+    imageFull: '/images/projects/cuatrodoce-full.webp',
   },
   {
     id: 'blackmaps',
@@ -181,6 +186,7 @@ export const projects: Project[] = [
     accentColor: '#0db7b9',
     placeholderPattern: 'maps',
     image: '/images/projects/blackmaps.webp',
+    imageFull: '/images/projects/blackmaps-full.webp',
   },
 ];
 
