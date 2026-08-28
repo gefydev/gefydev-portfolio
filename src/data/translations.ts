@@ -43,8 +43,9 @@ export interface TranslationDict {
   stack: {
     sectionTitle: string;
     sectionSubtitle: string;
+    webCore: string;
     languages: string;
-    frameworks: string;
+    ecosystem: string;
     tools: string;
     databases: string;
     systems: string;
@@ -118,10 +119,10 @@ export interface TranslationDict {
 export const translations: Record<'es' | 'en', TranslationDict> = {
   es: {
     meta: {
-      title: 'GefyDev (Genaro Febbo Yapur) — Desarrollador Full-Stack & Sistemas',
-      description: 'Portfolio de Genaro Febbo Yapur (GefyDev), estudiante de Ciencias de la Computación en la Universidad de Buenos Aires (Exactas) y egresado del CNBA. Especialista en Rust, TypeScript, Astro y React.',
-      keywords: 'GefyDev, Genaro Febbo Yapur, Desarrollador Web, Rust, Astro, TypeScript, Ciencias de la Computacion, Universidad de Buenos Aires, Exactas UBA, CNBA, Buenos Aires, Portfolio',
-      role: 'Desarrollador Full-Stack & Sistemas',
+      title: 'GefyDev (Genaro Febbo Yapur) — Desarrollador Full-Stack',
+      description: 'Portfolio de Genaro Febbo Yapur (GefyDev), estudiante de Ciencias de la Computación en la Universidad de Buenos Aires (Exactas) y egresado del CNBA. Especialista en TypeScript, JavaScript, React y Astro.',
+      keywords: 'GefyDev, Genaro Febbo Yapur, Desarrollador Full Stack, TypeScript, JavaScript, React, Astro, Frontend, Backend, Ciencias de la Computacion, Universidad de Buenos Aires, Exactas UBA, CNBA, Buenos Aires, Portfolio',
+      role: 'Desarrollador Full-Stack',
     },
     nav: {
       projects: 'Proyectos',
@@ -136,8 +137,8 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       badge: 'Universidad de Buenos Aires • Egresado CNBA • Buenos Aires, Argentina',
       greeting: 'Hola, soy',
       name: 'Genaro Febbo Yapur',
-      roleTitle: 'Desarrollador Full-Stack & Sistemas',
-      subtitle: 'Construyo software de alto rendimiento, clientes de streaming, herramientas de bajo nivel en Rust y plataformas web en Astro. Con foco riguroso en velocidad de ejecución, arquitectura limpia y diseño moderno.',
+      roleTitle: 'Desarrollador Full-Stack',
+      subtitle: 'Desarrollo aplicaciones web modernas, plataformas reactivas y herramientas de alto rendimiento con TypeScript, JavaScript, React y Astro. Con foco en velocidad de carga, arquitectura limpia y experiencias fluidas.',
       exploreProjects: 'Ver Proyectos',
       contactMe: 'Contactar',
       cliCommand: 'npx gefydev',
@@ -146,9 +147,9 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
     },
     projects: {
       sectionTitle: 'Proyectos Principales',
-      sectionSubtitle: 'Desarrollos destacados en Rust, Astro y tecnologías web con foco en rendimiento nativo y utilidad comunitaria.',
+      sectionSubtitle: 'Desarrollos web, plataformas y herramientas con foco en rendimiento, diseño limpio y utilidad comunitaria.',
       filterAll: 'Todos',
-      filterRust: 'Rust & CLI',
+      filterRust: 'Nativas & CLI',
       filterAstro: 'Astro & React',
       filterWeb: 'Web & APIs',
       liveDemo: 'Visitar Demo',
@@ -160,19 +161,20 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
     },
     stack: {
       sectionTitle: 'Tecnologías & Herramientas',
-      sectionSubtitle: 'Herramientas y lenguajes con los que desarrollo software rápido, seguro y escalable.',
-      languages: 'Lenguajes de Programación',
-      frameworks: 'Frameworks & Librerías',
-      tools: 'Herramientas de Desarrollo',
+      sectionSubtitle: 'Herramientas y lenguajes con los que construyo experiencias web de alto rendimiento y robustez técnica.',
+      webCore: 'Desarrollo Web Principal',
+      languages: 'Lenguajes & Fundamentos',
+      ecosystem: 'Ecosistema Web & Runtimes',
+      tools: 'Herramientas & DevOps',
       databases: 'Backend & Bases de Datos',
       systems: 'Sistemas & Automatización',
     },
     about: {
       sectionTitle: 'Sobre Mí & Trayectoria',
-      sectionSubtitle: 'Pasión por la ciencia de la computación, el código eficiente y el aprendizaje en profundidad.',
-      bioParagraph1: 'Soy Genaro Febbo Yapur, conocido en el entorno de desarrollo como GefyDev. Me apasiona entender el funcionamiento del software a fondo: desde la gestión de memoria y el rendimiento a bajo nivel con Rust, hasta la creación de plataformas web ultrarrápidas con Astro, TypeScript y React.',
-      bioParagraph2: 'Actualmente me encuentro cursando la Licenciatura en Ciencias de la Computación en la Facultad de Ciencias Exactas y Naturales de la Universidad de Buenos Aires (UBA), tras haberme graduado del prestigioso Colegio Nacional de Buenos Aires (CNBA). Esta formación me brinda una sólida base matemática y analítica para abordar problemas complejos con rigor ingenieril.',
-      bioParagraph3: 'Disfruto construir herramientas útiles tanto para la comunidad estudiantil como para el ecosistema open source, optimizando cada byte y cuidando la estética visual.',
+      sectionSubtitle: 'Pasión por la ingeniería web, las ciencias de la computación y el código bien diseñado.',
+      bioParagraph1: 'Soy Genaro Febbo Yapur, conocido en el entorno de desarrollo como GefyDev. Mi foco principal es el desarrollo web full-stack, creando aplicaciones y plataformas rápidas, accesibles e intuitivas con TypeScript, JavaScript, React y Astro.',
+      bioParagraph2: 'Actualmente curso la Licenciatura en Ciencias de la Computación en la Facultad de Ciencias Exactas y Naturales de la Universidad de Buenos Aires (UBA), tras haberme graduado del Colegio Nacional de Buenos Aires (CNBA). Esta formación me aporta una sólida base matemática, algorítmica y de ciencias de la computación, complementando mi desarrollo con lenguajes como C, C++, Python y la exploración de Rust.',
+      bioParagraph3: 'Disfruto construir herramientas útiles tanto para la comunidad estudiantil como para el ecosistema open source, optimizando cada detalle y priorizando la experiencia de usuario.',
       universityTitle: 'Educación Universitaria',
       universityDegree: 'Licenciatura en Ciencias de la Computación',
       universitySchool: 'Facultad de Ciencias Exactas y Naturales — Universidad de Buenos Aires',
@@ -190,7 +192,7 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       sectionTitle: 'Experiencia Profesional',
       sectionSubtitle: 'Trayectoria laboral y colaboraciones.',
       emptyTitle: 'Listo para mi primera oportunidad profesional',
-      emptyDesc: 'Enfocado en proyectos de código abierto, desarrollo en Rust y desarrollo web moderno. Abierto a propuestas de pasantías y posiciones junior de desarrollo.',
+      emptyDesc: 'Enfocado en desarrollo web full-stack con TypeScript, React y Astro, y proyectos de código abierto. Abierto a propuestas de pasantías y posiciones junior de desarrollo.',
       openToWorkBadge: 'Abierto a oportunidades / pasantías',
     },
     terminal: {
@@ -213,7 +215,7 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
     },
     contact: {
       sectionTitle: 'Contacto',
-      sectionSubtitle: '¿Querés conversar sobre un proyecto, oportunidad laboral o desarrollo de software?',
+      sectionSubtitle: '¿Querés conversar sobre un proyecto, oportunidad laboral o desarrollo web?',
       chatPrompt: 'Escribime directamente',
       emailLabel: 'Correo Electrónico',
       copyEmailBtn: 'Copiar Email',
@@ -234,10 +236,10 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
   },
   en: {
     meta: {
-      title: 'GefyDev (Genaro Febbo Yapur) — Full-Stack & Systems Developer',
-      description: 'Portfolio of Genaro Febbo Yapur (GefyDev), Computer Science undergraduate at the University of Buenos Aires (Exactas) and CNBA alumnus. Specializing in Rust, TypeScript, Astro, and React.',
-      keywords: 'GefyDev, Genaro Febbo Yapur, Software Developer, Rust, Astro, TypeScript, Computer Science, University of Buenos Aires, Exactas UBA, CNBA, Buenos Aires, Portfolio',
-      role: 'Full-Stack & Systems Developer',
+      title: 'GefyDev (Genaro Febbo Yapur) — Full-Stack Developer',
+      description: 'Portfolio of Genaro Febbo Yapur (GefyDev), Computer Science undergraduate at the University of Buenos Aires (Exactas) and CNBA alumnus. Specializing in TypeScript, JavaScript, React, and Astro.',
+      keywords: 'GefyDev, Genaro Febbo Yapur, Full Stack Developer, TypeScript, JavaScript, React, Astro, Frontend, Backend, Computer Science, University of Buenos Aires, Exactas UBA, CNBA, Buenos Aires, Portfolio',
+      role: 'Full-Stack Developer',
     },
     nav: {
       projects: 'Projects',
@@ -252,8 +254,8 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       badge: 'University of Buenos Aires • CNBA Alumnus • Buenos Aires, Argentina',
       greeting: 'Hi, I am',
       name: 'Genaro Febbo Yapur',
-      roleTitle: 'Full-Stack & Systems Developer',
-      subtitle: 'I engineer high-performance software, lightweight streaming clients, low-level Rust tooling, and ultrafast Astro web applications with clean architecture and refined design.',
+      roleTitle: 'Full-Stack Developer',
+      subtitle: 'I develop modern web applications, reactive interfaces, and high-performance tools with TypeScript, JavaScript, React, and Astro. Focused on page load speed, clean architectures, and fluid experiences.',
       exploreProjects: 'Explore Projects',
       contactMe: 'Get in Touch',
       cliCommand: 'npx gefydev',
@@ -262,9 +264,9 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
     },
     projects: {
       sectionTitle: 'Core Projects',
-      sectionSubtitle: 'Key software systems engineered with Rust, Astro, and modern web technologies.',
+      sectionSubtitle: 'Web applications, platforms, and native tools engineered with a focus on performance and community value.',
       filterAll: 'All',
-      filterRust: 'Rust & CLI',
+      filterRust: 'Native & CLI',
       filterAstro: 'Astro & React',
       filterWeb: 'Web & APIs',
       liveDemo: 'Live Demo',
@@ -276,19 +278,20 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
     },
     stack: {
       sectionTitle: 'Technologies & Tools',
-      sectionSubtitle: 'Languages and tools I use to engineer reliable, memory-efficient software.',
-      languages: 'Programming Languages',
-      frameworks: 'Frameworks & Libraries',
-      tools: 'Developer Tools',
+      sectionSubtitle: 'Languages and modern tools I use to engineer robust, high-performance web applications.',
+      webCore: 'Primary Web Stack',
+      languages: 'Languages & Foundations',
+      ecosystem: 'Web Ecosystem & Runtimes',
+      tools: 'Developer Tools & DevOps',
       databases: 'Backend & Databases',
-      systems: 'Systems & CI/CD',
+      systems: 'Systems & Automation',
     },
     about: {
       sectionTitle: 'About Me & Education',
-      sectionSubtitle: 'Passionate about computer science, algorithm efficiency, and in-depth engineering.',
-      bioParagraph1: "I'm Genaro Febbo Yapur, known in the developer community as GefyDev. I'm fascinated by how systems work under the hood: from memory safety and native efficiency in Rust to building lightning-fast server-rendered web platforms with Astro, TypeScript, and React.",
-      bioParagraph2: "I am currently pursuing a Bachelor's Degree in Computer Science at the prestigious Faculty of Exact and Natural Sciences of the University of Buenos Aires, following my graduation from the historic Colegio Nacional de Buenos Aires (CNBA). This provides me with a deep mathematical foundation and rigorous analytical problem-solving skills.",
-      bioParagraph3: "I enjoy architecting tools that empower communities and open-source ecosystems, optimizing every single byte while crafting enjoyable visual experiences.",
+      sectionSubtitle: 'Passionate about web engineering, computer science fundamentals, and clean code.',
+      bioParagraph1: "I'm Genaro Febbo Yapur, known in the developer community as GefyDev. My primary focus is full-stack web engineering, crafting fast, accessible, and intuitive applications with TypeScript, JavaScript, React, and Astro.",
+      bioParagraph2: "I am currently pursuing a Bachelor's Degree in Computer Science at the Faculty of Exact and Natural Sciences of the University of Buenos Aires, following my graduation from the historic Colegio Nacional de Buenos Aires (CNBA). This provides me with a strong mathematical and algorithmic foundation, complementing my development skills with languages like C, C++, Python, and ongoing exploration of Rust.",
+      bioParagraph3: 'I enjoy architecting tools that empower communities and open-source ecosystems, optimizing every detail while crafting delightful user experiences.',
       universityTitle: 'University Education',
       universityDegree: 'B.S. in Computer Science',
       universitySchool: 'Faculty of Exact and Natural Sciences — University of Buenos Aires',
@@ -306,7 +309,7 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       sectionTitle: 'Work Experience',
       sectionSubtitle: 'Career background and collaborations.',
       emptyTitle: 'Ready for my first professional software engineering role',
-      emptyDesc: 'Focused on open source contributions, low-level Rust tooling, and modern web development. Open to internship and junior engineering opportunities.',
+      emptyDesc: 'Focused on full-stack web development with TypeScript, React, and Astro, alongside open source projects. Open to internship and junior engineering opportunities.',
       openToWorkBadge: 'Open to internships & junior roles',
     },
     terminal: {
@@ -329,7 +332,7 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
     },
     contact: {
       sectionTitle: 'Get In Touch',
-      sectionSubtitle: 'Interested in collaborating on a project or discussing software engineering?',
+      sectionSubtitle: 'Interested in collaborating on a web project or discussing software engineering opportunities?',
       chatPrompt: 'Reach out directly',
       emailLabel: 'Email Address',
       copyEmailBtn: 'Copy Email',
