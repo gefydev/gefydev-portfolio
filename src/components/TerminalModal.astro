@@ -353,6 +353,27 @@ const closeAria =
         }, 3000);
     }
 
+    function triggerModalConfetti(opts: Record<string, any>) {
+        const fire = (confettiFn: Function) => {
+            confettiFn(opts);
+        };
+
+        if ((window as any).confetti) {
+            fire((window as any).confetti);
+            return;
+        }
+
+        const script = document.createElement("script");
+        script.src = "/scripts/confetti.min.js";
+        script.async = true;
+        script.onload = () => {
+            if ((window as any).confetti) {
+                fire((window as any).confetti);
+            }
+        };
+        document.body.appendChild(script);
+    }
+
     function initTerminal() {
         const { modal, card, input, closeBtn, items } = getTerminalElements();
         if (!modal || (modal as HTMLElement).dataset.bound) return;
@@ -424,30 +445,12 @@ const closeAria =
                     }
                 } else if (action === "confetti") {
                     closeTerminal();
-                    const triggerConfetti = async () => {
-                        try {
-                            const confettiModule =
-                                await import("canvas-confetti");
-                            const confetti = confettiModule.default;
-                            confetti({
-                                particleCount: 80,
-                                spread: 70,
-                                origin: { y: 0.6 },
-                                colors: [
-                                    "#0db7b9",
-                                    "#735ed5",
-                                    "#22d3ee",
-                                    "#8b5cf6",
-                                ],
-                            });
-                        } catch {}
-                    };
-
-                    if ("requestIdleCallback" in window) {
-                        requestIdleCallback(triggerConfetti);
-                    } else {
-                        requestAnimationFrame(triggerConfetti);
-                    }
+                    triggerModalConfetti({
+                        particleCount: 80,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ["#0db7b9", "#735ed5", "#22d3ee", "#8b5cf6"],
+                    });
                 }
             });
         });

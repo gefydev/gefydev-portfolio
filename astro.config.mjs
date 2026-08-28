@@ -9,6 +9,9 @@ export default defineConfig({
   site: 'https://gefy.dev',
   output: 'server',
   compressHTML: true,
+  build: {
+    inlineStylesheets: 'always',
+  },
   adapter: isVercel
     ? vercel()
     : node({
@@ -18,8 +21,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
     build: {
       target: 'es2022',
-      cssCodeSplit: true,
-      assetsInlineLimit: 4096,
+      cssCodeSplit: false,
     },
   },
 });

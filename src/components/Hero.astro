@@ -251,6 +251,27 @@ const copyCmdAria =
 </section>
 
 <script>
+    function triggerConfetti(opts: Record<string, any>) {
+        const fire = (confettiFn: Function) => {
+            confettiFn(opts);
+        };
+
+        if ((window as any).confetti) {
+            fire((window as any).confetti);
+            return;
+        }
+
+        const script = document.createElement("script");
+        script.src = "/scripts/confetti.min.js";
+        script.async = true;
+        script.onload = () => {
+            if ((window as any).confetti) {
+                fire((window as any).confetti);
+            }
+        };
+        document.body.appendChild(script);
+    }
+
     function initHero() {
         const copyBtn = document.getElementById("hero-copy-cmd");
         if (!copyBtn || copyBtn.dataset.bound) return;
@@ -276,29 +297,12 @@ const copyCmdAria =
                     "(prefers-reduced-motion: reduce)",
                 ).matches;
                 if (!prefersReducedMotion) {
-                    const triggerConfetti = async () => {
-                        try {
-                            const { default: confetti } =
-                                await import("canvas-confetti");
-                            confetti({
-                                particleCount: 35,
-                                spread: 60,
-                                origin: { y: 0.8 },
-                                colors: [
-                                    "#0db7b9",
-                                    "#735ed5",
-                                    "#22d3ee",
-                                    "#8b5cf6",
-                                ],
-                            });
-                        } catch {}
-                    };
-
-                    if ("requestIdleCallback" in window) {
-                        requestIdleCallback(triggerConfetti);
-                    } else {
-                        requestAnimationFrame(triggerConfetti);
-                    }
+                    triggerConfetti({
+                        particleCount: 35,
+                        spread: 60,
+                        origin: { y: 0.8 },
+                        colors: ["#0db7b9", "#735ed5", "#22d3ee", "#8b5cf6"],
+                    });
                 }
 
                 setTimeout(() => {
