@@ -55,16 +55,26 @@ const closeAria =
         </div>
 
         <div
-            class="relative w-full flex-1 bg-zinc-950 flex items-center justify-center p-2 sm:p-4 overflow-hidden"
+            class="relative w-full flex-1 bg-zinc-950 flex items-center justify-center p-2 sm:p-4 overflow-hidden min-h-[260px]"
         >
             <div
                 class="relative w-full max-h-[68vh] flex items-center justify-center rounded-xl overflow-hidden bg-zinc-900/60 border border-zinc-800/60"
             >
+                <div
+                    id="modal-image-skeleton"
+                    class="absolute inset-0 flex items-center justify-center bg-zinc-900/80 pointer-events-none transition-opacity duration-200"
+                >
+                    <div
+                        class="w-8 h-8 rounded-full border-2 border-zinc-700 border-t-[#0db7b9] animate-spin"
+                    >
+                    </div>
+                </div>
+
                 <img
                     id="modal-project-image"
                     src=""
                     alt=""
-                    class="w-full h-auto max-h-[68vh] object-contain rounded-lg transition-transform duration-300"
+                    class="w-full h-auto max-h-[68vh] object-contain rounded-lg transition-opacity duration-250 opacity-0"
                     loading="eager"
                     decoding="async"
                 />
@@ -121,6 +131,7 @@ const closeAria =
             modalImg: document.getElementById(
                 "modal-project-image",
             ) as HTMLImageElement | null,
+            skeleton: document.getElementById("modal-image-skeleton"),
             modalDesc: document.getElementById("modal-project-desc"),
             modalLive: document.getElementById(
                 "modal-project-live",
@@ -147,6 +158,7 @@ const closeAria =
             modalBadge,
             modalBadgeText,
             modalImg,
+            skeleton,
             modalDesc,
             modalLive,
             modalGithub,
@@ -155,11 +167,31 @@ const closeAria =
         lastFocusedElement = document.activeElement as HTMLElement | null;
 
         if (modalTitle) modalTitle.textContent = data.title;
+        if (modalDesc) modalDesc.textContent = data.desc;
+
+        // Reset previous image and show loading skeleton to avoid flashing stale image
         if (modalImg) {
+            modalImg.classList.add("opacity-0");
+            modalImg.classList.remove("opacity-100");
+            if (skeleton) skeleton.classList.remove("opacity-0", "hidden");
+
+            const revealImage = () => {
+                modalImg.classList.remove("opacity-0");
+                modalImg.classList.add("opacity-100");
+                if (skeleton) skeleton.classList.add("opacity-0");
+            };
+
+            modalImg.onload = () => {
+                revealImage();
+            };
+
             modalImg.src = data.image;
             modalImg.alt = `Screenshot en alta resolución de ${data.title}`;
+
+            if (modalImg.complete && modalImg.naturalWidth > 0) {
+                revealImage();
+            }
         }
-        if (modalDesc) modalDesc.textContent = data.desc;
 
         if (data.badge && modalBadge && modalBadgeText) {
             modalBadgeText.textContent = data.badge;
@@ -214,7 +246,7 @@ const closeAria =
     }
 
     function closeModal() {
-        const { modal, card } = getImageModalElements();
+        const { modal, card, modalImg, skeleton } = getImageModalElements();
         if (!modal || !card || modal.classList.contains("hidden")) return;
 
         modal.classList.remove("opacity-100");
@@ -225,6 +257,14 @@ const closeAria =
         setTimeout(() => {
             modal.classList.add("hidden");
             modal.setAttribute("aria-hidden", "true");
+            if (modalImg) {
+                modalImg.src = "";
+                modalImg.classList.add("opacity-0");
+                modalImg.classList.remove("opacity-100");
+            }
+            if (skeleton) {
+                skeleton.classList.remove("opacity-0");
+            }
             document.body.style.overflow = "";
             document.body.style.paddingRight = "";
             if (lastFocusedElement) {
