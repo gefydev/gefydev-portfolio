@@ -4,35 +4,24 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const url = new URL(context.request.url);
   const pathname = url.pathname;
 
+  // Los archivos estáticos y de descubrimiento son cacheados directamente en el Edge por Cloudflare
   if (
     pathname.startsWith('/_astro') ||
     pathname.startsWith('/images') ||
     pathname.startsWith('/fonts') ||
     pathname.startsWith('/favicon') ||
+    pathname.endsWith('.xml') ||
+    pathname.endsWith('.txt') ||
     pathname.endsWith('.png') ||
     pathname.endsWith('.webp') ||
     pathname.endsWith('.svg') ||
     pathname.endsWith('.ico') ||
     pathname.endsWith('.woff2')
   ) {
-    const response = await next();
-    response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
-    response.headers.set('CDN-Cache-Control', 'max-age=31536000, immutable');
-    response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=31536000, immutable');
-    return response;
+    return next();
   }
 
-  if (
-    pathname.endsWith('.xml') ||
-    pathname.endsWith('.txt')
-  ) {
-    const response = await next();
-    response.headers.set('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400');
-    response.headers.set('CDN-Cache-Control', 'max-age=604800, stale-while-revalidate=86400');
-    response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=604800, stale-while-revalidate=86400');
-    return response;
-  }
-
+  // --- Lógica de Aplicación (i18n & Detección de Idioma) ---
   let lang: 'es' | 'en' = 'es';
 
   if (pathname.startsWith('/en')) {
@@ -54,26 +43,17 @@ export const onRequest = defineMiddleware(async (context, next) => {
       lang = cookieLang;
     } else {
       const acceptLanguage = context.request.headers.get('accept-language') || '';
-      if (acceptLanguage.toLowerCase().startsWith('en')) {
-        lang = 'en';
-      } else {
-        const enIndex = acceptLanguage.indexOf('en');
-        const esIndex = acceptLanguage.indexOf('es');
-        if (enIndex !== -1 && (esIndex === -1 || enIndex < esIndex)) {
-          lang = 'en';
-        } else {
-          lang = 'es';
-        }
-      }
+      const enIndex = acceptLanguage.indexOf('en');
+      const esIndex = acceptLanguage.indexOf('es');
+      lang = enIndex !== -1 && (esIndex === -1 || enIndex < esIndex) ? 'en' : 'es';
     }
   }
 
   context.locals.lang = lang;
 
+  // --- Headers de Respuesta para HTML dinámico ---
   const response = await next();
-  response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=86400, stale-while-revalidate=604800');
-  response.headers.set('CDN-Cache-Control', 'max-age=86400, stale-while-revalidate=604800');
-  response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=86400, stale-while-revalidate=604800');
+  response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
   response.headers.set('Vary', 'Accept-Language, Cookie');
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('X-Frame-Options', 'DENY');
