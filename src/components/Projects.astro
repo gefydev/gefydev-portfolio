@@ -21,7 +21,7 @@ const defaultSpans = [
 ];
 ---
 
-<section id="projects" class="py-24 border-t border-zinc-800/80 relative font-sans" aria-labelledby="projects-title">
+<section id="projects" class="py-24 border-t border-zinc-800/80 relative font-sans section-cv" aria-labelledby="projects-title">
   <!-- Subtle ambient glow -->
   <div class="absolute top-0 right-1/4 w-96 h-96 bg-[#0db7b9]/5 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -58,45 +58,51 @@ const defaultSpans = [
         </button>
         <button
           type="button"
-          class="project-filter-btn px-4 py-2 min-h-[40px] rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all cursor-pointer font-medium active:scale-[0.98]"
-          data-filter="rust"
+          class="project-filter-btn px-4 py-2 min-h-[40px] rounded-lg text-zinc-400 font-medium hover:text-white transition-all cursor-pointer active:scale-[0.98]"
+          data-filter="fullstack"
           role="tab"
           aria-selected="false"
           tabindex="-1"
         >
-          {t.projects.filterRust}
+          {t.projects.filterFullstack}
         </button>
         <button
           type="button"
-          class="project-filter-btn px-4 py-2 min-h-[40px] rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all cursor-pointer font-medium active:scale-[0.98]"
-          data-filter="astro"
+          class="project-filter-btn px-4 py-2 min-h-[40px] rounded-lg text-zinc-400 font-medium hover:text-white transition-all cursor-pointer active:scale-[0.98]"
+          data-filter="systems"
           role="tab"
           aria-selected="false"
           tabindex="-1"
         >
-          {t.projects.filterAstro}
+          {t.projects.filterSystems}
         </button>
         <button
           type="button"
-          class="project-filter-btn px-4 py-2 min-h-[40px] rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all cursor-pointer font-medium active:scale-[0.98]"
-          data-filter="web"
+          class="project-filter-btn px-4 py-2 min-h-[40px] rounded-lg text-zinc-400 font-medium hover:text-white transition-all cursor-pointer active:scale-[0.98]"
+          data-filter="extension"
           role="tab"
           aria-selected="false"
           tabindex="-1"
         >
-          {t.projects.filterWeb}
+          {t.projects.filterExtensions}
         </button>
       </div>
     </div>
 
-    <!-- Asymmetric Projects Bento Grid with Spotlight Tracking -->
-    <div id="projects-bento-grid" class="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 mb-16">
+    <!-- Dynamic Asymmetric Bento Grid for 5 Projects -->
+    <div id="projects-bento-grid" class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
       {projects.map((project, index) => (
-        <ProjectCard project={project} lang={lang} defaultSpan={defaultSpans[index] || 'col-span-12 md:col-span-6'} />
+        <ProjectCard
+          project={project}
+          lang={lang}
+          defaultSpan={defaultSpans[index] || 'col-span-12 md:col-span-6'}
+        />
       ))}
     </div>
 
-    <!-- Open Source Contributions Deck -->
+    <!-- ========================================== -->
+    <!-- OPEN SOURCE CONTRIBUTIONS SECTION -->
+    <!-- ========================================== -->
     <div id="contributions" class="pt-8 border-t border-zinc-800/80 space-y-6">
       <div class="space-y-2">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#735ed5]/10 border border-[#735ed5]/30 text-xs font-mono font-semibold text-purple-300">
@@ -220,19 +226,17 @@ const defaultSpans = [
     const projectCards = Array.from(document.querySelectorAll<HTMLElement>('.bento-project-card'));
     const grid = document.getElementById('projects-bento-grid');
 
-    // Setup Spotlight mouse tracking on projects grid
+    // Highly optimized spotlight: calculates rect ONLY on the single hovered card without layout thrashing
     let rafId: number | null = null;
     function handleMouseMove(e: MouseEvent) {
       if (rafId) cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
-        projectCards.forEach((card) => {
-          if (card.style.display === 'none') return;
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          card.style.setProperty('--mouse-x', `${x}px`);
-          card.style.setProperty('--mouse-y', `${y}px`);
-        });
+        const targetCard = (e.target as HTMLElement)?.closest<HTMLElement>('.bento-project-card');
+        if (targetCard && targetCard.style.display !== 'none') {
+          const rect = targetCard.getBoundingClientRect();
+          targetCard.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+          targetCard.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        }
       });
     }
 

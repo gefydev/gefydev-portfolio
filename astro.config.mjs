@@ -8,6 +8,11 @@ const isVercel = Boolean(process.env.VERCEL);
 export default defineConfig({
   site: 'https://gefy.dev',
   output: 'server',
+  compressHTML: true,
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport',
+  },
   adapter: isVercel
     ? vercel()
     : node({
@@ -15,5 +20,10 @@ export default defineConfig({
       }),
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      target: 'es2022',
+      cssCodeSplit: true,
+      assetsInlineLimit: 4096,
+    },
   },
 });

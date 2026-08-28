@@ -29,6 +29,7 @@ const noindex = Astro.props.noindex || false;
 <html lang={lang} class="dark scroll-smooth">
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link
             rel="icon"
             type="image/png"
@@ -69,6 +70,12 @@ const noindex = Astro.props.noindex || false;
                     {
                         where: { href_matches: "/*" },
                         eagerness: "moderate",
+                    },
+                ],
+                prefetch: [
+                    {
+                        where: { href_matches: "/*" },
+                        eagerness: "immediate",
                     },
                 ],
             })}

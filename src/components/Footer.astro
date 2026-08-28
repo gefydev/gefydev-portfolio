@@ -1,76 +1,97 @@
 ---
-import { translations } from '../data/translations';
-import { ArrowUp } from 'lucide-astro';
+import { translations } from "../data/translations";
+import { ArrowUp } from "lucide-astro";
 
 interface Props {
-  lang: 'es' | 'en';
+    lang: "es" | "en";
 }
 
 const { lang } = Astro.props;
 const t = translations[lang];
 const currentYear = new Date().getFullYear();
-const backToTopAria = lang === 'es' ? 'Volver al inicio de la página' : 'Back to top of the page';
-const sourceAria = lang === 'es' ? 'Ver código fuente de este portfolio en GitHub' : 'View portfolio source code on GitHub';
-const linkedinAria = lang === 'es' ? 'Abrir perfil de LinkedIn de GefyDev' : 'Open GefyDev LinkedIn profile';
+const backToTopAria =
+    lang === "es" ? "Volver al inicio de la página" : "Back to top of the page";
+const sourceAria =
+    lang === "es"
+        ? "Ver código fuente de este portfolio en GitHub"
+        : "View portfolio source code on GitHub";
+const linkedinAria =
+    lang === "es"
+        ? "Abrir perfil de LinkedIn de GefyDev"
+        : "Open GefyDev LinkedIn profile";
 ---
 
-<footer class="border-t border-zinc-800/80 bg-[#06070b] py-12 relative font-sans text-xs text-zinc-400">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-    <div class="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
-      <div class="flex items-center gap-2">
-        <span class="inline-block w-2.5 h-2.5 rounded-full bg-gradient-to-r from-[#0db7b9] to-[#735ed5]"></span>
-        <span class="font-bold text-zinc-200">GefyDev</span>
-        <span>© {currentYear}</span>
-      </div>
-      <span class="hidden sm:inline text-zinc-700">|</span>
-      <span>{t.footer.builtWith}</span>
+<footer
+    class="border-t border-zinc-800/80 bg-[#06070b] py-12 relative font-sans text-xs text-zinc-400"
+>
+    <div
+        class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-6"
+    >
+        <div
+            class="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left"
+        >
+            <div class="flex items-center gap-2">
+                <span
+                    class="inline-block w-2.5 h-2.5 rounded-full bg-gradient-to-r from-[#0db7b9] to-[#735ed5]"
+                ></span>
+                <span class="font-bold text-zinc-200">GefyDev</span>
+                <span>© {currentYear}</span>
+            </div>
+            <span class="hidden sm:inline text-zinc-700">|</span>
+            <span>{t.footer.builtWith}</span>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <a
+                href="https://github.com/gefydev"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-zinc-400 hover:text-[#0db7b9] transition-colors py-2 focus-visible:text-[#0db7b9]"
+                aria-label={sourceAria}
+            >
+                {t.footer.sourceCode}
+            </a>
+
+            <a
+                href="https://linkedin.com/in/gefydev"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-zinc-400 hover:text-[#0db7b9] transition-colors py-2 focus-visible:text-[#0db7b9]"
+                aria-label={linkedinAria}
+            >
+                {t.footer.linkedin}
+            </a>
+
+            <button
+                id="back-to-top-btn"
+                type="button"
+                class="inline-flex items-center gap-1.5 px-4 py-2 min-h-[40px] rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition-colors cursor-pointer active:scale-[0.98]"
+                aria-label={backToTopAria}
+            >
+                <span>{t.footer.backToTop}</span>
+                <ArrowUp class="w-3.5 h-3.5" />
+            </button>
+        </div>
     </div>
-
-    <div class="flex items-center gap-6">
-      <a
-        href="https://github.com/gefydev"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-zinc-400 hover:text-[#0db7b9] transition-colors py-2 focus-visible:text-[#0db7b9]"
-        aria-label={sourceAria}
-      >
-        {t.footer.sourceCode}
-      </a>
-
-      <a
-        href="https://linkedin.com/in/gefydev"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-zinc-400 hover:text-[#0db7b9] transition-colors py-2 focus-visible:text-[#0db7b9]"
-        aria-label={linkedinAria}
-      >
-        {t.footer.linkedin}
-      </a>
-
-      <button
-        id="back-to-top-btn"
-        type="button"
-        class="inline-flex items-center gap-1.5 px-4 py-2 min-h-[40px] rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white transition-colors cursor-pointer active:scale-[0.98]"
-        aria-label={backToTopAria}
-      >
-        <span>{t.footer.backToTop}</span>
-        <ArrowUp class="w-3.5 h-3.5" />
-      </button>
-    </div>
-  </div>
 </footer>
 
 <script>
-  function initFooter() {
-    const backToTopBtn = document.getElementById('back-to-top-btn');
-    backToTopBtn?.addEventListener('click', () => {
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      window.scrollTo({
-        top: 0,
-        behavior: prefersReducedMotion ? 'auto' : 'smooth',
-      });
-    });
-  }
+    function initFooter() {
+        const backToTopBtn = document.getElementById("back-to-top-btn");
+        if (!backToTopBtn || (backToTopBtn as HTMLElement).dataset.bound)
+            return;
+        (backToTopBtn as HTMLElement).dataset.bound = "true";
 
-  document.addEventListener('astro:page-load', initFooter);
+        backToTopBtn.addEventListener("click", () => {
+            const prefersReducedMotion = window.matchMedia(
+                "(prefers-reduced-motion: reduce)",
+            ).matches;
+            window.scrollTo({
+                top: 0,
+                behavior: prefersReducedMotion ? "auto" : "smooth",
+            });
+        });
+    }
+
+    document.addEventListener("astro:page-load", initFooter);
 </script>

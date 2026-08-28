@@ -40,7 +40,7 @@ const adb = techStack.find((t) => t.icon === "adb")!;
 
 <section
     id="stack"
-    class="py-20 md:py-28 border-b border-zinc-800/80 relative font-sans"
+    class="py-20 md:py-28 border-b border-zinc-800/80 relative font-sans section-cv"
     aria-labelledby="stack-title"
 >
     <!-- Ambient background glow -->
@@ -1006,28 +1006,25 @@ const adb = techStack.find((t) => t.icon === "adb")!;
 
 <script>
     function initTechBento() {
-        const cards = Array.from(
-            document.querySelectorAll<HTMLElement>(".bento-card"),
-        );
-        if (cards.length === 0) return;
+        const grid = document.getElementById("tech-bento-grid");
+        if (!grid || (grid as HTMLElement).dataset.bound) return;
+        (grid as HTMLElement).dataset.bound = "true";
 
         let rafId: number | null = null;
 
         function handleMouseMove(e: MouseEvent) {
             if (rafId) cancelAnimationFrame(rafId);
             rafId = requestAnimationFrame(() => {
-                cards.forEach((card) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    card.style.setProperty("--mouse-x", `${x}px`);
-                    card.style.setProperty("--mouse-y", `${y}px`);
-                });
+                const targetCard = (e.target as HTMLElement)?.closest<HTMLElement>(".bento-card");
+                if (targetCard) {
+                    const rect = targetCard.getBoundingClientRect();
+                    targetCard.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+                    targetCard.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+                }
             });
         }
 
-        const grid = document.getElementById("tech-bento-grid");
-        grid?.addEventListener("mousemove", handleMouseMove, { passive: true });
+        grid.addEventListener("mousemove", handleMouseMove, { passive: true });
     }
 
     document.addEventListener("astro:page-load", initTechBento);

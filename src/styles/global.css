@@ -94,6 +94,11 @@
 }
 
 @layer utilities {
+  .section-cv {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 700px;
+  }
+
   .bg-grid-pattern {
     background-size: 36px 36px;
     background-image: 
