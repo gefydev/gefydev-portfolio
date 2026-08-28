@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from "astro:transitions";
 import SEO from "../components/SEO.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
@@ -85,7 +84,18 @@ const noindex = Astro.props.noindex || false;
             lang={lang}
             noindex={noindex}
         />
-        <ClientRouter />
+
+        <!-- Speculation Rules API for instant 0ms cross-language navigation without heavy JS router -->
+        <script type="speculationrules" is:inline>
+            {
+                "prerender": [
+                    {
+                        "where": { "href_matches": "/*" },
+                        "eagerness": "moderate"
+                    }
+                ]
+            }
+        </script>
     </head>
     <body
         class="bg-[#06070b] text-zinc-100 antialiased selection:bg-[#735ed5]/30 selection:text-white min-h-screen flex flex-col justify-between"

@@ -302,5 +302,10 @@ const closeAria =
         }
     });
 
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initImageModal);
+    } else {
+        initImageModal();
+    }
     document.addEventListener("astro:page-load", initImageModal);
 </script>

@@ -9,10 +9,6 @@ export default defineConfig({
   site: 'https://gefy.dev',
   output: 'server',
   compressHTML: true,
-  prefetch: {
-    prefetchAll: false,
-    defaultStrategy: 'hover',
-  },
   adapter: isVercel
     ? vercel()
     : node({

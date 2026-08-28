@@ -75,6 +75,7 @@ const linkedinAria =
                     </p>
                 </div>
 
+                <!--email_off-->
                 <div class="space-y-3 pt-4 border-t border-zinc-800/80 text-xs">
                     <div
                         class="p-4 rounded-xl bg-zinc-900/70 border border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
@@ -124,6 +125,7 @@ const linkedinAria =
                         </div>
                     </div>
                 </div>
+                <!--/email_off-->
             </div>
 
             <div class="lg:col-span-4 flex flex-col justify-between gap-4">
@@ -218,8 +220,8 @@ const linkedinAria =
 <script>
     function initContact() {
         const copyBtn = document.getElementById("contact-copy-email-btn");
-        if (!copyBtn || copyBtn.dataset.bound) return;
-        copyBtn.dataset.bound = "true";
+        if (!copyBtn || (copyBtn as HTMLElement).dataset.bound) return;
+        (copyBtn as HTMLElement).dataset.bound = "true";
 
         const copyIcon = copyBtn.querySelector(".contact-copy-icon");
         const checkIcon = copyBtn.querySelector(".contact-check-icon");
@@ -251,5 +253,10 @@ const linkedinAria =
         });
     }
 
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initContact);
+    } else {
+        initContact();
+    }
     document.addEventListener("astro:page-load", initContact);
 </script>

@@ -166,6 +166,7 @@ const closeAria =
                 {t.terminal.actions}
             </div>
 
+            <!--email_off-->
             <button
                 type="button"
                 class="terminal-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
@@ -179,6 +180,7 @@ const closeAria =
                     >hi@gefy.dev</span
                 >
             </button>
+            <!--/email_off-->
 
             <button
                 type="button"
@@ -248,8 +250,8 @@ const closeAria =
     </div>
 
     <div
-        id="terminal-toast"
-        class="fixed bottom-6 right-6 hidden px-4 py-3 rounded-xl bg-zinc-900 border border-emerald-500/40 text-emerald-400 shadow-2xl flex items-center gap-2 text-xs font-sans z-60"
+        id="email-copied-toast"
+        class="fixed bottom-6 right-6 hidden bg-emerald-950 border border-emerald-800 text-emerald-300 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 text-xs font-semibold z-60"
     >
         <Check class="w-4 h-4" />
         <span>{t.terminal.emailCopiedNotice}</span>
@@ -257,86 +259,106 @@ const closeAria =
 </div>
 
 <script>
-    let lastActiveElement: HTMLElement | null = null;
     let selectedIndex = 0;
-    let filterRaf: number | null = null;
 
     function getTerminalElements() {
-        return {
-            modal: document.getElementById("terminal-modal"),
-            input: document.getElementById(
-                "terminal-search-input",
-            ) as HTMLInputElement | null,
-            closeBtn: document.getElementById("close-terminal-btn"),
-            items: Array.from(
-                document.querySelectorAll<HTMLButtonElement>(".terminal-item"),
-            ),
-            toast: document.getElementById("terminal-toast"),
-        };
+        const modal = document.getElementById("terminal-modal");
+        const card = document.getElementById("terminal-card");
+        const input = document.getElementById(
+            "terminal-search-input",
+        ) as HTMLInputElement | null;
+        const closeBtn = document.getElementById("close-terminal-btn");
+        const list = document.getElementById("terminal-list");
+        const items = list
+            ? (Array.from(
+                  list.querySelectorAll(".terminal-item"),
+              ) as HTMLButtonElement[])
+            : [];
+        const toast = document.getElementById("email-copied-toast");
+
+        return { modal, card, input, closeBtn, list, items, toast };
     }
 
     function openTerminal() {
-        const { modal, input } = getTerminalElements();
-        if (!modal) return;
-        lastActiveElement = document.activeElement as HTMLElement | null;
+        const { modal, card, input, items } = getTerminalElements();
+        if (!modal || !card || !input) return;
+
         modal.classList.remove("hidden");
         document.body.style.overflow = "hidden";
-        if (input) input.value = "";
+        input.value = "";
+        selectedIndex = 0;
         filterItems("");
         updateSelection(0);
+
         requestAnimationFrame(() => {
-            input?.focus();
+            input.focus();
         });
     }
 
     function closeTerminal() {
-        const { modal } = getTerminalElements();
-        if (!modal || modal.classList.contains("hidden")) return;
+        const { modal, input } = getTerminalElements();
+        if (!modal) return;
+
         modal.classList.add("hidden");
         document.body.style.overflow = "";
-        if (lastActiveElement) {
-            lastActiveElement.focus();
-        }
+        if (input) input.value = "";
     }
 
-    function updateSelection(index: number) {
+    function updateSelection(newIndex: number) {
         const { items } = getTerminalElements();
         const visibleItems = items.filter((i) => i.style.display !== "none");
         if (visibleItems.length === 0) return;
 
-        selectedIndex = Math.max(0, Math.min(index, visibleItems.length - 1));
+        selectedIndex = (newIndex + visibleItems.length) % visibleItems.length;
 
         visibleItems.forEach((item, idx) => {
-            const isSel = idx === selectedIndex;
-            item.classList.toggle("bg-zinc-900", isSel);
-            item.classList.toggle("text-white", isSel);
-            if (isSel) {
+            if (idx === selectedIndex) {
+                item.classList.add("bg-zinc-800", "text-white");
+                item.classList.remove("text-zinc-300");
                 item.scrollIntoView({ block: "nearest" });
+            } else {
+                item.classList.remove("bg-zinc-800", "text-white");
+                item.classList.add("text-zinc-300");
             }
         });
     }
 
     function filterItems(query: string) {
-        if (filterRaf) cancelAnimationFrame(filterRaf);
-        filterRaf = requestAnimationFrame(() => {
-            const { items } = getTerminalElements();
-            const q = query.toLowerCase().trim();
-            items.forEach((item) => {
-                const text = item.textContent?.toLowerCase() || "";
-                item.style.display = !q || text.includes(q) ? "flex" : "none";
-            });
-            updateSelection(0);
+        const { items } = getTerminalElements();
+        const q = query.toLowerCase().trim();
+
+        items.forEach((item) => {
+            const text = item.textContent?.toLowerCase() || "";
+            const matches = text.includes(q);
+            item.style.display = matches ? "flex" : "none";
         });
+
+        const headers = document.querySelectorAll(
+            "#terminal-list > div:not(.terminal-item)",
+        );
+        headers.forEach((h) => {
+            (h as HTMLElement).style.display = q === "" ? "block" : "none";
+        });
+
+        selectedIndex = 0;
+        updateSelection(0);
+    }
+
+    function showToast() {
+        const { toast } = getTerminalElements();
+        if (!toast) return;
+        toast.classList.remove("hidden");
+        setTimeout(() => {
+            toast.classList.add("hidden");
+        }, 3000);
     }
 
     function initTerminal() {
-        const { modal, input, closeBtn, items, toast } = getTerminalElements();
+        const { modal, card, input, closeBtn, items } = getTerminalElements();
         if (!modal || (modal as HTMLElement).dataset.bound) return;
         (modal as HTMLElement).dataset.bound = "true";
 
-        input?.addEventListener("input", (e) => {
-            filterItems((e.target as HTMLInputElement).value);
-        });
+        window.addEventListener("open-terminal", openTerminal);
 
         closeBtn?.addEventListener("click", closeTerminal);
 
@@ -346,87 +368,94 @@ const closeAria =
             }
         });
 
+        input?.addEventListener("input", (e) => {
+            filterItems((e.target as HTMLInputElement).value);
+        });
+
         items.forEach((item) => {
+            item.addEventListener("mouseenter", () => {
+                const visibleItems = items.filter(
+                    (i) => i.style.display !== "none",
+                );
+                const idx = visibleItems.indexOf(item);
+                if (idx !== -1) updateSelection(idx);
+            });
+
             item.addEventListener("click", () => {
                 const action = item.getAttribute("data-action");
+
                 if (action === "navigate") {
                     const target = item.getAttribute("data-target");
-                    closeTerminal();
                     if (target) {
-                        window.location.hash = target;
+                        closeTerminal();
+                        const el = document.querySelector(target);
+                        if (el) {
+                            const prefersReducedMotion = window.matchMedia(
+                                "(prefers-reduced-motion: reduce)",
+                            ).matches;
+                            el.scrollIntoView({
+                                behavior: prefersReducedMotion
+                                    ? "auto"
+                                    : "smooth",
+                            });
+                        }
                     }
                 } else if (action === "copy-email") {
                     if (navigator.clipboard) {
                         navigator.clipboard
                             .writeText("hi@gefy.dev")
+                            .then(() => {
+                                showToast();
+                            })
                             .catch(() => {});
                     }
                     closeTerminal();
-                    if (toast) {
-                        toast.classList.remove("hidden");
-                        setTimeout(() => {
-                            toast.classList.add("hidden");
-                        }, 3000);
-                    }
                 } else if (action === "switch-lang") {
                     const targetLang = item.getAttribute("data-target-lang");
                     if (targetLang) {
-                        document.cookie = `user_lang=${targetLang}; path=/; max-age=31536000; SameSite=Lax`;
+                        closeTerminal();
                         window.location.href = `/${targetLang}`;
                     }
                 } else if (action === "open-url") {
                     const url = item.getAttribute("data-url");
-                    if (url) window.open(url, "_blank");
-                    closeTerminal();
+                    if (url) {
+                        window.open(url, "_blank", "noopener,noreferrer");
+                        closeTerminal();
+                    }
                 } else if (action === "confetti") {
                     closeTerminal();
-                    const prefersReducedMotion = window.matchMedia(
-                        "(prefers-reduced-motion: reduce)",
-                    ).matches;
-                    if (!prefersReducedMotion) {
-                        const runConfetti = async () => {
-                            try {
-                                const { default: confetti } =
-                                    await import("canvas-confetti");
-                                confetti({
-                                    particleCount: 100,
-                                    spread: 70,
-                                    origin: { y: 0.6 },
-                                    colors: [
-                                        "#0db7b9",
-                                        "#735ed5",
-                                        "#22d3ee",
-                                        "#8b5cf6",
-                                    ],
-                                });
-                            } catch {}
-                        };
-                        if ("requestIdleCallback" in window) {
-                            requestIdleCallback(runConfetti);
-                        } else {
-                            requestAnimationFrame(runConfetti);
-                        }
+                    const triggerConfetti = async () => {
+                        try {
+                            const confettiModule =
+                                await import("canvas-confetti");
+                            const confetti = confettiModule.default;
+                            confetti({
+                                particleCount: 80,
+                                spread: 70,
+                                origin: { y: 0.6 },
+                                colors: [
+                                    "#0db7b9",
+                                    "#735ed5",
+                                    "#22d3ee",
+                                    "#8b5cf6",
+                                ],
+                            });
+                        } catch {}
+                    };
+
+                    if ("requestIdleCallback" in window) {
+                        requestIdleCallback(triggerConfetti);
+                    } else {
+                        requestAnimationFrame(triggerConfetti);
                     }
                 }
             });
         });
     }
 
-    // Global listeners registered once on window and document
-    window.addEventListener("toggle-terminal", () => {
-        const modal = document.getElementById("terminal-modal");
-        if (!modal) return;
-        if (modal.classList.contains("hidden")) {
-            openTerminal();
-        } else {
-            closeTerminal();
-        }
-    });
-
-    window.addEventListener("keydown", (e) => {
-        const modal = document.getElementById("terminal-modal");
-        if (!modal) return;
-        const isHidden = modal.classList.contains("hidden");
+    document.addEventListener("keydown", (e) => {
+        const { modal, input, closeBtn } = getTerminalElements();
+        const isHidden = modal?.classList.contains("hidden");
 
         if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
             e.preventDefault();
@@ -436,6 +465,7 @@ const closeAria =
                 closeTerminal();
             }
         } else if (e.key === "Escape" && !isHidden) {
+            e.preventDefault();
             closeTerminal();
         } else if (!isHidden) {
             const { items, input, closeBtn } = getTerminalElements();
@@ -470,5 +500,10 @@ const closeAria =
         }
     });
 
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initTerminal);
+    } else {
+        initTerminal();
+    }
     document.addEventListener("astro:page-load", initTerminal);
 </script>

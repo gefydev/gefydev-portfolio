@@ -7,6 +7,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (
     pathname.startsWith('/_astro') ||
     pathname.startsWith('/images') ||
+    pathname.startsWith('/fonts') ||
     pathname.startsWith('/favicon') ||
     pathname.endsWith('.png') ||
     pathname.endsWith('.webp') ||
@@ -15,15 +16,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
     pathname.endsWith('.woff2')
   ) {
     const response = await next();
-    if (pathname.startsWith('/_astro')) {
-      response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
-      response.headers.set('CDN-Cache-Control', 'max-age=31536000, immutable');
-      response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=31536000, immutable');
-    } else {
-      response.headers.set('Cache-Control', 'public, max-age=86400, s-maxage=2592000, stale-while-revalidate=604800');
-      response.headers.set('CDN-Cache-Control', 'max-age=2592000, stale-while-revalidate=604800');
-      response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=2592000, stale-while-revalidate=604800');
-    }
+    response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+    response.headers.set('CDN-Cache-Control', 'max-age=31536000, immutable');
+    response.headers.set('Cloudflare-CDN-Cache-Control', 'max-age=31536000, immutable');
     return response;
   }
 

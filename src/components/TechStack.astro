@@ -1027,5 +1027,10 @@ const adb = techStack.find((t) => t.icon === "adb")!;
         grid.addEventListener("mousemove", handleMouseMove, { passive: true });
     }
 
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initTechBento);
+    } else {
+        initTechBento();
+    }
     document.addEventListener("astro:page-load", initTechBento);
 </script>

@@ -251,38 +251,35 @@ const defaultSpans = [
         card.classList.remove('md:col-span-5', 'md:col-span-6', 'md:col-span-7', 'md:col-span-12');
 
         if (count === 1) {
-          // Single item takes full row
           card.classList.add('md:col-span-12');
         } else if (count === 2) {
-          // 2 items: 7 cols + 5 cols
           card.classList.add(index === 0 ? 'md:col-span-7' : 'md:col-span-5');
         } else if (count === 3) {
-          // 3 items: 7 + 5 on row 1, 12 on row 2
           if (index === 0) card.classList.add('md:col-span-7');
           else if (index === 1) card.classList.add('md:col-span-5');
           else card.classList.add('md:col-span-12');
         } else if (count === 4) {
-          // 4 items: 7 + 5 on row 1, 5 + 7 on row 2
           if (index === 0) card.classList.add('md:col-span-7');
           else if (index === 1) card.classList.add('md:col-span-5');
           else if (index === 2) card.classList.add('md:col-span-5');
           else card.classList.add('md:col-span-7');
-        } else {
-          // 5+ items: 7 + 5, 5 + 7, 12...
+        } else if (count === 5) {
           if (index === 0) card.classList.add('md:col-span-7');
           else if (index === 1) card.classList.add('md:col-span-5');
           else if (index === 2) card.classList.add('md:col-span-5');
           else if (index === 3) card.classList.add('md:col-span-7');
           else card.classList.add('md:col-span-12');
+        } else {
+          card.classList.add('md:col-span-6');
         }
       });
     }
 
-    function setActiveTab(selectedBtn: HTMLButtonElement) {
-      const filter = selectedBtn.getAttribute('data-filter');
+    function setActiveTab(activeBtn: HTMLButtonElement) {
+      const filter = activeBtn.getAttribute('data-filter') || 'all';
 
       filterBtns.forEach((b) => {
-        const isSelected = b === selectedBtn;
+        const isSelected = b === activeBtn;
         b.classList.toggle('bg-[#0db7b9]', isSelected);
         b.classList.toggle('text-zinc-950', isSelected);
         b.classList.toggle('font-bold', isSelected);
@@ -337,5 +334,10 @@ const defaultSpans = [
     });
   }
 
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProjects);
+  } else {
+    initProjects();
+  }
   document.addEventListener('astro:page-load', initProjects);
 </script>

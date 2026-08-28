@@ -38,6 +38,10 @@ const hexToRgb = (hex: string) => {
 };
 
 const rgbColor = hexToRgb(project.accentColor || "#0db7b9");
+
+// Responsive thumbnail paths
+const thumb400 = project.image.replace(".webp", "-400w.webp");
+const thumb640 = project.image;
 ---
 
 <article
@@ -57,11 +61,13 @@ const rgbColor = hexToRgb(project.accentColor || "#0db7b9");
             class="relative w-full h-64 sm:h-72 md:h-80 rounded-xl bg-zinc-900 border border-zinc-800/90 overflow-hidden group/preview flex flex-col justify-between p-4 cursor-pointer project-card-media shrink-0 shadow-inner"
         >
             <img
-                src={project.image}
+                src={thumb640}
+                srcset={`${thumb400} 400w, ${thumb640} 640w`}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
                 alt={`Screenshot de ${project.name}`}
                 class="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover/preview:scale-105"
-                width="800"
-                height="440"
+                width="640"
+                height="352"
                 loading="lazy"
                 decoding="async"
             />
@@ -243,5 +249,10 @@ const rgbColor = hexToRgb(project.accentColor || "#0db7b9");
         });
     }
 
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initProjectCards);
+    } else {
+        initProjectCards();
+    }
     document.addEventListener("astro:page-load", initProjectCards);
 </script>

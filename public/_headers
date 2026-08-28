@@ -2,12 +2,19 @@
   Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: *
 
-/images/*
-  Cache-Control: public, max-age=86400, s-maxage=2592000, stale-while-revalidate=604800
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: *
 
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/favicon*
+  Cache-Control: public, max-age=31536000, immutable
+
 /favicon.ico
-  Cache-Control: public, max-age=86400, s-maxage=2592000, stale-while-revalidate=604800
+  Cache-Control: public, max-age=31536000, immutable
 
 /robots.txt
   Cache-Control: public, max-age=86400, s-maxage=604800

@@ -325,6 +325,11 @@ const menuAriaLabel =
         }
     });
 
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initNavbar);
+    } else {
+        initNavbar();
+    }
     document.addEventListener("astro:page-load", initNavbar);
     document.addEventListener("astro:before-swap", () => {
         if (clockInterval) {
