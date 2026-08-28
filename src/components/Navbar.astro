@@ -24,12 +24,12 @@ const menuAriaLabel =
 ---
 
 <header
-    class="fixed top-0 inset-x-0 z-40 transition-all duration-300 border-b border-white/[0.06] bg-[#06070b]/85 backdrop-blur-md"
+    class="fixed top-0 inset-x-0 z-40 border-b border-white/[0.06] bg-[#06070b]/85 backdrop-blur-md"
 >
     <div
         class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between"
     >
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 shrink-0">
             <a
                 href={`/${lang}`}
                 class="group flex items-center gap-2.5 font-sans font-bold text-sm tracking-tight text-white hover:text-cyan-400 transition-colors focus-visible:ring-1 focus-visible:ring-cyan-400 rounded-sm"
@@ -62,14 +62,14 @@ const menuAriaLabel =
                 <span class="text-zinc-400">Buenos Aires</span>
                 <span
                     id="nav-live-clock"
-                    class="text-zinc-200 font-mono text-[11px] tabular-nums"
+                    class="text-zinc-200 font-mono text-[11px] tabular-nums inline-block min-w-[62px] text-center"
                     >--:--:--</span
                 >
             </div>
         </div>
 
         <nav
-            class="hidden md:flex items-center gap-6 text-xs font-sans font-medium tracking-normal text-zinc-400"
+            class="hidden md:flex items-center gap-6 text-xs font-sans font-medium tracking-normal text-zinc-400 shrink-0"
             aria-label="Main Navigation"
         >
             <a
@@ -99,7 +99,7 @@ const menuAriaLabel =
             >
         </nav>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 shrink-0">
             <button
                 id="cmd-palette-btn"
                 type="button"
@@ -197,7 +197,8 @@ const menuAriaLabel =
                 <span
                     >Buenos Aires: <span
                         id="mobile-live-clock"
-                        class="text-zinc-200 font-mono">--:--:--</span
+                        class="text-zinc-200 font-mono inline-block min-w-[62px] text-center"
+                        >--:--:--</span
                     ></span
                 >
             </div>
