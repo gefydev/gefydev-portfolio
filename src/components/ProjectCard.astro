@@ -52,9 +52,9 @@ const rgbColor = hexToRgb(project.accentColor || "#0db7b9");
     </div>
 
     <div class="relative z-10 p-6 sm:p-7 space-y-5 flex-1 flex flex-col">
-        <!-- Image Box with interactive preview and Fullscreen trigger -->
+        <!-- Image Box with increased height and interactive preview -->
         <div
-            class="relative w-full h-48 sm:h-52 rounded-xl bg-zinc-900 border border-zinc-800/90 overflow-hidden group/preview flex flex-col justify-between p-4 cursor-pointer project-card-media shrink-0"
+            class="relative w-full h-64 sm:h-72 md:h-80 rounded-xl bg-zinc-900 border border-zinc-800/90 overflow-hidden group/preview flex flex-col justify-between p-4 cursor-pointer project-card-media shrink-0 shadow-inner"
         >
             <img
                 src={project.image}
@@ -66,7 +66,7 @@ const rgbColor = hexToRgb(project.accentColor || "#0db7b9");
                 decoding="async"
             />
             <div
-                class="absolute inset-0 bg-gradient-to-t from-zinc-950/95 via-zinc-950/40 to-zinc-950/20 pointer-events-none"
+                class="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/15 to-zinc-950/30 pointer-events-none"
             >
             </div>
 
