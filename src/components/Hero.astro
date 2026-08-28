@@ -1,197 +1,319 @@
 ---
-import { translations } from '../data/translations';
-import { Terminal, Copy, Check, ArrowRight, Sparkles, GraduationCap, MapPin, Layers } from 'lucide-astro';
+import { translations } from "../data/translations";
+import {
+    Terminal,
+    Copy,
+    Check,
+    ArrowRight,
+    Sparkles,
+    GraduationCap,
+    MapPin,
+    Layers,
+} from "lucide-astro";
 
 interface Props {
-  lang: 'es' | 'en';
+    lang: "es" | "en";
 }
 
 const { lang } = Astro.props;
 const t = translations[lang];
 
-const copyCmdAria = lang === 'es' ? 'Copiar comando npx gefydev' : 'Copy command npx gefydev';
+const copyCmdAria =
+    lang === "es" ? "Copiar comando npx gefydev" : "Copy command npx gefydev";
 ---
 
-<section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden font-sans" aria-label="Hero">
-  <div class="absolute inset-0 bg-brand-glow pointer-events-none opacity-70"></div>
-  <div class="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none"></div>
-
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-      <div class="lg:col-span-8 space-y-6">
-        <div class="inline-flex flex-wrap items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-800 text-xs text-zinc-300">
-          <span class="inline-flex items-center gap-1.5 text-[#0db7b9] font-semibold">
-            <Sparkles class="w-3.5 h-3.5 text-[#a78bfa]" />
-            <span>GefyDev</span>
-          </span>
-          <span class="text-zinc-600">•</span>
-          <span class="text-zinc-300 font-medium">{t.hero.badge}</span>
-        </div>
-
-        <div class="space-y-3">
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-[1.1]">
-            <span class="text-zinc-400 font-normal text-2xl sm:text-3xl block mb-1">{t.hero.greeting}</span>
-            <span class="text-title-gradient">{t.hero.name}</span>
-          </h1>
-          <p class="text-xl sm:text-2xl font-semibold text-brand-gradient flex items-center gap-2">
-            <span>{t.hero.roleTitle}</span>
-          </p>
-        </div>
-
-        <p class="text-base sm:text-lg text-zinc-300 max-w-2xl leading-relaxed font-normal">
-          {t.hero.subtitle}
-        </p>
-
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
-          <div class="relative flex items-center rounded-xl bg-zinc-950/90 border border-zinc-800 hover:border-[#0db7b9]/40 transition-colors p-1.5 text-xs text-zinc-300 max-w-md group">
-            <div class="flex items-center gap-2 px-3 py-2 text-zinc-400 border-r border-zinc-800/80 font-mono">
-              <Terminal class="w-3.5 h-3.5 text-[#0db7b9]" />
-              <span class="text-zinc-400">$</span>
-            </div>
-            <code id="hero-cmd-text" class="px-3 py-2 text-cyan-300 font-mono text-xs flex-1 select-all">npx gefydev</code>
-            <button
-              id="hero-copy-cmd"
-              type="button"
-              class="px-3.5 py-2 min-h-[36px] rounded-lg bg-zinc-900 hover:bg-[#0db7b9] hover:text-zinc-950 text-zinc-200 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer active:scale-[0.98]"
-              aria-label={copyCmdAria}
-            >
-              <Copy class="w-3.5 h-3.5 copy-icon" />
-              <Check class="w-3.5 h-3.5 check-icon hidden text-emerald-400" />
-              <span class="copy-label">{lang === 'es' ? 'Copiar' : 'Copy'}</span>
-            </button>
-          </div>
-
-          <div class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs font-medium text-emerald-400">
-            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>{t.hero.availableBadge}</span>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-3 pt-2">
-          <a
-            href="#projects"
-            class="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-xl bg-gradient-to-r from-[#0db7b9] to-[#735ed5] hover:opacity-95 text-white font-semibold text-sm transition-all shadow-lg shadow-[#0db7b9]/15 hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0"
-          >
-            <span>{t.hero.exploreProjects}</span>
-            <ArrowRight class="w-4 h-4" />
-          </a>
-
-          <a
-            href="#contact"
-            class="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-200 font-medium text-sm transition-all hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0"
-          >
-            <span>{t.hero.contactMe}</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="lg:col-span-4 flex justify-center lg:justify-end">
-        <div class="relative w-full max-w-xs group">
-          <div class="absolute -inset-1 bg-gradient-to-r from-[#0db7b9] to-[#735ed5] rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
-          
-          <div class="relative rounded-2xl bg-zinc-950/90 border border-zinc-800 p-5 space-y-4 shadow-xl">
-            <div class="relative aspect-square rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800/80 overflow-hidden flex flex-col items-center justify-center text-center p-6 group/avatar">
-              <img
-                src="/images/logo-white-bg.webp"
-                alt="GefyDev Official Logo"
-                class="w-28 h-28 rounded-2xl object-contain shadow-md mb-3 group-hover/avatar:scale-105 transition-transform"
-                width="112"
-                height="112"
-                loading="eager"
-                decoding="async"
-                fetchpriority="high"
-              />
-              <p class="text-sm font-bold text-white">Genaro Febbo Yapur</p>
-              <p class="text-xs font-mono text-[#0db7b9]">@gefydev</p>
-
-              <div class="absolute top-3 right-3 px-2 py-0.5 rounded text-[10px] font-medium bg-[#735ed5]/20 border border-[#735ed5]/40 text-purple-300">
-                {lang === 'es' ? 'U. de Buenos Aires' : 'Univ. of Buenos Aires'}
-              </div>
-            </div>
-
-            <div class="space-y-2 text-xs">
-              <div class="flex items-center justify-between py-2 px-3 rounded-lg bg-zinc-900/60 border border-zinc-800/60 text-zinc-300">
-                <span class="flex items-center gap-2">
-                  <GraduationCap class="w-4 h-4 text-purple-400" />
-                  <span class="font-medium">{lang === 'es' ? 'Universidad' : 'University'}</span>
-                </span>
-                <span class="font-semibold text-white">{lang === 'es' ? 'U. de Buenos Aires' : 'Univ. of Buenos Aires'}</span>
-              </div>
-
-              <div class="flex items-center justify-between py-2 px-3 rounded-lg bg-zinc-900/60 border border-zinc-800/60 text-zinc-300">
-                <span class="flex items-center gap-2">
-                  <Layers class="w-4 h-4 text-[#0db7b9]" />
-                  <span class="font-medium">{lang === 'es' ? 'Secundario' : 'High School'}</span>
-                </span>
-                <span class="text-zinc-300">{lang === 'es' ? 'Egresado CNBA' : 'CNBA Alumnus'}</span>
-              </div>
-
-              <div class="flex items-center justify-between py-2 px-3 rounded-lg bg-zinc-900/60 border border-zinc-800/60 text-zinc-300">
-                <span class="flex items-center gap-2">
-                  <MapPin class="w-4 h-4 text-emerald-400" />
-                  <span class="font-medium">{lang === 'es' ? 'Ubicación' : 'Location'}</span>
-                </span>
-                <span class="text-zinc-300 font-medium">Buenos Aires, AR 🇦🇷</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<section
+    class="relative min-h-screen min-h-[100svh] min-h-[100dvh] flex flex-col justify-center pt-20 pb-12 sm:pt-24 sm:pb-16 overflow-hidden font-sans"
+    aria-label="Hero"
+>
+    <div class="absolute inset-0 bg-brand-glow pointer-events-none opacity-70">
     </div>
-  </div>
+    <div
+        class="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none"
+    >
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 w-full my-auto">
+        <div
+            class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center py-4 sm:py-6"
+        >
+            <div class="lg:col-span-8 space-y-6">
+                <div
+                    class="inline-flex flex-wrap items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-800 text-xs text-zinc-300"
+                >
+                    <span
+                        class="inline-flex items-center gap-1.5 text-[#0db7b9] font-semibold"
+                    >
+                        <Sparkles class="w-3.5 h-3.5 text-[#a78bfa]" />
+                        <span>GefyDev</span>
+                    </span>
+                    <span class="text-zinc-600">•</span>
+                    <span class="text-zinc-300 font-medium">{t.hero.badge}</span
+                    >
+                </div>
+
+                <div class="space-y-3">
+                    <h1
+                        class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-[1.1]"
+                    >
+                        <span
+                            class="text-zinc-400 font-normal text-2xl sm:text-3xl block mb-1"
+                            >{t.hero.greeting}</span
+                        >
+                        <span class="text-title-gradient">{t.hero.name}</span>
+                    </h1>
+                    <p
+                        class="text-xl sm:text-2xl font-semibold text-brand-gradient flex items-center gap-2"
+                    >
+                        <span>{t.hero.roleTitle}</span>
+                    </p>
+                </div>
+
+                <p
+                    class="text-base sm:text-lg text-zinc-300 max-w-2xl leading-relaxed font-normal"
+                >
+                    {t.hero.subtitle}
+                </p>
+
+                <div
+                    class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2"
+                >
+                    <div
+                        class="relative flex items-center rounded-xl bg-zinc-950/90 border border-zinc-800 hover:border-[#0db7b9]/40 transition-colors p-1.5 text-xs text-zinc-300 max-w-md group"
+                    >
+                        <div
+                            class="flex items-center gap-2 px-3 py-2 text-zinc-400 border-r border-zinc-800/80 font-mono"
+                        >
+                            <Terminal class="w-3.5 h-3.5 text-[#0db7b9]" />
+                            <span class="text-zinc-400">$</span>
+                        </div>
+                        <code
+                            id="hero-cmd-text"
+                            class="px-3 py-2 text-cyan-300 font-mono text-xs flex-1 select-all"
+                            >npx gefydev</code
+                        >
+                        <button
+                            id="hero-copy-cmd"
+                            type="button"
+                            class="px-3.5 py-2 min-h-[36px] rounded-lg bg-zinc-900 hover:bg-[#0db7b9] hover:text-zinc-950 text-zinc-200 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer active:scale-[0.98]"
+                            aria-label={copyCmdAria}
+                        >
+                            <Copy class="w-3.5 h-3.5 copy-icon" />
+                            <Check
+                                class="w-3.5 h-3.5 check-icon hidden text-emerald-400"
+                            />
+                            <span class="copy-label"
+                                >{lang === "es" ? "Copiar" : "Copy"}</span
+                            >
+                        </button>
+                    </div>
+
+                    <div
+                        class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs font-medium text-emerald-400"
+                    >
+                        <span
+                            class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"
+                        ></span>
+                        <span>{t.hero.availableBadge}</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3 pt-2">
+                    <a
+                        href="#projects"
+                        class="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-xl bg-gradient-to-r from-[#0db7b9] to-[#735ed5] hover:opacity-95 text-white font-semibold text-sm transition-all shadow-lg shadow-[#0db7b9]/15 hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0"
+                    >
+                        <span>{t.hero.exploreProjects}</span>
+                        <ArrowRight class="w-4 h-4" />
+                    </a>
+
+                    <a
+                        href="#contact"
+                        class="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-200 font-medium text-sm transition-all hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0"
+                    >
+                        <span>{t.hero.contactMe}</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4 flex justify-center lg:justify-end">
+                <div class="relative w-full max-w-xs group">
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-[#0db7b9] to-[#735ed5] rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity"
+                    >
+                    </div>
+
+                    <div
+                        class="relative rounded-2xl bg-zinc-950/90 border border-zinc-800 p-5 space-y-4 shadow-xl"
+                    >
+                        <div
+                            class="relative aspect-square rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800/80 overflow-hidden flex flex-col items-center justify-center text-center p-6 group/avatar"
+                        >
+                            <img
+                                src="/images/logo-white-bg.webp"
+                                alt="GefyDev Official Logo"
+                                class="w-28 h-28 rounded-2xl object-contain shadow-md mb-3 group-hover/avatar:scale-105 transition-transform"
+                                width="112"
+                                height="112"
+                                loading="eager"
+                                decoding="async"
+                                fetchpriority="high"
+                            />
+                            <p class="text-sm font-bold text-white">
+                                Genaro Febbo Yapur
+                            </p>
+                            <p class="text-xs font-mono text-[#0db7b9]">
+                                @gefydev
+                            </p>
+
+                            <div
+                                class="absolute top-3 right-3 px-2 py-0.5 rounded text-[10px] font-medium bg-[#735ed5]/20 border border-[#735ed5]/40 text-purple-300"
+                            >
+                                {
+                                    lang === "es"
+                                        ? "U. de Buenos Aires"
+                                        : "Univ. of Buenos Aires"
+                                }
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 text-xs">
+                            <div
+                                class="flex items-center justify-between py-2 px-3 rounded-lg bg-zinc-900/60 border border-zinc-800/60 text-zinc-300"
+                            >
+                                <span class="flex items-center gap-2">
+                                    <GraduationCap
+                                        class="w-4 h-4 text-purple-400"
+                                    />
+                                    <span class="font-medium"
+                                        >{
+                                            lang === "es"
+                                                ? "Universidad"
+                                                : "University"
+                                        }</span
+                                    >
+                                </span>
+                                <span class="font-semibold text-white"
+                                    >{
+                                        lang === "es"
+                                            ? "U. de Buenos Aires"
+                                            : "Univ. of Buenos Aires"
+                                    }</span
+                                >
+                            </div>
+
+                            <div
+                                class="flex items-center justify-between py-2 px-3 rounded-lg bg-zinc-900/60 border border-zinc-800/60 text-zinc-300"
+                            >
+                                <span class="flex items-center gap-2">
+                                    <Layers class="w-4 h-4 text-[#0db7b9]" />
+                                    <span class="font-medium"
+                                        >{
+                                            lang === "es"
+                                                ? "Secundario"
+                                                : "High School"
+                                        }</span
+                                    >
+                                </span>
+                                <span class="text-zinc-300"
+                                    >{
+                                        lang === "es"
+                                            ? "Egresado CNBA"
+                                            : "CNBA Alumnus"
+                                    }</span
+                                >
+                            </div>
+
+                            <div
+                                class="flex items-center justify-between py-2 px-3 rounded-lg bg-zinc-900/60 border border-zinc-800/60 text-zinc-300"
+                            >
+                                <span class="flex items-center gap-2">
+                                    <MapPin class="w-4 h-4 text-emerald-400" />
+                                    <span class="font-medium"
+                                        >{
+                                            lang === "es"
+                                                ? "Ubicación"
+                                                : "Location"
+                                        }</span
+                                    >
+                                </span>
+                                <span class="text-zinc-300 font-medium"
+                                    >Buenos Aires, AR 🇦🇷</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <script>
-  function initHero() {
-    const copyBtn = document.getElementById('hero-copy-cmd');
-    if (!copyBtn || copyBtn.dataset.bound) return;
-    copyBtn.dataset.bound = 'true';
+    function initHero() {
+        const copyBtn = document.getElementById("hero-copy-cmd");
+        if (!copyBtn || copyBtn.dataset.bound) return;
+        copyBtn.dataset.bound = "true";
 
-    const copyIcon = copyBtn.querySelector('.copy-icon');
-    const checkIcon = copyBtn.querySelector('.check-icon');
-    const copyLabel = copyBtn.querySelector('.copy-label');
+        const copyIcon = copyBtn.querySelector(".copy-icon");
+        const checkIcon = copyBtn.querySelector(".check-icon");
+        const copyLabel = copyBtn.querySelector(".copy-label");
 
-    copyBtn.addEventListener('click', () => {
-      try {
-        copyIcon?.classList.add('hidden');
-        checkIcon?.classList.remove('hidden');
-        if (copyLabel) copyLabel.textContent = '¡Listo!';
-
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText('npx gefydev').catch(() => {});
-        }
-
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (!prefersReducedMotion) {
-          const triggerConfetti = async () => {
+        copyBtn.addEventListener("click", () => {
             try {
-              const { default: confetti } = await import('canvas-confetti');
-              confetti({
-                particleCount: 35,
-                spread: 60,
-                origin: { y: 0.8 },
-                colors: ['#0db7b9', '#735ed5', '#22d3ee', '#8b5cf6'],
-              });
+                copyIcon?.classList.add("hidden");
+                checkIcon?.classList.remove("hidden");
+                if (copyLabel) copyLabel.textContent = "¡Listo!";
+
+                if (navigator.clipboard) {
+                    navigator.clipboard
+                        .writeText("npx gefydev")
+                        .catch(() => {});
+                }
+
+                const prefersReducedMotion = window.matchMedia(
+                    "(prefers-reduced-motion: reduce)",
+                ).matches;
+                if (!prefersReducedMotion) {
+                    const triggerConfetti = async () => {
+                        try {
+                            const { default: confetti } =
+                                await import("canvas-confetti");
+                            confetti({
+                                particleCount: 35,
+                                spread: 60,
+                                origin: { y: 0.8 },
+                                colors: [
+                                    "#0db7b9",
+                                    "#735ed5",
+                                    "#22d3ee",
+                                    "#8b5cf6",
+                                ],
+                            });
+                        } catch {}
+                    };
+
+                    if ("requestIdleCallback" in window) {
+                        requestIdleCallback(triggerConfetti);
+                    } else {
+                        requestAnimationFrame(triggerConfetti);
+                    }
+                }
+
+                setTimeout(() => {
+                    copyIcon?.classList.remove("hidden");
+                    checkIcon?.classList.add("hidden");
+                    if (copyLabel) {
+                        copyLabel.textContent = copyBtn
+                            .getAttribute("aria-label")
+                            ?.includes("Copy")
+                            ? "Copy"
+                            : "Copiar";
+                    }
+                }, 2500);
             } catch {}
-          };
+        });
+    }
 
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(triggerConfetti);
-          } else {
-            requestAnimationFrame(triggerConfetti);
-          }
-        }
-
-        setTimeout(() => {
-          copyIcon?.classList.remove('hidden');
-          checkIcon?.classList.add('hidden');
-          if (copyLabel) {
-            copyLabel.textContent = copyBtn.getAttribute('aria-label')?.includes('Copy') ? 'Copy' : 'Copiar';
-          }
-        }, 2500);
-      } catch {}
-    });
-  }
-
-  document.addEventListener('astro:page-load', initHero);
+    document.addEventListener("astro:page-load", initHero);
 </script>
