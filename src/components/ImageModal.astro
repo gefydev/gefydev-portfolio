@@ -179,11 +179,18 @@ const closeAria =
                 }
             }
 
-            modal.classList.remove("hidden");
-            modal.setAttribute("aria-hidden", "false");
+            // Lock scroll without causing horizontal layout shift
+            const scrollbarWidth =
+                window.innerWidth - document.documentElement.clientWidth;
+            if (scrollbarWidth > 0) {
+                document.body.style.paddingRight = `${scrollbarWidth}px`;
+            }
             document.body.style.overflow = "hidden";
 
-            // Force layout recalculation so the transition starts from opacity 0 & scale 95
+            modal.classList.remove("hidden");
+            modal.setAttribute("aria-hidden", "false");
+
+            // Force layout recalculation so the transition starts smoothly from opacity 0 & scale 95
             void modal.offsetWidth;
 
             requestAnimationFrame(() => {
@@ -207,6 +214,7 @@ const closeAria =
                 modal.classList.add("hidden");
                 modal.setAttribute("aria-hidden", "true");
                 document.body.style.overflow = "";
+                document.body.style.paddingRight = "";
                 if (lastFocusedElement) {
                     lastFocusedElement.focus();
                 }
