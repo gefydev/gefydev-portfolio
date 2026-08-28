@@ -61,25 +61,6 @@ const noindex = Astro.props.noindex || false;
             type="image/webp"
             fetchpriority="high"
         />
-        <script
-            is:inline
-            transition:persist
-            type="speculationrules"
-            set:html={JSON.stringify({
-                prerender: [
-                    {
-                        where: { href_matches: "/*" },
-                        eagerness: "moderate",
-                    },
-                ],
-                prefetch: [
-                    {
-                        where: { href_matches: "/*" },
-                        eagerness: "immediate",
-                    },
-                ],
-            })}
-        />
         <SEO
             title={title}
             description={description}

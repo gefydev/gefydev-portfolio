@@ -10,8 +10,8 @@ export default defineConfig({
   output: 'server',
   compressHTML: true,
   prefetch: {
-    prefetchAll: true,
-    defaultStrategy: 'viewport',
+    prefetchAll: false,
+    defaultStrategy: 'hover',
   },
   adapter: isVercel
     ? vercel()
