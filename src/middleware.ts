@@ -6,17 +6,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   // Los archivos estáticos y de descubrimiento son cacheados directamente en el Edge por Cloudflare
   if (
-    pathname.startsWith('/_astro') ||
-    pathname.startsWith('/images') ||
-    pathname.startsWith('/fonts') ||
-    pathname.startsWith('/favicon') ||
-    pathname.endsWith('.xml') ||
-    pathname.endsWith('.txt') ||
-    pathname.endsWith('.png') ||
-    pathname.endsWith('.webp') ||
-    pathname.endsWith('.svg') ||
-    pathname.endsWith('.ico') ||
-    pathname.endsWith('.woff2')
+    pathname.includes('.') ||
+    pathname.startsWith('/_astro/')
   ) {
     return next();
   }
@@ -59,7 +50,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-  response.headers.set('Link', '</images/logo-white-bg.webp>; rel=preload; as=image');
 
   return response;
 });
