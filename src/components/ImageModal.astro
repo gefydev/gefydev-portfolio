@@ -108,143 +108,159 @@ const closeAria =
 </div>
 
 <script>
+    let lastFocusedElement: HTMLElement | null = null;
+
+    function getImageModalElements() {
+        return {
+            modal: document.getElementById("project-image-modal"),
+            card: document.getElementById("project-image-card"),
+            closeBtn: document.getElementById("close-image-modal-btn"),
+            modalTitle: document.getElementById("modal-project-title"),
+            modalBadge: document.getElementById("modal-project-badge"),
+            modalBadgeText: document.getElementById("modal-project-badge-text"),
+            modalImg: document.getElementById(
+                "modal-project-image",
+            ) as HTMLImageElement | null,
+            modalDesc: document.getElementById("modal-project-desc"),
+            modalLive: document.getElementById(
+                "modal-project-live",
+            ) as HTMLAnchorElement | null,
+            modalGithub: document.getElementById(
+                "modal-project-github",
+            ) as HTMLAnchorElement | null,
+        };
+    }
+
+    function openModal(data: {
+        title: string;
+        image: string;
+        desc: string;
+        badge?: string;
+        liveUrl?: string;
+        githubUrl?: string;
+    }) {
+        const {
+            modal,
+            card,
+            closeBtn,
+            modalTitle,
+            modalBadge,
+            modalBadgeText,
+            modalImg,
+            modalDesc,
+            modalLive,
+            modalGithub,
+        } = getImageModalElements();
+        if (!modal || !card) return;
+        lastFocusedElement = document.activeElement as HTMLElement | null;
+
+        if (modalTitle) modalTitle.textContent = data.title;
+        if (modalImg) {
+            modalImg.src = data.image;
+            modalImg.alt = `Screenshot en alta resolución de ${data.title}`;
+        }
+        if (modalDesc) modalDesc.textContent = data.desc;
+
+        if (data.badge && modalBadge && modalBadgeText) {
+            modalBadgeText.textContent = data.badge;
+            modalBadge.classList.remove("hidden");
+            modalBadge.classList.add("inline-flex");
+        } else if (modalBadge) {
+            modalBadge.classList.add("hidden");
+            modalBadge.classList.remove("inline-flex");
+        }
+
+        if (modalLive) {
+            if (data.liveUrl) {
+                modalLive.href = data.liveUrl;
+                modalLive.classList.remove("hidden");
+                modalLive.classList.add("inline-flex");
+            } else {
+                modalLive.classList.add("hidden");
+                modalLive.classList.remove("inline-flex");
+            }
+        }
+
+        if (modalGithub) {
+            if (data.githubUrl) {
+                modalGithub.href = data.githubUrl;
+                modalGithub.classList.remove("hidden");
+                modalGithub.classList.add("inline-flex");
+            } else {
+                modalGithub.classList.add("hidden");
+                modalGithub.classList.remove("inline-flex");
+            }
+        }
+
+        const scrollbarWidth =
+            window.innerWidth - document.documentElement.clientWidth;
+        if (scrollbarWidth > 0) {
+            document.body.style.paddingRight = `${scrollbarWidth}px`;
+        }
+        document.body.style.overflow = "hidden";
+
+        modal.classList.remove("hidden");
+        modal.setAttribute("aria-hidden", "false");
+
+        void modal.offsetWidth;
+
+        requestAnimationFrame(() => {
+            modal.classList.remove("opacity-0");
+            modal.classList.add("opacity-100");
+            card.classList.remove("scale-95");
+            card.classList.add("scale-100");
+            closeBtn?.focus();
+        });
+    }
+
+    function closeModal() {
+        const { modal, card } = getImageModalElements();
+        if (!modal || !card || modal.classList.contains("hidden")) return;
+
+        modal.classList.remove("opacity-100");
+        modal.classList.add("opacity-0");
+        card.classList.remove("scale-100");
+        card.classList.add("scale-95");
+
+        setTimeout(() => {
+            modal.classList.add("hidden");
+            modal.setAttribute("aria-hidden", "true");
+            document.body.style.overflow = "";
+            document.body.style.paddingRight = "";
+            if (lastFocusedElement) {
+                lastFocusedElement.focus();
+            }
+        }, 300);
+    }
+
     function initImageModal() {
-        const modal = document.getElementById("project-image-modal");
-        const card = document.getElementById("project-image-card");
-        const closeBtn = document.getElementById("close-image-modal-btn");
-        const modalTitle = document.getElementById("modal-project-title");
-        const modalBadge = document.getElementById("modal-project-badge");
-        const modalBadgeText = document.getElementById(
-            "modal-project-badge-text",
-        );
-        const modalImg = document.getElementById(
-            "modal-project-image",
-        ) as HTMLImageElement | null;
-        const modalDesc = document.getElementById("modal-project-desc");
-        const modalLive = document.getElementById(
-            "modal-project-live",
-        ) as HTMLAnchorElement | null;
-        const modalGithub = document.getElementById(
-            "modal-project-github",
-        ) as HTMLAnchorElement | null;
-
-        let lastFocusedElement: HTMLElement | null = null;
-
-        function openModal(data: {
-            title: string;
-            image: string;
-            desc: string;
-            badge?: string;
-            liveUrl?: string;
-            githubUrl?: string;
-        }) {
-            if (!modal || !card) return;
-            lastFocusedElement = document.activeElement as HTMLElement | null;
-
-            if (modalTitle) modalTitle.textContent = data.title;
-            if (modalImg) {
-                modalImg.src = data.image;
-                modalImg.alt = `Screenshot en alta resolución de ${data.title}`;
-            }
-            if (modalDesc) modalDesc.textContent = data.desc;
-
-            if (data.badge && modalBadge && modalBadgeText) {
-                modalBadgeText.textContent = data.badge;
-                modalBadge.classList.remove("hidden");
-                modalBadge.classList.add("inline-flex");
-            } else if (modalBadge) {
-                modalBadge.classList.add("hidden");
-                modalBadge.classList.remove("inline-flex");
-            }
-
-            if (modalLive) {
-                if (data.liveUrl) {
-                    modalLive.href = data.liveUrl;
-                    modalLive.classList.remove("hidden");
-                    modalLive.classList.add("inline-flex");
-                } else {
-                    modalLive.classList.add("hidden");
-                    modalLive.classList.remove("inline-flex");
-                }
-            }
-
-            if (modalGithub) {
-                if (data.githubUrl) {
-                    modalGithub.href = data.githubUrl;
-                    modalGithub.classList.remove("hidden");
-                    modalGithub.classList.add("inline-flex");
-                } else {
-                    modalGithub.classList.add("hidden");
-                    modalGithub.classList.remove("inline-flex");
-                }
-            }
-
-            // Lock scroll without causing horizontal layout shift
-            const scrollbarWidth =
-                window.innerWidth - document.documentElement.clientWidth;
-            if (scrollbarWidth > 0) {
-                document.body.style.paddingRight = `${scrollbarWidth}px`;
-            }
-            document.body.style.overflow = "hidden";
-
-            modal.classList.remove("hidden");
-            modal.setAttribute("aria-hidden", "false");
-
-            // Force layout recalculation so the transition starts smoothly from opacity 0 & scale 95
-            void modal.offsetWidth;
-
-            requestAnimationFrame(() => {
-                modal.classList.remove("opacity-0");
-                modal.classList.add("opacity-100");
-                card.classList.remove("scale-95");
-                card.classList.add("scale-100");
-                closeBtn?.focus();
-            });
-        }
-
-        function closeModal() {
-            if (!modal || !card) return;
-
-            modal.classList.remove("opacity-100");
-            modal.classList.add("opacity-0");
-            card.classList.remove("scale-100");
-            card.classList.add("scale-95");
-
-            setTimeout(() => {
-                modal.classList.add("hidden");
-                modal.setAttribute("aria-hidden", "true");
-                document.body.style.overflow = "";
-                document.body.style.paddingRight = "";
-                if (lastFocusedElement) {
-                    lastFocusedElement.focus();
-                }
-            }, 300);
-        }
+        const { modal, closeBtn } = getImageModalElements();
+        if (!modal || (modal as HTMLElement).dataset.bound) return;
+        (modal as HTMLElement).dataset.bound = "true";
 
         closeBtn?.addEventListener("click", closeModal);
 
-        modal?.addEventListener("click", (e) => {
+        modal.addEventListener("click", (e) => {
             if (e.target === modal) {
                 closeModal();
             }
         });
+    }
 
-        document.addEventListener("keydown", (e) => {
-            if (
-                e.key === "Escape" &&
-                modal &&
-                !modal.classList.contains("hidden")
-            ) {
+    window.addEventListener("open-project-modal", ((e: CustomEvent) => {
+        if (e.detail) {
+            openModal(e.detail);
+        }
+    }) as EventListener);
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            const modal = document.getElementById("project-image-modal");
+            if (modal && !modal.classList.contains("hidden")) {
                 closeModal();
             }
-        });
-
-        window.addEventListener("open-project-modal", ((e: CustomEvent) => {
-            if (e.detail) {
-                openModal(e.detail);
-            }
-        }) as EventListener);
-    }
+        }
+    });
 
     document.addEventListener("astro:page-load", initImageModal);
 </script>

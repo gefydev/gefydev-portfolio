@@ -240,75 +240,77 @@ const menuAriaLabel =
         if (clockInterval) clearInterval(clockInterval);
         updateAllClocks();
         clockInterval = setInterval(updateAllClocks, 1000);
+    }
 
-        const mobileBtn = document.getElementById("mobile-menu-btn");
-        if (!mobileBtn || (mobileBtn as HTMLElement).dataset.bound) return;
-        (mobileBtn as HTMLElement).dataset.bound = "true";
-
+    function closeMobileDrawer() {
         const drawer = document.getElementById("mobile-menu-drawer");
-        const openIcon = mobileBtn.querySelector(".menu-open-icon");
-        const closeIcon = mobileBtn.querySelector(".menu-close-icon");
+        const mobileBtn = document.getElementById("mobile-menu-btn");
+        if (!drawer || !mobileBtn) return;
+        drawer.classList.add("hidden");
+        mobileBtn.setAttribute("aria-expanded", "false");
+        mobileBtn.querySelector(".menu-open-icon")?.classList.remove("hidden");
+        mobileBtn.querySelector(".menu-close-icon")?.classList.add("hidden");
+    }
 
-        function closeMobileMenu() {
-            if (!drawer || !mobileBtn) return;
-            drawer.classList.add("hidden");
-            mobileBtn.setAttribute("aria-expanded", "false");
-            openIcon?.classList.remove("hidden");
-            closeIcon?.classList.add("hidden");
+    function toggleMobileDrawer() {
+        const drawer = document.getElementById("mobile-menu-drawer");
+        const mobileBtn = document.getElementById("mobile-menu-btn");
+        if (!drawer || !mobileBtn) return;
+        const isHidden = drawer.classList.toggle("hidden");
+        mobileBtn.setAttribute("aria-expanded", String(!isHidden));
+        mobileBtn
+            .querySelector(".menu-open-icon")
+            ?.classList.toggle("hidden", !isHidden);
+        mobileBtn
+            .querySelector(".menu-close-icon")
+            ?.classList.toggle("hidden", isHidden);
+    }
+
+    // Delegated document click listeners
+    document.addEventListener("click", (e) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+
+        // Command palette button click (desktop or mobile)
+        if (target.closest("#cmd-palette-btn")) {
+            window.dispatchEvent(new CustomEvent("toggle-terminal"));
+            return;
         }
 
-        function toggleMobileMenu(e: Event) {
-            e.stopPropagation();
-            if (!drawer || !mobileBtn) return;
-            const isHidden = drawer.classList.toggle("hidden");
-            mobileBtn.setAttribute("aria-expanded", String(!isHidden));
-            openIcon?.classList.toggle("hidden", !isHidden);
-            closeIcon?.classList.toggle("hidden", isHidden);
+        if (target.closest("#mobile-cmd-btn")) {
+            closeMobileDrawer();
+            window.dispatchEvent(new CustomEvent("toggle-terminal"));
+            return;
         }
 
-        mobileBtn.addEventListener("click", toggleMobileMenu);
+        // Mobile menu toggle button
+        if (target.closest("#mobile-menu-btn")) {
+            toggleMobileDrawer();
+            return;
+        }
 
-        document.querySelectorAll(".mobile-nav-link").forEach((link) => {
-            link.addEventListener("click", closeMobileMenu);
-        });
+        // Mobile nav links
+        if (target.closest(".mobile-nav-link")) {
+            closeMobileDrawer();
+            return;
+        }
 
-        const langToggle = document.getElementById("lang-toggle-btn");
-        langToggle?.addEventListener("click", () => {
-            const targetLang = langToggle.getAttribute("data-target-lang");
+        // Language toggle button cookie persistence
+        const langBtn = target.closest<HTMLElement>("#lang-toggle-btn");
+        if (langBtn) {
+            const targetLang = langBtn.getAttribute("data-target-lang");
             if (targetLang) {
                 document.cookie = `user_lang=${targetLang}; path=/; max-age=31536000; SameSite=Lax`;
             }
-        });
+            return;
+        }
 
-        const cmdPaletteBtn = document.getElementById("cmd-palette-btn");
-        const mobileCmdBtn = document.getElementById("mobile-cmd-btn");
-
-        cmdPaletteBtn?.addEventListener("click", () => {
-            window.dispatchEvent(new CustomEvent("toggle-terminal"));
-        });
-
-        mobileCmdBtn?.addEventListener("click", () => {
-            closeMobileMenu();
-            window.dispatchEvent(new CustomEvent("toggle-terminal"));
-        });
-    }
-
-    document.addEventListener("click", (e) => {
+        // Outside click to close mobile menu
         const drawer = document.getElementById("mobile-menu-drawer");
         const mobileBtn = document.getElementById("mobile-menu-btn");
         if (drawer && !drawer.classList.contains("hidden")) {
-            if (
-                !drawer.contains(e.target as Node) &&
-                !mobileBtn?.contains(e.target as Node)
-            ) {
-                drawer.classList.add("hidden");
-                mobileBtn?.setAttribute("aria-expanded", "false");
-                mobileBtn
-                    ?.querySelector(".menu-open-icon")
-                    ?.classList.remove("hidden");
-                mobileBtn
-                    ?.querySelector(".menu-close-icon")
-                    ?.classList.add("hidden");
+            if (!drawer.contains(target) && !mobileBtn?.contains(target)) {
+                closeMobileDrawer();
             }
         }
     });
@@ -316,16 +318,8 @@ const menuAriaLabel =
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
             const drawer = document.getElementById("mobile-menu-drawer");
-            const mobileBtn = document.getElementById("mobile-menu-btn");
             if (drawer && !drawer.classList.contains("hidden")) {
-                drawer.classList.add("hidden");
-                mobileBtn?.setAttribute("aria-expanded", "false");
-                mobileBtn
-                    ?.querySelector(".menu-open-icon")
-                    ?.classList.remove("hidden");
-                mobileBtn
-                    ?.querySelector(".menu-close-icon")
-                    ?.classList.add("hidden");
+                closeMobileDrawer();
             }
         }
     });
