@@ -304,6 +304,16 @@ const closeAria =
         if (input) input.value = "";
     }
 
+    function toggleTerminal() {
+        const { modal } = getTerminalElements();
+        if (!modal) return;
+        if (modal.classList.contains("hidden")) {
+            openTerminal();
+        } else {
+            closeTerminal();
+        }
+    }
+
     function updateSelection(newIndex: number) {
         const { items } = getTerminalElements();
         const visibleItems = items.filter((i) => i.style.display !== "none");
@@ -378,8 +388,6 @@ const closeAria =
         const { modal, card, input, closeBtn, items } = getTerminalElements();
         if (!modal || (modal as HTMLElement).dataset.bound) return;
         (modal as HTMLElement).dataset.bound = "true";
-
-        window.addEventListener("open-terminal", openTerminal);
 
         closeBtn?.addEventListener("click", closeTerminal);
 
@@ -456,17 +464,18 @@ const closeAria =
         });
     }
 
+    // Global Event Listeners for Terminal Modal
+    window.addEventListener("open-terminal", openTerminal);
+    window.addEventListener("toggle-terminal", toggleTerminal);
+    window.addEventListener("close-terminal", closeTerminal);
+
     document.addEventListener("keydown", (e) => {
         const { modal, input, closeBtn } = getTerminalElements();
         const isHidden = modal?.classList.contains("hidden");
 
         if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
             e.preventDefault();
-            if (isHidden) {
-                openTerminal();
-            } else {
-                closeTerminal();
-            }
+            toggleTerminal();
         } else if (e.key === "Escape" && !isHidden) {
             e.preventDefault();
             closeTerminal();
