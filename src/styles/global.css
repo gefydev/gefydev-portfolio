@@ -215,6 +215,7 @@
   .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
   .pname { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--s-3); }
   .badge { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--fg-3); }
+  .pdom { margin-top: var(--s-1); font-family: var(--font-mono); font-size: var(--fs-mono); color: var(--fg-3); overflow-wrap: anywhere; }
   .pdesc { margin-top: var(--s-2); font-size: var(--fs-sm); color: var(--fg-2); }
   .tags { margin-top: var(--s-3); font-family: var(--font-mono); font-size: var(--fs-mono); line-height: 1.6; color: var(--fg-3); }
   .tags span + span::before { content: " · "; }
@@ -298,6 +299,7 @@
   }
   @media (pointer: coarse) {
     .nav a, .links a, .tab, .textbtn { min-height: 2.75rem; display: inline-flex; align-items: center; }
+    .brand, .facts a.link, .contact-row .textbtn, .foot button { min-height: 2.75rem; display: inline-flex; align-items: center; }
   }
 }
 
