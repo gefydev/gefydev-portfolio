@@ -86,8 +86,8 @@ export const projects: Project[] = [
     techTags: [techBadgeStyles.Rust, techBadgeStyles.Iced, techBadgeStyles.Rodio],
     stars: 2,
     badge: {
-      es: '⭐ Proyecto Estrella',
-      en: '⭐ Flagship Project',
+      es: 'Proyecto Estrella',
+      en: 'Flagship Project',
     },
     accentColor: '#735ed5',
     placeholderPattern: 'music',

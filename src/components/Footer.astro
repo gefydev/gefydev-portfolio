@@ -1,6 +1,5 @@
 ---
 import { translations } from "../data/translations";
-import { ArrowUp } from "lucide-astro";
 
 interface Props {
     lang: "es" | "en";
@@ -16,48 +15,23 @@ const topAriaLabel =
         : "Scroll back to top of page";
 ---
 
-<footer
-    class="border-t border-zinc-800/80 bg-[#06070b] py-12 text-xs text-zinc-300 font-sans"
->
-    <div
-        class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6"
-    >
-        <div class="flex items-center gap-3">
-            <img
-                src="/images/logo-white-bg.webp"
-                alt="GefyDev"
-                class="w-6 h-6 rounded-md object-contain"
-                width="24"
-                height="24"
-            />
-            <span class="font-semibold text-zinc-300">
-                GefyDev © {currentYear}
-            </span>
-            <span class="text-zinc-400">•</span>
-            <span class="text-zinc-400 font-mono"
-                >Buenos Aires, Argentina 🇦🇷</span
-            >
-        </div>
-
-        <div class="flex items-center gap-6 text-zinc-300">
-            <span class="text-zinc-400">
+<footer class="site-footer">
+    <div class="wrap foot">
+        <div class="foot-l">
+            <span>GefyDev © {currentYear}</span>
+            <span>Buenos Aires, Argentina</span>
+            <span>
                 {
                     lang === "es"
                         ? "Construido con Astro & Tailwind CSS"
                         : "Built with Astro & Tailwind CSS"
                 }
             </span>
-
-            <button
-                id="back-to-top-btn"
-                type="button"
-                class="inline-flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white transition-colors cursor-pointer active:scale-[0.98]"
-                aria-label={topAriaLabel}
-            >
-                <span>{t.footer.backToTop}</span>
-                <ArrowUp class="w-3.5 h-3.5" />
-            </button>
         </div>
+
+        <button id="back-to-top-btn" type="button" aria-label={topAriaLabel}>
+            {t.footer.backToTop} <span aria-hidden="true">↑</span>
+        </button>
     </div>
 </footer>
 

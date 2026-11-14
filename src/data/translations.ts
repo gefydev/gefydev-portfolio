@@ -210,7 +210,7 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       switchLanguage: 'Cambiar idioma a Inglés (EN)',
       openGithub: 'Abrir GitHub (@gefydev)',
       openLinkedin: 'Abrir LinkedIn (/in/gefydev)',
-      triggerConfetti: 'Lanzar confeti 🎉',
+      triggerConfetti: 'Lanzar confeti',
       emailCopiedNotice: '¡Email copiado al portapapeles!',
     },
     contact: {
@@ -327,7 +327,7 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       switchLanguage: 'Switch language to Spanish (ES)',
       openGithub: 'Open GitHub (@gefydev)',
       openLinkedin: 'Open LinkedIn (/in/gefydev)',
-      triggerConfetti: 'Celebrate with confetti 🎉',
+      triggerConfetti: 'Celebrate with confetti',
       emailCopiedNotice: 'Email copied to clipboard!',
     },
     contact: {
