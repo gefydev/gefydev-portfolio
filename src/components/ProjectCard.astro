@@ -58,6 +58,7 @@ const thumb640 = project.image;
             <h3>{project.name}</h3>
             {project.badge && <span class="badge">{project.badge[lang]}</span>}
         </div>
+        <p class="pdom">{project.homepageUrl ? project.homepageUrl.replace("https://", "") : "github.com"}</p>
         <p class="pdesc">{project.description[lang]}</p>
         <p class="tags" aria-label={techAria}>
             {project.techTags.map((tag) => <span>{tag.name}</span>)}
