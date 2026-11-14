@@ -38,7 +38,7 @@ const thumb640 = project.image;
         data-desc={project.description[lang]}
         data-badge={project.badge ? project.badge[lang] : ""}
         data-live={project.homepageUrl || ""}
-        data-github={project.githubUrl}
+        data-github={project.githubUrl || ""}
         aria-label={viewImageAria}
     >
         <img
@@ -79,15 +79,19 @@ const thumb640 = project.image;
                     <span class="stars">CLI / TUI Tool</span>
                 )
             }
-            <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="link ext"
-                aria-label={sourceCodeAria}
-            >
-                {lang === "es" ? "Código" : "Source"}
-            </a>
+            {
+                project.githubUrl && (
+                    <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="link ext"
+                        aria-label={sourceCodeAria}
+                    >
+                        {lang === "es" ? "Código" : "Source"}
+                    </a>
+                )
+            }
             {project.stars > 0 && <span class="stars">★ {project.stars}</span>}
         </div>
     </div>

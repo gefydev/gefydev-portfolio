@@ -19,7 +19,7 @@ export interface Project {
   };
   featured: boolean;
   homepageUrl?: string;
-  githubUrl: string;
+  githubUrl?: string;
   techTags: TechTag[];
   stars: number;
   badge?: {
@@ -27,7 +27,7 @@ export interface Project {
     en: string;
   };
   accentColor: string;
-  placeholderPattern: 'music' | 'crypto' | 'terminal' | 'stream' | 'maps';
+  placeholderPattern: 'music' | 'crypto' | 'terminal' | 'stream' | 'maps' | 'web';
   image: string;
   imageFull?: string;
 }
@@ -67,28 +67,74 @@ export const techBadgeStyles: Record<string, TechTag> = {
   Rodio: { name: 'Rodio (Audio)', color: '#a78bfa', bg: 'rgba(167, 139, 250, 0.12)', border: 'rgba(167, 139, 250, 0.3)' },
 };
 
+// Etiquetas sueltas (stack del CENBA): el color no se muestra, solo el nombre.
+const tag = (name: string, color = '#a1a1aa'): TechTag => ({ name, color, bg: 'rgba(161, 161, 170, 0.12)', border: 'rgba(161, 161, 170, 0.3)' });
+
 export const projects: Project[] = [
+  {
+    id: 'cenba',
+    name: 'CENBA',
+    category: 'astro',
+    featured: true,
+    title: {
+      es: 'CENBA — Sitio del Centro de Estudiantes del Colegio Nacional de Buenos Aires',
+      en: 'CENBA — Student Union Website of the Colegio Nacional de Buenos Aires',
+    },
+    description: {
+      es: 'Sitio en producción del Centro de Estudiantes del Colegio Nacional de Buenos Aires, el colegio más importante del país: mesa directiva, elecciones desde 2010, estatuto, noticias y memoria, con un panel de edición sin código. Suma su propio backend en Cloudflare Workers: biblioteca de pruebas con visor de PDF y OCR, ¿Hay campo? con notificaciones push que se renuevan solas, registro de notas, fichas de docentes y escrutinio en vivo por WebSocket.',
+      en: 'Production website of the Student Union of the Colegio Nacional de Buenos Aires, the most important school in Argentina: board of representatives, elections since 2010, bylaws, news and memorial, with a no-code editing panel. It runs its own backend on Cloudflare Workers: an exam library with a PDF viewer and OCR, ¿Hay campo? with self-renewing push notifications, a grade tracker, teacher profiles and live vote counting over WebSocket.',
+    },
+    homepageUrl: 'https://cenba.com.ar',
+    techTags: [
+      techBadgeStyles.Astro,
+      techBadgeStyles.React,
+      techBadgeStyles.TypeScript,
+      techBadgeStyles.Tailwind,
+      tag('Keystatic'),
+      tag('Vercel'),
+      tag('Cloudflare Workers'),
+      tag('D1'),
+      tag('R2'),
+      tag('Durable Objects'),
+      tag('Queues'),
+      tag('WebSockets'),
+      tag('Web Push'),
+      tag('Tesseract.js (OCR)'),
+      tag('pdf.js'),
+      tag('pdf-lib'),
+      tag('WebGL2'),
+      tag('Python'),
+      tag('Supabase'),
+      tag('PostHog'),
+      techBadgeStyles.CI,
+    ],
+    stars: 0,
+    badge: {
+      es: 'En Producción',
+      en: 'In Production',
+    },
+    accentColor: '#0192dd',
+    placeholderPattern: 'web',
+    image: '/images/projects/cenba.webp',
+    imageFull: '/images/projects/cenba-full.webp',
+  },
   {
     id: 'spotifust',
     name: 'Spotifust',
     category: 'rust',
-    featured: true,
+    featured: false,
     title: {
       es: 'Spotifust — Cliente de Spotify Ultraligero en Rust',
       en: 'Spotifust — Ultra-lightweight Spotify Client in Rust',
     },
     description: {
-      es: 'Proyecto estrella. Un cliente de Spotify desarrollado desde cero en Rust priorizando velocidad instantánea, mínimo uso de memoria y rendimiento nativo sin la sobrecarga de clientes pesados.',
-      en: 'Flagship project. A lightweight Spotify client built from scratch in Rust, engineered for minimal memory footprint, instant startup, and blazing fast audio streaming.',
+      es: 'Un cliente de Spotify desarrollado desde cero en Rust priorizando velocidad instantánea, mínimo uso de memoria y rendimiento nativo sin la sobrecarga de clientes pesados.',
+      en: 'A lightweight Spotify client built from scratch in Rust, engineered for minimal memory footprint, instant startup, and blazing fast audio streaming.',
     },
     homepageUrl: 'https://spotifust.gefy.dev',
     githubUrl: 'https://github.com/gefydev/spotifust',
     techTags: [techBadgeStyles.Rust, techBadgeStyles.Iced, techBadgeStyles.Rodio],
     stars: 2,
-    badge: {
-      es: 'Proyecto Estrella',
-      en: 'Flagship Project',
-    },
     accentColor: '#735ed5',
     placeholderPattern: 'music',
     image: '/images/projects/spotifust.webp',
