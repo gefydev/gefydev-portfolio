@@ -1,20 +1,5 @@
 ---
 import { translations } from "../data/translations";
-import {
-    Terminal,
-    Search,
-    FolderGit2,
-    Cpu,
-    User,
-    Mail,
-    Globe,
-    Github,
-    Linkedin,
-    Sparkles,
-    X,
-    GitPullRequest,
-    Check,
-} from "lucide-astro";
 
 interface Props {
     lang: "es" | "en";
@@ -29,233 +14,113 @@ const closeAria =
 
 <div
     id="terminal-modal"
-    class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-start justify-center p-4 sm:p-6 pt-20 sm:pt-28"
+    class="overlay hidden"
     role="dialog"
     aria-modal="true"
     aria-labelledby="cmd-palette-title"
 >
-    <div
-        id="terminal-card"
-        class="relative w-full max-w-xl rounded-2xl bg-zinc-950 border border-zinc-800 shadow-2xl overflow-hidden font-sans text-sm"
-    >
-        <div
-            class="flex items-center justify-between px-4 py-3 border-b border-zinc-800 bg-zinc-900/60"
-        >
-            <div class="flex items-center gap-2 text-zinc-400">
-                <Terminal class="w-4 h-4 text-[#0db7b9]" />
-                <span
-                    id="cmd-palette-title"
-                    class="text-xs font-semibold text-zinc-200"
-                    >{t.terminal.title}</span
-                >
-            </div>
-            <button
-                id="close-terminal-btn"
-                type="button"
-                class="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
-                aria-label={closeAria}
-            >
-                <X class="w-4 h-4" />
-            </button>
-        </div>
-
-        <div
-            class="relative flex items-center px-4 py-3 border-b border-zinc-800/80"
-        >
-            <Search class="w-4 h-4 text-zinc-400 mr-3 shrink-0" />
+    <div id="terminal-card" class="palette">
+        <span id="cmd-palette-title" class="sr-only">{t.terminal.title}</span>
+        <div class="palette-top">
             <input
                 id="terminal-search-input"
                 type="text"
                 placeholder={t.terminal.searchPlaceholder}
-                class="w-full bg-transparent text-zinc-100 placeholder:text-zinc-400 focus:outline-hidden text-sm"
                 autocomplete="off"
                 spellcheck="false"
             />
+            <button
+                id="close-terminal-btn"
+                type="button"
+                class="kbd"
+                style="background: none; cursor: pointer"
+                aria-label={closeAria}
+            >
+                ESC
+            </button>
         </div>
 
-        <div id="terminal-list" class="max-h-80 overflow-y-auto p-2 space-y-1">
-            <div
-                class="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-400"
-            >
-                {t.terminal.navigation}
-            </div>
+        <div id="terminal-list" class="palette-list">
+            <div class="palette-group">{t.terminal.navigation}</div>
 
-            <button
-                type="button"
-                class="terminal-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
-                data-action="navigate"
-                data-target="#projects"
-            >
-                <div class="flex items-center gap-2.5">
-                    <FolderGit2 class="w-4 h-4 text-[#0db7b9] shrink-0" />
-                    <span>{t.terminal.goToProjects}</span>
-                </div>
-                <kbd
-                    class="text-[10px] font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-400"
-                    >#projects</kbd
-                >
+            <button type="button" class="terminal-item palette-item" data-action="navigate" data-target="#projects">
+                <span>{t.terminal.goToProjects}</span>
+                <kbd class="kbd">#projects</kbd>
+            </button>
+            <button type="button" class="terminal-item palette-item" data-action="navigate" data-target="#contributions">
+                <span>{t.terminal.goToContributions}</span>
+                <kbd class="kbd">#contributions</kbd>
+            </button>
+            <button type="button" class="terminal-item palette-item" data-action="navigate" data-target="#stack">
+                <span>{t.terminal.goToStack}</span>
+                <kbd class="kbd">#stack</kbd>
+            </button>
+            <button type="button" class="terminal-item palette-item" data-action="navigate" data-target="#about">
+                <span>{t.terminal.goToAbout}</span>
+                <kbd class="kbd">#about</kbd>
+            </button>
+            <button type="button" class="terminal-item palette-item" data-action="navigate" data-target="#contact">
+                <span>{t.terminal.goToContact}</span>
+                <kbd class="kbd">#contact</kbd>
             </button>
 
-            <button
-                type="button"
-                class="terminal-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
-                data-action="navigate"
-                data-target="#contributions"
-            >
-                <div class="flex items-center gap-2.5">
-                    <GitPullRequest class="w-4 h-4 text-purple-400 shrink-0" />
-                    <span>{t.terminal.goToContributions}</span>
-                </div>
-                <kbd
-                    class="text-[10px] font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-400"
-                    >#contributions</kbd
-                >
-            </button>
-
-            <button
-                type="button"
-                class="terminal-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
-                data-action="navigate"
-                data-target="#stack"
-            >
-                <div class="flex items-center gap-2.5">
-                    <Cpu class="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>{t.terminal.goToStack}</span>
-                </div>
-                <kbd
-                    class="text-[10px] font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-400"
-                    >#stack</kbd
-                >
-            </button>
-
-            <button
-                type="button"
-                class="terminal-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
-                data-action="navigate"
-                data-target="#about"
-            >
-                <div class="flex items-center gap-2.5">
-                    <User class="w-4 h-4 text-purple-300 shrink-0" />
-                    <span>{t.terminal.goToAbout}</span>
-                </div>
-                <kbd
-                    class="text-[10px] font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-400"
-                    >#about</kbd
-                >
-            </button>
-
-            <button
-                type="button"
-                class="terminal-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
-                data-action="navigate"
-                data-target="#contact"
-            >
-                <div class="flex items-center gap-2.5">
-                    <Mail class="w-4 h-4 text-[#0db7b9] shrink-0" />
-                    <span>{t.terminal.goToContact}</span>
-                </div>
-                <kbd
-                    class="text-[10px] font-mono bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 rounded text-zinc-400"
-                    >#contact</kbd
-                >
-            </button>
-
-            <div
-                class="px-3 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-400"
-            >
-                {t.terminal.actions}
-            </div>
+            <div class="palette-group">{t.terminal.actions}</div>
 
             <!--email_off-->
-            <button
-                type="button"
-                class="terminal-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
-                data-action="copy-email"
-            >
-                <div class="flex items-center gap-2.5">
-                    <Mail class="w-4 h-4 text-amber-400 shrink-0" />
-                    <span class="copy-email-text">{t.terminal.copyEmail}</span>
-                </div>
-                <span class="text-[11px] font-mono text-zinc-400"
-                    >hi@gefy.dev</span
-                >
+            <button type="button" class="terminal-item palette-item" data-action="copy-email">
+                <span class="copy-email-text">{t.terminal.copyEmail}</span>
+                <kbd class="kbd">hi@gefy.dev</kbd>
             </button>
             <!--/email_off-->
 
             <button
                 type="button"
-                class="terminal-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                class="terminal-item palette-item"
                 data-action="switch-lang"
                 data-target-lang={otherLang}
             >
-                <div class="flex items-center gap-2.5">
-                    <Globe class="w-4 h-4 text-[#0db7b9] shrink-0" />
-                    <span>{t.terminal.switchLanguage}</span>
-                </div>
-                <span class="text-[11px] font-mono text-[#0db7b9] font-bold"
-                    >{otherLang.toUpperCase()}</span
-                >
+                <span>{t.terminal.switchLanguage}</span>
+                <kbd class="kbd">{otherLang.toUpperCase()}</kbd>
             </button>
 
             <button
                 type="button"
-                class="terminal-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                class="terminal-item palette-item"
                 data-action="open-url"
                 data-url="https://github.com/gefydev"
             >
-                <div class="flex items-center gap-2.5">
-                    <Github class="w-4 h-4 text-zinc-300 shrink-0" />
-                    <span>{t.terminal.openGithub}</span>
-                </div>
-                <span class="text-[11px] font-mono text-zinc-400">@gefydev</span
-                >
+                <span>{t.terminal.openGithub}</span>
+                <span aria-hidden="true" class="kbd" style="border: 0">↗</span>
             </button>
 
             <button
                 type="button"
-                class="terminal-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                class="terminal-item palette-item"
                 data-action="open-url"
                 data-url="https://linkedin.com/in/gefydev"
             >
-                <div class="flex items-center gap-2.5">
-                    <Linkedin class="w-4 h-4 text-[#0db7b9] shrink-0" />
-                    <span>{t.terminal.openLinkedin}</span>
-                </div>
-                <span class="text-[11px] font-mono text-zinc-400"
-                    >/in/gefydev</span
-                >
+                <span>{t.terminal.openLinkedin}</span>
+                <span aria-hidden="true" class="kbd" style="border: 0">↗</span>
             </button>
 
             <button
                 type="button"
-                class="terminal-item w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-zinc-900 text-left text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                class="terminal-item palette-item"
                 data-action="confetti"
             >
-                <div class="flex items-center gap-2.5">
-                    <Sparkles class="w-4 h-4 text-amber-400 shrink-0" />
-                    <span>{t.terminal.triggerConfetti}</span>
-                </div>
-                <span class="text-[11px] text-amber-400">🎉</span>
+                <span>{t.terminal.triggerConfetti}</span>
             </button>
         </div>
 
-        <div
-            class="px-4 py-2.5 border-t border-zinc-800/80 bg-zinc-900/40 flex items-center justify-between text-xs text-zinc-400"
-        >
+        <div class="palette-foot">
             <span>{t.terminal.close}</span>
-            <span class="font-mono text-[11px]"
-                >[↵] {lang === "es" ? "Ejecutar" : "Select"}</span
-            >
+            <span class="kbd" style="border: 0">[↵] {lang === "es" ? "Ejecutar" : "Select"}</span>
         </div>
     </div>
+</div>
 
-    <div
-        id="email-copied-toast"
-        class="fixed bottom-6 right-6 hidden bg-emerald-950 border border-emerald-800 text-emerald-300 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 text-xs font-semibold z-60"
-    >
-        <Check class="w-4 h-4" />
-        <span>{t.terminal.emailCopiedNotice}</span>
-    </div>
+<div id="email-copied-toast" class="toast hidden" role="status">
+    {t.terminal.emailCopiedNotice}
 </div>
 
 <script>
@@ -323,12 +188,10 @@ const closeAria =
 
         visibleItems.forEach((item, idx) => {
             if (idx === selectedIndex) {
-                item.classList.add("bg-zinc-800", "text-white");
-                item.classList.remove("text-zinc-300");
+                item.classList.add("is-active");
                 item.scrollIntoView({ block: "nearest" });
             } else {
-                item.classList.remove("bg-zinc-800", "text-white");
-                item.classList.add("text-zinc-300");
+                item.classList.remove("is-active");
             }
         });
     }

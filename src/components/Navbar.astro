@@ -1,6 +1,5 @@
 ---
 import { translations } from "../data/translations";
-import { Terminal, Globe, Menu, X, ArrowUpRight } from "lucide-astro";
 
 interface Props {
     lang: "es" | "en";
@@ -21,195 +20,86 @@ const menuAriaLabel =
     lang === "es"
         ? "Alternar menú de navegación móvil"
         : "Toggle mobile navigation menu";
+
+const links = [
+    { href: "#projects", label: t.nav.projects },
+    { href: "#contributions", label: t.nav.contributions },
+    { href: "#stack", label: t.nav.stack },
+    { href: "#about", label: t.nav.about },
+    { href: "#contact", label: t.nav.contact },
+];
 ---
 
-<header
-    class="fixed top-0 inset-x-0 z-40 border-b border-white/[0.06] bg-[#06070b]/85 backdrop-blur-md"
->
-    <div
-        class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between"
-    >
-        <div class="flex items-center gap-4 shrink-0">
-            <a
-                href={`/${lang}`}
-                class="group flex items-center gap-2.5 font-sans font-bold text-sm tracking-tight text-white hover:text-cyan-400 transition-colors focus-visible:ring-1 focus-visible:ring-cyan-400 rounded-sm"
-                aria-label="GefyDev Home"
-            >
-                <img
-                    src="/images/logo-white-bg.webp"
-                    alt="GefyDev Logo"
-                    class="w-7 h-7 rounded-md object-contain shadow-xs group-hover:scale-105 transition-transform"
-                    width="28"
-                    height="28"
-                />
-                <span class="flex items-center text-sm font-semibold">
-                    <span class="text-white">gefy</span>
-                    <span class="text-[#0db7b9]">.dev</span>
-                </span>
-            </a>
+<header class="site-header">
+    <div class="wrap bar">
+        <a href={`/${lang}`} class="brand" aria-label="GefyDev Home">
+            <img
+                src="/images/logo-white-bg.webp"
+                alt=""
+                width="20"
+                height="20"
+            />
+            <span>gefy.dev</span>
+        </a>
 
-            <div
-                class="hidden md:flex items-center gap-2 pl-3 border-l border-zinc-800 text-xs font-sans text-zinc-400"
-            >
-                <span class="relative flex h-2 w-2">
-                    <span
-                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"
-                    ></span>
-                    <span
-                        class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"
-                    ></span>
-                </span>
-                <span class="text-zinc-400">Buenos Aires</span>
-                <span
-                    id="nav-live-clock"
-                    class="text-zinc-200 font-mono text-[11px] tabular-nums inline-block min-w-[62px] text-center"
-                    >--:--:--</span
-                >
-            </div>
-        </div>
-
-        <nav
-            class="hidden md:flex items-center gap-6 text-xs font-sans font-medium tracking-normal text-zinc-400 shrink-0"
-            aria-label="Main Navigation"
-        >
-            <a
-                href="#projects"
-                class="hover:text-white transition-colors py-1 focus-visible:text-[#0db7b9]"
-                >{t.nav.projects}</a
-            >
-            <a
-                href="#contributions"
-                class="hover:text-white transition-colors py-1 focus-visible:text-[#0db7b9]"
-                >{t.nav.contributions}</a
-            >
-            <a
-                href="#stack"
-                class="hover:text-white transition-colors py-1 focus-visible:text-[#0db7b9]"
-                >{t.nav.stack}</a
-            >
-            <a
-                href="#about"
-                class="hover:text-white transition-colors py-1 focus-visible:text-[#0db7b9]"
-                >{t.nav.about}</a
-            >
-            <a
-                href="#contact"
-                class="hover:text-white transition-colors py-1 focus-visible:text-[#0db7b9]"
-                >{t.nav.contact}</a
-            >
+        <nav class="nav" aria-label="Main Navigation">
+            {links.map((l) => <a href={l.href}>{l.label}</a>)}
         </nav>
 
-        <div class="flex items-center gap-2 shrink-0">
+        <div class="tools">
             <button
                 id="cmd-palette-btn"
                 type="button"
-                class="hidden sm:inline-flex items-center gap-2 px-3 py-2 min-h-[40px] rounded-lg bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white text-xs font-sans transition-all cursor-pointer shadow-xs active:scale-[0.98]"
+                class="kbd-btn"
                 aria-label={cmdAriaLabel}
             >
-                <Terminal class="w-3.5 h-3.5 text-[#0db7b9]" />
-                <span class="text-[11px] text-zinc-300 font-medium"
-                    >{t.nav.commandPalette}</span
-                >
-                <kbd
-                    class="px-1.5 py-0.5 text-[10px] bg-zinc-800 border border-zinc-700/80 rounded text-zinc-400 font-mono"
-                    >⌘K</kbd
-                >
+                ⌘K
             </button>
 
             <a
                 href={otherLangUrl}
                 id="lang-toggle-btn"
                 data-target-lang={otherLang}
-                class="inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] min-w-[44px] justify-center rounded-lg bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 hover:border-[#0db7b9]/40 text-xs font-sans font-medium text-zinc-300 hover:text-[#0db7b9] transition-all cursor-pointer active:scale-[0.98]"
+                class="lang"
                 aria-label={langAriaLabel}
             >
-                <Globe class="w-3.5 h-3.5 text-zinc-400" />
-                <span class="font-bold font-mono text-[11px]"
-                    >{lang.toUpperCase()}</span
-                >
-                <span class="text-zinc-400 text-[10px] font-mono"
-                    >/ {otherLang.toUpperCase()}</span
+                <span aria-current={lang === "es" ? "true" : undefined}>ES</span
+                ><span aria-hidden="true">/</span><span
+                    aria-current={lang === "en" ? "true" : undefined}>EN</span
                 >
             </a>
 
             <button
                 id="mobile-menu-btn"
                 type="button"
-                class="md:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white transition-colors cursor-pointer"
+                class="menu-btn md:hidden"
                 aria-label={menuAriaLabel}
                 aria-expanded="false"
                 aria-controls="mobile-menu-drawer"
             >
-                <Menu class="w-5 h-5 menu-open-icon" />
-                <X class="w-5 h-5 menu-close-icon hidden" />
+                <span class="menu-open-icon">{lang === "es" ? "Menú" : "Menu"}</span>
+                <span class="menu-close-icon hidden">{lang === "es" ? "Cerrar" : "Close"}</span>
             </button>
         </div>
     </div>
 
     <nav
         id="mobile-menu-drawer"
-        class="hidden md:hidden border-b border-zinc-800/80 bg-[#06070b]/95 backdrop-blur-xl px-6 py-5 space-y-4 font-sans text-sm"
+        class="menu-list hidden md:hidden"
         aria-label={lang === "es" ? "Navegación móvil" : "Mobile Navigation"}
     >
-        <div class="flex flex-col space-y-1">
-            <a
-                href="#projects"
-                class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-3 min-h-[44px] flex items-center justify-between border-b border-zinc-900"
-            >
-                <span class="font-medium">{t.nav.projects}</span>
-                <ArrowUpRight class="w-4 h-4 text-zinc-600" />
-            </a>
-            <a
-                href="#contributions"
-                class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-3 min-h-[44px] flex items-center justify-between border-b border-zinc-900"
-            >
-                <span class="font-medium">{t.nav.contributions}</span>
-                <ArrowUpRight class="w-4 h-4 text-zinc-600" />
-            </a>
-            <a
-                href="#stack"
-                class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-3 min-h-[44px] flex items-center justify-between border-b border-zinc-900"
-            >
-                <span class="font-medium">{t.nav.stack}</span>
-                <ArrowUpRight class="w-4 h-4 text-zinc-600" />
-            </a>
-            <a
-                href="#about"
-                class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-3 min-h-[44px] flex items-center justify-between border-b border-zinc-900"
-            >
-                <span class="font-medium">{t.nav.about}</span>
-                <ArrowUpRight class="w-4 h-4 text-zinc-600" />
-            </a>
-            <a
-                href="#contact"
-                class="mobile-nav-link text-zinc-300 hover:text-[#0db7b9] py-3 min-h-[44px] flex items-center justify-between"
-            >
-                <span class="font-medium">{t.nav.contact}</span>
-                <ArrowUpRight class="w-4 h-4 text-zinc-600" />
-            </a>
-        </div>
-
-        <div
-            class="pt-3 border-t border-zinc-800 flex items-center justify-between text-xs text-zinc-400"
-        >
-            <div class="flex items-center gap-2">
-                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-                <span
-                    >Buenos Aires: <span
-                        id="mobile-live-clock"
-                        class="text-zinc-200 font-mono inline-block min-w-[62px] text-center"
-                        >--:--:--</span
-                    ></span
-                >
-            </div>
-            <button
-                id="mobile-cmd-btn"
-                class="px-3 py-2 min-h-[40px] rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 flex items-center gap-1.5 cursor-pointer"
-            >
-                <Terminal class="w-3.5 h-3.5 text-[#0db7b9]" />
-                <span class="font-mono text-xs">⌘K</span>
-            </button>
-        </div>
+        {
+            links.map((l) => (
+                <a href={l.href} class="mobile-nav-link">
+                    <span>{l.label}</span>
+                    <span class="hint" aria-hidden="true">↗</span>
+                </a>
+            ))
+        }
+        <button id="mobile-cmd-btn" type="button">
+            <span>{t.nav.commandPalette}</span>
+            <span class="hint" aria-hidden="true">⌘K</span>
+        </button>
     </nav>
 </header>
 

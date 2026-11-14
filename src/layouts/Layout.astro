@@ -25,7 +25,7 @@ const noindex = Astro.props.noindex || false;
 ---
 
 <!doctype html>
-<html lang={lang} class="dark scroll-smooth">
+<html lang={lang} class="scroll-smooth">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -84,13 +84,8 @@ const noindex = Astro.props.noindex || false;
             }
         </script>
     </head>
-    <body
-        class="bg-[#06070b] text-zinc-100 antialiased selection:bg-[#735ed5]/30 selection:text-white min-h-screen flex flex-col justify-between"
-    >
-        <a
-            href="#main-content"
-            class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#0db7b9] focus:text-zinc-950 focus:font-sans focus:font-bold focus:rounded-md focus:shadow-xl"
-        >
+    <body class="bg-bg text-fg antialiased min-h-screen flex flex-col justify-between">
+        <a href="#main-content" class="skip">
             {
                 lang === "es"
                     ? "Saltar al contenido principal"

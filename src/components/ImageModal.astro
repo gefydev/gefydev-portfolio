@@ -1,6 +1,5 @@
 ---
 import { translations } from "../data/translations";
-import { X, ExternalLink, Github, Sparkles } from "lucide-astro";
 
 interface Props {
     lang: "es" | "en";
@@ -13,104 +12,62 @@ const closeAria =
 
 <div
     id="project-image-modal"
-    class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300 ease-out bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 md:p-8"
+    class="overlay hidden"
     role="dialog"
     aria-modal="true"
     aria-labelledby="modal-project-title"
     aria-hidden="true"
 >
-    <div
-        id="project-image-card"
-        class="relative w-full max-w-5xl max-h-[92vh] flex flex-col rounded-2xl bg-zinc-950 border border-zinc-800/90 shadow-2xl shadow-black/80 overflow-hidden transform scale-95 transition-all duration-300 ease-out font-sans"
-    >
-        <div
-            class="flex items-center justify-between px-5 py-3.5 border-b border-zinc-800/80 bg-zinc-900/70"
-        >
-            <div class="flex items-center gap-3 min-w-0">
-                <span
-                    class="w-2.5 h-2.5 rounded-full bg-[#0db7b9] shadow-[0_0_8px_rgba(13,183,185,0.6)]"
-                ></span>
-                <h3
-                    id="modal-project-title"
-                    class="text-sm sm:text-base font-bold text-white truncate"
-                >
-                </h3>
-                <span
-                    id="modal-project-badge"
-                    class="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#735ed5]/20 border border-[#735ed5]/40 text-purple-300"
-                >
-                    <Sparkles class="w-3 h-3 text-[#0db7b9]" />
+    <div id="project-image-card" class="modal-card">
+        <div class="modal-top">
+            <div class="pname">
+                <h3 id="modal-project-title"></h3>
+                <span id="modal-project-badge" class="badge hidden">
                     <span id="modal-project-badge-text"></span>
                 </span>
             </div>
-
             <button
                 id="close-image-modal-btn"
                 type="button"
-                class="p-2 min-w-[36px] min-h-[36px] rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors flex items-center justify-center cursor-pointer"
+                class="textbtn"
                 aria-label={closeAria}
             >
-                <X class="w-4 h-4" />
+                {lang === "es" ? "Cerrar" : "Close"} [ESC]
             </button>
         </div>
 
-        <div
-            class="relative w-full flex-1 bg-zinc-950 flex items-center justify-center p-2 sm:p-4 overflow-hidden min-h-[260px]"
-        >
-            <div
-                class="relative w-full max-h-[68vh] flex items-center justify-center rounded-xl overflow-hidden bg-zinc-900/60 border border-zinc-800/60"
-            >
-                <div
-                    id="modal-image-skeleton"
-                    class="absolute inset-0 flex items-center justify-center bg-zinc-900/80 pointer-events-none transition-opacity duration-200"
-                >
-                    <div
-                        class="w-8 h-8 rounded-full border-2 border-zinc-700 border-t-[#0db7b9] animate-spin"
-                    >
-                    </div>
-                </div>
-
-                <img
-                    id="modal-project-image"
-                    src=""
-                    alt=""
-                    class="w-full h-auto max-h-[68vh] object-contain rounded-lg transition-opacity duration-250 opacity-0 aspect-video"
-                    loading="eager"
-                    decoding="async"
-                />
-            </div>
+        <div class="modal-frame">
+            <div id="modal-image-skeleton" class="skeleton"></div>
+            <img
+                id="modal-project-image"
+                src=""
+                alt=""
+                class="opacity-0"
+                loading="eager"
+                decoding="async"
+            />
         </div>
 
-        <div
-            class="px-5 py-4 border-t border-zinc-800/80 bg-zinc-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-        >
-            <p
-                id="modal-project-desc"
-                class="text-xs sm:text-sm text-zinc-300 leading-relaxed max-w-xl line-clamp-2 sm:line-clamp-none"
-            >
-            </p>
-
-            <div class="flex items-center gap-2.5 shrink-0">
+        <div class="modal-foot">
+            <p id="modal-project-desc" class="pdesc" style="margin-top: 0; max-width: 34rem"></p>
+            <div class="links" style="margin-top: 0">
                 <a
                     id="modal-project-live"
                     href="#"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="hidden items-center gap-1.5 px-4 py-2 min-h-[38px] rounded-xl bg-[#0db7b9] hover:bg-[#0db7b9]/90 text-zinc-950 font-bold text-xs transition-colors cursor-pointer active:scale-[0.98]"
+                    class="link ext hidden"
                 >
-                    <span>{lang === "es" ? "Ver Sitio" : "Live Preview"}</span>
-                    <ExternalLink class="w-3.5 h-3.5" />
+                    {lang === "es" ? "Ver Sitio" : "Live Preview"}
                 </a>
-
                 <a
                     id="modal-project-github"
                     href="#"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="hidden items-center gap-1.5 px-4 py-2 min-h-[38px] rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs transition-colors cursor-pointer active:scale-[0.98]"
+                    class="link ext hidden"
                 >
-                    <Github class="w-3.5 h-3.5" />
-                    <span>{lang === "es" ? "Código" : "Source"}</span>
+                    {lang === "es" ? "Código" : "Source"}
                 </a>
             </div>
         </div>
@@ -234,27 +191,14 @@ const closeAria =
         modal.classList.remove("hidden");
         modal.setAttribute("aria-hidden", "false");
 
-        void modal.offsetWidth;
-
-        requestAnimationFrame(() => {
-            modal.classList.remove("opacity-0");
-            modal.classList.add("opacity-100");
-            card.classList.remove("scale-95");
-            card.classList.add("scale-100");
-            closeBtn?.focus();
-        });
+        closeBtn?.focus();
     }
 
     function closeModal() {
         const { modal, card, modalImg, skeleton } = getImageModalElements();
         if (!modal || !card || modal.classList.contains("hidden")) return;
 
-        modal.classList.remove("opacity-100");
-        modal.classList.add("opacity-0");
-        card.classList.remove("scale-100");
-        card.classList.add("scale-95");
-
-        setTimeout(() => {
+        {
             modal.classList.add("hidden");
             modal.setAttribute("aria-hidden", "true");
             if (modalImg) {
@@ -270,7 +214,7 @@ const closeAria =
             if (lastFocusedElement) {
                 lastFocusedElement.focus();
             }
-        }, 300);
+        }
     }
 
     function initImageModal() {
