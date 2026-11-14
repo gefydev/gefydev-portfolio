@@ -5,3 +5,4 @@ declare namespace App {
     lang: 'es' | 'en';
   }
 }
+interface ImportMetaEnv { readonly SITE_LASTMOD: string }

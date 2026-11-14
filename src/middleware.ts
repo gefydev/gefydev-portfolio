@@ -42,6 +42,17 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   context.locals.lang = lang;
 
+  // "/" no tiene contenido propio: redirige (302, depende del visitante) a /es o /en.
+  // private/no-store para que ni la CDN ni el navegador la cacheen y la raíz no duplique /en.
+  if (pathname === '/') {
+    const redirect = context.redirect(`/${lang}`, 302);
+    redirect.headers.set('Cache-Control', 'private, no-store');
+    redirect.headers.set('CDN-Cache-Control', 'no-store');
+    redirect.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
+    redirect.headers.set('Vary', 'Accept-Language, Cookie');
+    return redirect;
+  }
+
   // --- Headers de Respuesta para HTML dinámico ---
   const response = await next();
   response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
