@@ -36,7 +36,6 @@ export interface TranslationDict {
     liveDemo: string;
     viewSource: string;
     stars: string;
-    flagship: string;
     contributionsTitle: string;
     contributionsSubtitle: string;
   };
@@ -155,7 +154,6 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       liveDemo: 'Visitar Demo',
       viewSource: 'Código en GitHub',
       stars: 'stars',
-      flagship: 'Proyecto Estrella',
       contributionsTitle: 'Contribuciones de Código Abierto',
       contributionsSubtitle: 'Participación activa en proyectos de la comunidad de código abierto.',
     },
@@ -272,7 +270,6 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       liveDemo: 'Live Demo',
       viewSource: 'Source on GitHub',
       stars: 'stars',
-      flagship: 'Flagship Project',
       contributionsTitle: 'Open Source Contributions',
       contributionsSubtitle: 'Active development and contributions across open-source ecosystems.',
     },

@@ -15,7 +15,7 @@ export const GET: APIRoute = async () => {
 - [Canonical Site](${siteUrl}/): Root portfolio entrypoint with automatic locale routing.
 
 ## Featured Software Projects
-${projects.map((p) => `- [${p.name}](${p.homepageUrl || p.githubUrl}): ${p.description.en} (Repository: [GitHub](${p.githubUrl}))`).join('\n')}
+${projects.map((p) => `- [${p.name}](${p.homepageUrl || p.githubUrl}): ${p.description.en}${p.githubUrl ? ` (Repository: [GitHub](${p.githubUrl}))` : ''}`).join('\n')}
 
 ## Open Source Contributions
 ${openSourceContributions.map((c) => `- [${c.author}/${c.repo}](${c.url}): ${c.description.en} (Role: ${c.role.en}, Stars: ${c.stars})`).join('\n')}
