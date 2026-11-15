@@ -309,8 +309,9 @@
     --vida-r: 280px;                /* radio del spotlight */
     --vida-col: 46rem;              /* igual a --measure */
     --vida-fade: 4.5rem;            /* rampa de la zona "calma" detrás del texto */
-    --vida-calm: 0.4;               /* grilla base detrás de la columna (0–1) */
-    --vida-calm-lit: 0.15;          /* spotlight detrás de la columna (0–1); .15 mantiene --fg-3 >= 4,3 en cruces */
+    /* Claro: más calma detrás del texto para sostener --fg-3 >= 4,5:1 en el peor píxel (QA de Curie) */
+    --vida-calm: 0.25;              /* grilla base detrás de la columna (0–1) */
+    --vida-calm-lit: 0.07;          /* spotlight detrás de la columna (0–1) */
     /* Color — claro */
     --vida-line: rgba(23, 23, 23, 0.055);
     --vida-lit: rgba(10, 122, 124, 0.16);
@@ -323,6 +324,8 @@
   }
   @media (prefers-color-scheme: dark) {
     :root {
+      --vida-calm: 0.4;
+      --vida-calm-lit: 0.15;
       --vida-line: rgba(237, 237, 237, 0.065);
       --vida-lit: rgba(13, 183, 185, 0.3);
     }
