@@ -85,6 +85,7 @@ const noindex = Astro.props.noindex || false;
         </script>
     </head>
     <body class="bg-bg text-fg antialiased min-h-screen flex flex-col justify-between">
+        <div class="vida" aria-hidden="true"><div class="vida-spot"><div></div></div></div>
         <a href="#main-content" class="skip">
             {
                 lang === "es"
@@ -102,5 +103,30 @@ const noindex = Astro.props.noindex || false;
         <Footer lang={lang} />
         <TerminalModal lang={lang} />
         <ImageModal lang={lang} />
+        <script is:inline>
+            /* VIDA: linterna que sigue al mouse. Solo pointer fine, sin reduced-motion. Solo transform. */
+            (function () {
+                var s = document.querySelector(".vida-spot"), d = document.documentElement;
+                if (!s || !matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+                var rm = matchMedia("(prefers-reduced-motion: reduce)");
+                if (rm.matches) return;
+                var g = s.firstElementChild, R = s.offsetWidth / 2, tx = 0, ty = 0, x = 0, y = 0, raf = 0, first = true;
+                function tick() {
+                    x += (tx - x) * 0.18; y += (ty - y) * 0.18;
+                    var a = Math.round(x - R), b = Math.round(y - R);
+                    s.style.transform = "translate3d(" + a + "px," + b + "px,0)";
+                    g.style.transform = "translate3d(" + -a + "px," + -b + "px,0)";
+                    raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.5 ? requestAnimationFrame(tick) : 0;
+                }
+                addEventListener("pointermove", function (e) {
+                    if (e.pointerType !== "mouse" || rm.matches) return;
+                    tx = e.clientX; ty = e.clientY;
+                    if (first) { x = tx; y = ty; first = false; }
+                    d.setAttribute("data-vida", "");
+                    if (!raf) raf = requestAnimationFrame(tick);
+                }, { passive: true });
+                document.addEventListener("pointerout", function (e) { if (!e.relatedTarget) d.removeAttribute("data-vida"); });
+            })();
+        </script>
     </body>
 </html>
