@@ -312,6 +312,14 @@
     /* Claro: más calma detrás del texto para sostener --fg-3 >= 4,5:1 en el peor píxel (QA de Curie) */
     --vida-calm: 0.25;              /* grilla base detrás de la columna (0–1) */
     --vida-calm-lit: 0.07;          /* spotlight detrás de la columna (0–1) */
+    /* Origen común de las dos grillas (base y linterna): X centrada y redondeada a píxel entero
+       (sin esto una línea cae a medio píxel y se ve doble); Y = alto de la navbar (3.5rem), para
+       que la primera línea horizontal caiga sobre su borde inferior. */
+    --vida-x: calc(50% - var(--vida-cell) / 2);
+    --vida-y: 3.5rem;
+    /* posición de reposo de la linterna (px enteros: las dos capas se contra-trasladan sin resto) */
+    --vida-x0: round(down, calc(50vw - var(--vida-r)), 1px);
+    --vida-y0: round(down, calc(28vh - var(--vida-r)), 1px);
     /* Color — claro */
     --vida-line: rgba(23, 23, 23, 0.055);
     --vida-lit: rgba(10, 122, 124, 0.16);
@@ -349,7 +357,8 @@
       linear-gradient(to right, var(--vida-line) 1px, transparent 1px),
       linear-gradient(to bottom, var(--vida-line) 1px, transparent 1px);
     background-size: var(--vida-cell) var(--vida-cell);
-    background-position: 50% 0;
+    background-position: var(--vida-x) var(--vida-y);
+    background-position: round(down, var(--vida-x), 1px) var(--vida-y);
     -webkit-mask-image: var(--vida-calm-mask);
     mask-image: var(--vida-calm-mask);
   }
@@ -360,12 +369,12 @@
      .vida-spot  : cuadrado de 2R con máscara radial estática; el JS lo traslada.
      .vida-spot>div: grilla iluminada del tamaño del viewport, contra-trasladada para
                      quedar fija respecto de la pantalla (alineada con la grilla base). */
-  .vida { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+  .vida { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; container-type: size; }
   .vida-spot {
     position: absolute; left: 0; top: 0;
     width: calc(var(--vida-r) * 2); height: calc(var(--vida-r) * 2);
     /* reposo / touch / reduced-motion / sin JS: spotlight fijo arriba al centro */
-    transform: translate3d(calc(50vw - var(--vida-r)), calc(28vh - var(--vida-r)), 0);
+    transform: translate3d(var(--vida-x0), var(--vida-y0), 0);
     -webkit-mask-image: radial-gradient(circle closest-side, #000 0, rgba(0, 0, 0, 0.55) 45%, transparent 100%);
     mask-image: radial-gradient(circle closest-side, #000 0, rgba(0, 0, 0, 0.55) 45%, transparent 100%);
     opacity: 0.6;
@@ -373,13 +382,17 @@
   }
   .vida-spot > div {
     position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; height: 100lvh;
-    transform: translate3d(calc(var(--vida-r) - 50vw), calc(var(--vida-r) - 28vh), 0);
+    /* misma caja que la grilla base (.vida = inset:0): 100vw incluiría la barra de scroll */
+    width: 100cqw; height: 100cqh;
+    transform: translate3d(calc(-1 * var(--vida-x0)), calc(-1 * var(--vida-y0)), 0);
     background-image:
-      radial-gradient(circle, var(--vida-lit) 1.5px, transparent 2px),
+      /* punto centrado en el cruce (centro de la línea de 1 px = +0,5 px) */
+      radial-gradient(circle at calc(var(--vida-cell) / 2 + 0.5px) calc(var(--vida-cell) / 2 + 0.5px), var(--vida-lit) 1.5px, transparent 2px),
       linear-gradient(to right, var(--vida-lit) 1px, transparent 1px),
       linear-gradient(to bottom, var(--vida-lit) 1px, transparent 1px);
     background-size: var(--vida-cell) var(--vida-cell);
-    background-position: calc(50% + var(--vida-cell) / 2) calc(var(--vida-cell) / 2), 50% 0, 50% 0;
+    background-position: calc(var(--vida-x) + var(--vida-cell) / 2) calc(var(--vida-y) + var(--vida-cell) / 2), var(--vida-x) var(--vida-y), var(--vida-x) var(--vida-y);
+    background-position: calc(round(down, var(--vida-x), 1px) + var(--vida-cell) / 2) calc(var(--vida-y) + var(--vida-cell) / 2), round(down, var(--vida-x), 1px) var(--vida-y), round(down, var(--vida-x), 1px) var(--vida-y);
     /* detrás de la columna de texto el spotlight se atenúa (contraste) */
     -webkit-mask-image: linear-gradient(90deg,
         #000 calc(50% - var(--vida-col) / 2 - var(--vida-fade)),
