@@ -404,7 +404,7 @@
     @keyframes vida-bar  { to { transform: scaleX(1); } }
 
     /* 2.1 Las capas de fondo aparecen con un fade (no afecta LCP: son gradientes) */
-    body::before, .vida { animation: vida-in 900ms ease-out backwards; }
+    body::before, .vida { animation: vida-in 400ms ease-out backwards; }
     .vida-spot { transition: opacity 500ms ease; }
 
     /* 2.2 Entrada del hero: solo transform (sin opacity => sin riesgo de contraste ni de LCP) */
