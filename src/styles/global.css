@@ -301,6 +301,161 @@
     .nav a, .links a, .tab, .textbtn { min-height: 2.75rem; display: inline-flex; align-items: center; }
     .brand, .facts a.link, .contact-row .textbtn, .foot button { min-height: 2.75rem; display: inline-flex; align-items: center; }
   }
+
+  /* ==== VIDA: grilla de fondo, linterna y microinteracciones (diseño de Davinci) ==== */
+  :root {
+    /* Geometría */
+    --vida-cell: 32px;              /* 736 px de columna = 23 celdas exactas */
+    --vida-r: 280px;                /* radio del spotlight */
+    --vida-col: 46rem;              /* igual a --measure */
+    --vida-fade: 4.5rem;            /* rampa de la zona "calma" detrás del texto */
+    /* Claro: más calma detrás del texto para sostener --fg-3 >= 4,5:1 en el peor píxel (QA de Curie) */
+    --vida-calm: 0.25;              /* grilla base detrás de la columna (0–1) */
+    --vida-calm-lit: 0.07;          /* spotlight detrás de la columna (0–1) */
+    /* Color — claro */
+    --vida-line: rgba(23, 23, 23, 0.055);
+    --vida-lit: rgba(10, 122, 124, 0.16);
+    /* Máscara horizontal: gutters a opacidad plena, columna de texto "calma" */
+    --vida-calm-mask: linear-gradient(90deg,
+        #000 calc(50% - var(--vida-col) / 2 - var(--vida-fade)),
+        rgba(0, 0, 0, var(--vida-calm)) calc(50% - var(--vida-col) / 2),
+        rgba(0, 0, 0, var(--vida-calm)) calc(50% + var(--vida-col) / 2),
+        #000 calc(50% + var(--vida-col) / 2 + var(--vida-fade)));
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --vida-calm: 0.4;
+      --vida-calm-lit: 0.15;
+      --vida-line: rgba(237, 237, 237, 0.065);
+      --vida-lit: rgba(13, 183, 185, 0.3);
+    }
+  }
+
+  /* --- 1. Capas de fondo ---------------------------------------------------- */
+  body { isolation: isolate; }                 /* contiene el z-index:-1 de las capas */
+  .site-header { background: transparent; }    /* que la grilla corra también detrás del header */
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Grilla base: líneas de 1 px cada 32 px, centrada para alinear con la columna */
+  body::before {
+    background-image:
+      linear-gradient(to right, var(--vida-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--vida-line) 1px, transparent 1px);
+    background-size: var(--vida-cell) var(--vida-cell);
+    background-position: 50% 0;
+    -webkit-mask-image: var(--vida-calm-mask);
+    mask-image: var(--vida-calm-mask);
+  }
+
+  /* Grilla "iluminada" = elemento chico (2×radio) que se mueve SOLO con transform.
+     Estructura (1 nodo decorativo, sin texto):
+       <div class="vida" aria-hidden="true"><div class="vida-spot"><div></div></div></div>
+     .vida-spot  : cuadrado de 2R con máscara radial estática; el JS lo traslada.
+     .vida-spot>div: grilla iluminada del tamaño del viewport, contra-trasladada para
+                     quedar fija respecto de la pantalla (alineada con la grilla base). */
+  .vida { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+  .vida-spot {
+    position: absolute; left: 0; top: 0;
+    width: calc(var(--vida-r) * 2); height: calc(var(--vida-r) * 2);
+    /* reposo / touch / reduced-motion / sin JS: spotlight fijo arriba al centro */
+    transform: translate3d(calc(50vw - var(--vida-r)), calc(28vh - var(--vida-r)), 0);
+    -webkit-mask-image: radial-gradient(circle closest-side, #000 0, rgba(0, 0, 0, 0.55) 45%, transparent 100%);
+    mask-image: radial-gradient(circle closest-side, #000 0, rgba(0, 0, 0, 0.55) 45%, transparent 100%);
+    opacity: 0.6;
+    will-change: transform;
+  }
+  .vida-spot > div {
+    position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; height: 100lvh;
+    transform: translate3d(calc(var(--vida-r) - 50vw), calc(var(--vida-r) - 28vh), 0);
+    background-image:
+      radial-gradient(circle, var(--vida-lit) 1.5px, transparent 2px),
+      linear-gradient(to right, var(--vida-lit) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--vida-lit) 1px, transparent 1px);
+    background-size: var(--vida-cell) var(--vida-cell);
+    background-position: calc(50% + var(--vida-cell) / 2) calc(var(--vida-cell) / 2), 50% 0, 50% 0;
+    /* detrás de la columna de texto el spotlight se atenúa (contraste) */
+    -webkit-mask-image: linear-gradient(90deg,
+        #000 calc(50% - var(--vida-col) / 2 - var(--vida-fade)),
+        rgba(0, 0, 0, var(--vida-calm-lit)) calc(50% - var(--vida-col) / 2),
+        rgba(0, 0, 0, var(--vida-calm-lit)) calc(50% + var(--vida-col) / 2),
+        #000 calc(50% + var(--vida-col) / 2 + var(--vida-fade)));
+    mask-image: linear-gradient(90deg,
+        #000 calc(50% - var(--vida-col) / 2 - var(--vida-fade)),
+        rgba(0, 0, 0, var(--vida-calm-lit)) calc(50% - var(--vida-col) / 2),
+        rgba(0, 0, 0, var(--vida-calm-lit)) calc(50% + var(--vida-col) / 2),
+        #000 calc(50% + var(--vida-col) / 2 + var(--vida-fade)));
+  }
+  /* El JS pone data-vida cuando hay un mouse sobre la página */
+  html[data-vida] .vida-spot { opacity: 1; }
+
+  /* --- 2. Movimiento (todo bajo no-preference: con reduced-motion queda estático) */
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes vida-in   { from { opacity: 0; } }
+    @keyframes vida-up   { from { transform: translateY(10px); } }
+    @keyframes vida-rise { from { transform: translateY(14px); } }
+    @keyframes vida-ping { from { transform: scale(1); opacity: 0.55; } to { transform: scale(3.4); opacity: 0; } }
+    @keyframes vida-bar  { to { transform: scaleX(1); } }
+
+    /* 2.1 Las capas de fondo aparecen con un fade (no afecta LCP: son gradientes) */
+    body::before, .vida { animation: vida-in 400ms ease-out backwards; }
+    .vida-spot { transition: opacity 500ms ease; }
+
+    /* 2.2 Entrada del hero: solo transform (sin opacity => sin riesgo de contraste ni de LCP) */
+    .hero .wrap > * { animation: vida-up 640ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+    .hero h1        { animation-delay: 0ms; }
+    .hero .role     { animation-delay: 60ms; }
+    .hero .byline   { animation-delay: 100ms; }
+    .hero .lead     { animation-delay: 140ms; }
+    .hero .actions  { animation-delay: 200ms; }
+    .hero .cmdrow   { animation-delay: 260ms; }
+
+    /* 2.3 Punto de "Disponible": anillo suave cada 2,8 s */
+    .status { position: relative; }
+    .status::after {
+      content: ""; position: absolute; left: 0; top: 50%; width: 6px; height: 6px; margin-top: -3px;
+      border: 1px solid var(--accent); border-radius: 50%;
+      animation: vida-ping 2800ms ease-out 1200ms infinite; pointer-events: none;
+    }
+
+    /* 2.4 Microinteracciones (solo con mouse) */
+    @media (hover: hover) {
+      .btn span[aria-hidden] { display: inline-block; transition: transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+      .btn:hover span[aria-hidden] { transform: translateX(3px); }
+      a.ext::after { transition: transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1), color 120ms ease; }
+      a.ext:hover::after { transform: translate(2px, -2px); color: var(--accent); }
+      .thumb img { transition: transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+      .project:hover .thumb img, .contrib:hover .thumb img { transform: scale(1.025); }
+      .project:hover .thumb, .contrib:hover .thumb { border-color: var(--line-strong); }
+    }
+    .btn { transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease; }
+    .btn:active { transform: translateY(1px); }
+
+    /* 2.5 Progreso de lectura (CSS puro, solo donde hay scroll-driven animations) */
+    @supports (animation-timeline: scroll()) {
+      .site-header::before {
+        content: ""; position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 50;
+        background: var(--accent); transform: scaleX(0); transform-origin: 0 50%;
+        animation: vida-bar linear both; animation-timeline: scroll(root block);
+        pointer-events: none;
+      }
+    }
+
+    /* 2.6 Entrada al hacer scroll: filas que suben 14 px (solo transform) */
+    @supports (animation-timeline: view()) {
+      .section-head, .project, .contrib, .group, .facts > div, .prose, .contact-cta {
+        animation: vida-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 35%;
+      }
+    }
+  }
 }
 
 @layer utilities {
