@@ -647,6 +647,7 @@
   .site-header .brand { transform: translate(calc(-1 * var(--h-dx)), var(--h-dy)); }
   .site-header .nav,
   .site-header .tools { transform: translate(var(--h-dx), var(--h-dy)); }
+  .site-header .menu-list { transform: translateY(var(--h-dy)); }   /* el cajón móvil baja igual que el botón «Menú» y no lo tapa */
   .site-header .brand span { opacity: 0; }   /* el texto de la marca lo pone la palabra gigante */
 
   /* Tramos del recorrido (en :root porque los usan main y footer, fuera de .top).
@@ -689,7 +690,7 @@
       @keyframes hero-nav     { to { transform: none; } }
       @keyframes hero-line    { to { border-bottom-color: var(--line); } }
 
-      .hero-panel > i, .hero-word, .hero-photo, .site-header, .site-header .brand, .site-header .nav, .site-header .tools {
+      .hero-panel > i, .hero-word, .hero-photo, .site-header, .site-header .brand, .site-header .nav, .site-header .tools, .site-header .menu-list {
         animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         animation-fill-mode: both; animation-duration: auto;
         animation-timeline: scroll(root block);
@@ -699,7 +700,7 @@
       .hero-photo  { animation-name: hero-photo, hero-hide; animation-range: var(--t-photo), var(--t-pfade);
                      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1), linear; will-change: transform, opacity; }
       .site-header .brand { animation-name: hero-brand; animation-range: var(--t-panel); }
-      .site-header .nav, .site-header .tools { animation-name: hero-nav; animation-range: var(--t-panel); }
+      .site-header .nav, .site-header .tools, .site-header .menu-list { animation-name: hero-nav; animation-range: var(--t-panel); }
       .site-header { animation-name: hero-line; animation-range: var(--t-panel); }
       @container (max-width: 43.75rem) or (max-aspect-ratio: 1/1) {
         .hero-photo { animation-name: hero-photo-m, hero-hide; }
