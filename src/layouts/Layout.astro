@@ -1,6 +1,7 @@
 ---
 import SEO from "../components/SEO.astro";
 import Navbar from "../components/Navbar.astro";
+import HeroStage from "../components/HeroStage.astro";
 import Footer from "../components/Footer.astro";
 import TerminalModal from "../components/TerminalModal.astro";
 import ImageModal from "../components/ImageModal.astro";
@@ -94,7 +95,10 @@ const noindex = Astro.props.noindex || false;
             }
         </a>
 
-        <Navbar lang={lang} />
+        <div class="top">
+            <Navbar lang={lang} />
+            <HeroStage lang={lang} />
+        </div>
 
         <main id="main-content" class="flex-1">
             <slot />

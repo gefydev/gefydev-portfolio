@@ -25,6 +25,9 @@ export interface TranslationDict {
     cliCommand: string;
     copied: string;
     availableBadge: string;
+    stageTitle1: string;
+    stageTitle2: string;
+    stageCopy: string;
   };
   projects: {
     sectionTitle: string;
@@ -143,6 +146,9 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       cliCommand: 'npx gefydev',
       copied: '¡Copiado!',
       availableBadge: 'Disponible para proyectos y desafíos',
+      stageTitle1: 'Webs veloces.',
+      stageTitle2: 'Arquitectura limpia.',
+      stageCopy: 'Desarrollo aplicaciones web modernas, plataformas reactivas y herramientas de alto rendimiento con TypeScript, JavaScript, React y Astro.',
     },
     projects: {
       sectionTitle: 'Proyectos Principales',
@@ -259,6 +265,9 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
       cliCommand: 'npx gefydev',
       copied: 'Copied!',
       availableBadge: 'Available for projects & opportunities',
+      stageTitle1: 'Fast web apps.',
+      stageTitle2: 'Clean architecture.',
+      stageCopy: 'I develop modern web applications, reactive interfaces, and high-performance tools with TypeScript, JavaScript, React, and Astro.',
     },
     projects: {
       sectionTitle: 'Core Projects',

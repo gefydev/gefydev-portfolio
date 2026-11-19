@@ -1,0 +1,29 @@
+---
+import { translations } from "../data/translations";
+import { heroIcons } from "../data/hero-icons";
+
+interface Props {
+    lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+const t = translations[lang];
+---
+
+<!-- Hero decorativo (sin headings, sin JS). El h1 real vive en Hero.astro. Estilos: .hero-stage en global.css -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    {heroIcons.map((i) => <symbol id={`i-${i.id}`} viewBox="0 0 24 24"><path d={i.d} /></symbol>)}
+</svg>
+<div class="hero-stage" aria-hidden="true">
+    <div class="hero-inner">
+        <div class="hero-panel"><i class="t"></i><i class="b"></i><i class="l"></i><i class="r"></i><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
+        <p class="hero-eyebrow"><span>{t.hero.name}</span><span class="eb-role"> · <span>{t.hero.roleTitle}</span></span></p>
+        <p class="hero-title"><span>{t.hero.stageTitle1}</span><span>{t.hero.stageTitle2}</span></p>
+        <div class="hero-word"><span class="w-fg">gefy.dev</span><span class="w-ac">gefy.dev</span></div>
+        <div class="hero-photo is-logo"><img src="/images/logo.png" alt="" width="512" height="512" decoding="async" fetchpriority="high" /></div>
+        <p class="hero-copy">{t.hero.stageCopy}</p>
+        <ul class="hero-tech">
+            {heroIcons.map((i) => <li><svg focusable="false"><use href={`#i-${i.id}`} /></svg></li>)}
+        </ul>
+    </div>
+</div>

@@ -469,6 +469,274 @@
       }
     }
   }
+
+  /* ==== HERO: primera pantalla + transición por scroll (diseño de Davinci, DISENO-HERO.md) ==== */
+  /* ==========================================================================
+     HERO — primera pantalla + transición por scroll hacia la página actual.
+     Fuente de verdad de los valores (ver DISENO-HERO.md). Va DESPUÉS de vida.css.
+     Se apoya en los tokens ya existentes de global.css (--bg, --fg, --fg-2, --fg-3,
+     --accent, --line, --surface, --gutter, --measure, --font-sans, --font-mono).
+
+     Capas (de abajo hacia arriba):
+       body::before / .vida   z -1   grilla + linterna (ya en prod, NO se tocan)
+       main, footer           z auto la página actual (invisible hasta el final de la transición)
+       .hero-stage            z 30   el hero (fixed, decorativo, aria-hidden, sin puntero)
+       .site-header           z 40   el header real (sticky durante la transición)
+
+     Modo base = ESTÁTICO (sin scroll-driven animations, reduced-motion, viewport bajo):
+       el hero es una sección de 100svh y la página sigue debajo. Es también el
+       estado inicial (progreso 0) de la animación: los estados "from" salen de acá.
+     Modo animado = @media (no-preference) + (min-height: 34rem) + @supports scroll().
+     ========================================================================== */
+
+  :root {
+    --hero-run: 75svh;           /* distancia de scroll de la transición (el espaciador mide esto + 56 px) */
+    --hero-hdr: 3.5rem;          /* alto del header (56 px, ya existente) */
+    --hero-frame: #0a7a7c;       /* marco de color — claro  (= --accent) */
+    --hero-k: 3.98;              /* ancho de "gefy.dev" en em (Geist 600, -0.01em); se mide en DISENO-HERO.md §7 */
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --hero-frame: #0c4c4e; }   /* = mezcla 38 % --accent oscuro + #0b0b0c */
+  }
+
+  /* --------------------------------------------------------------------------
+     1. Contenedor del hero (estado base / progreso 0)
+     -------------------------------------------------------------------------- */
+  .top { position: relative; }
+  .hero-stage {
+    position: relative;
+    height: 100svh;
+    min-height: 34rem;
+    overflow: hidden;
+    container-type: size;          /* las medidas internas usan cqw/cqh del propio hero */
+    pointer-events: none;
+    z-index: 30;
+  }
+  .hero-inner {
+    position: absolute; inset: 0;
+
+    /* ---- geometría (desktop) ---- */
+    --in: clamp(10px, 3.2cqw, 40px);                                     /* ancho del marco */
+    --pad: clamp(16px, 3.75cqw, 48px);                                  /* aire panel → contenido */
+    --L: max(var(--gutter), calc(var(--in) + var(--pad)));              /* borde izq. y der. del contenido */
+    --cw: calc(100cqw - 2 * var(--L));                                  /* ancho de contenido */
+    --hy: calc(var(--in) + 36px);                                       /* eje vertical del header en el hero */
+    --cyp: 50cqh;                                                       /* eje vertical de la foto */
+    --cy: 54cqh;                                                        /* eje vertical de palabra y foto */
+
+    --F: min(calc(var(--cw) * 0.62 / var(--hero-k)), 28cqh);            /* font-size de la palabra gigante */
+    --Wp: min(26cqw, 40cqh);                                            /* ancho del slot de la foto (alto = 1,25 ×) */
+    --Hp: calc(var(--Wp) * 1.25);
+
+    /* ---- destinos de la transición (coinciden con el header real) ---- */
+    --col: calc((100cqw - min(100cqw, var(--measure))) / 2 + var(--gutter));  /* borde izq. de la columna de 736 */
+    --ws: tan(atan2(16px, var(--F)));                                   /* escala palabra → texto de la marca (16 px) */
+    --ps: tan(atan2(20px, var(--Wp)));                                  /* escala foto → ícono de la marca (20 px) */
+
+  }
+
+  /* Mobile / vertical: un solo layout apilado */
+  @container (max-width: 43.75rem) or (max-aspect-ratio: 1/1) {
+    .hero-inner {
+      --cy: 33cqh;
+      --F: min(calc(var(--cw) / var(--hero-k)), 22cqh);
+      --Wp: min(42cqw, 26cqh);
+    }
+  }
+
+  /* Marco: 8 piezas (4 bordes + 4 esquinas con el radio) que dejan un hueco redondeado
+     TRANSPARENTE: la grilla y la linterna de body se ven a través del panel.
+     Al animar, cada pieza se desliza hacia afuera con transform (--dx/--dy = dirección).
+     (Antes era un box-shadow gigante escalado: bajaba a ~42 fps; esto mantiene 60.) */
+  .hero-panel { position: absolute; inset: 0; --R: clamp(16px, 2.2cqw, 28px); --out: calc(var(--in) + var(--R) + 2px); }
+  .hero-panel > i {
+    position: absolute; background: var(--hero-frame); --dx: 0; --dy: 0;
+  }
+  .hero-panel .t  { left: 0; right: 0; top: 0;    height: var(--in); --dy: -1; }
+  .hero-panel .b  { left: 0; right: 0; bottom: 0; height: var(--in); --dy: 1; }
+  .hero-panel .l  { top: 0; bottom: 0; left: 0;  width: var(--in); --dx: -1; }
+  .hero-panel .r  { top: 0; bottom: 0; right: 0; width: var(--in); --dx: 1; }
+  /* Rellenos de esquina: cuadrado de lado R dentro del ángulo interior, con el hueco redondeado */
+  .hero-panel .tl, .hero-panel .tr, .hero-panel .bl, .hero-panel .br { width: var(--R); height: var(--R); }
+  .hero-panel .tl { left: var(--in);  top: var(--in);    --dx: -1; --dy: -1; background: radial-gradient(circle at 100% 100%, transparent calc(var(--R) - 0.5px), var(--hero-frame) var(--R)); }
+  .hero-panel .tr { right: var(--in); top: var(--in);    --dx: 1;  --dy: -1; background: radial-gradient(circle at 0 100%,    transparent calc(var(--R) - 0.5px), var(--hero-frame) var(--R)); }
+  .hero-panel .bl { left: var(--in);  bottom: var(--in); --dx: -1; --dy: 1;  background: radial-gradient(circle at 100% 0,    transparent calc(var(--R) - 0.5px), var(--hero-frame) var(--R)); }
+  .hero-panel .br { right: var(--in); bottom: var(--in); --dx: 1;  --dy: 1;  background: radial-gradient(circle at 0 0,       transparent calc(var(--R) - 0.5px), var(--hero-frame) var(--R)); }
+
+  /* Textos */
+  .hero-eyebrow,
+  .hero-title,
+  .hero-copy {
+    position: absolute; left: var(--L); margin: 0;
+  }
+  .hero-eyebrow {
+    top: calc(var(--hy) + 28px);
+    font: 500 var(--fs-xs)/1.4 var(--font-mono);
+    letter-spacing: 0.02em; color: var(--fg-3); white-space: nowrap;
+  }
+  .hero-title {
+    top: calc(var(--hy) + 60px);
+    font-size: clamp(1.5rem, 2.8cqw + 2.2cqh, 5rem);
+    line-height: 1.05; font-weight: 600; letter-spacing: -0.03em; color: var(--fg);
+  }
+  .hero-title span { display: block; white-space: nowrap; }
+  .hero-copy {
+    bottom: calc(var(--in) + clamp(24px, 5cqh, 44px));
+    width: min(26rem, 34cqw);
+    font-size: var(--fs-base); line-height: 1.55; color: var(--fg-2);
+  }
+
+  /* Palabra gigante: dos copias apiladas (fg y acento) que se cruzan al viajar */
+  .hero-word {
+    position: absolute; left: 0; top: 0;
+    display: grid;
+    font-size: var(--F); line-height: 1; font-weight: 600; letter-spacing: -0.01em;
+    white-space: nowrap; transform-origin: 0 0;
+    transform: translate(var(--L), calc(var(--cy) - var(--F) / 2));
+  }
+  .hero-word > span { grid-area: 1 / 1; }
+  .hero-word .w-fg { color: var(--fg); opacity: 0; }
+  .hero-word .w-ac { color: var(--accent); }
+
+  /* Foto (slot): hoy el logo, mañana una foto vertical. Mismo contenedor, otro recorte. */
+  .hero-photo {
+    position: absolute; left: 0; top: 0;
+    width: var(--Wp); height: var(--Hp);
+    transform-origin: 0 0;
+    transform: translate(calc(100cqw - var(--L) - var(--Wp)), calc(var(--cyp) - var(--Hp) / 2));
+    clip-path: inset(0 0 0 0 round 20px);
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .hero-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
+  /* Logo cuadrado con fondo transparente: se muestra entero, con aire */
+  .hero-photo.is-logo img { object-fit: contain; padding: 14%; box-sizing: border-box; }
+
+  /* Stack (SVG simple-icons, currentColor => sirven en claro y oscuro) */
+  .hero-tech {
+    position: absolute; right: var(--L);
+    bottom: calc(var(--in) + clamp(24px, 5cqh, 44px));
+    width: var(--Wp);
+    display: grid; grid-template-columns: repeat(9, 1fr); gap: 14px 0; justify-items: center;
+    margin: 0; padding: 0; list-style: none; color: var(--fg-2);
+  }
+  .hero-tech svg { display: block; width: min(clamp(20px, 2.1cqw, 30px), calc(var(--Wp) / 9 - 3px)); height: auto; aspect-ratio: 1; fill: currentColor; }
+
+  @container (max-width: 43.75rem) or (max-aspect-ratio: 1/1) {
+    .hero-eyebrow { top: calc(var(--hy) + 24px); white-space: normal; max-width: var(--cw); }
+    .hero-title { top: calc(var(--hy) + 52px); font-size: clamp(1.5rem, 8.2cqw, 3.4rem); }
+    .hero-copy {
+      top: 47cqh; bottom: auto; width: calc(var(--cw) - var(--Wp) - 16px);
+      font-size: clamp(0.75rem, 3.4cqw, 0.875rem); line-height: 1.5;
+    }
+    .hero-photo { transform: translate(calc(100cqw - var(--L) - var(--Wp)), 47cqh); }
+    .hero-tech { left: var(--L); right: auto; width: var(--cw); }
+    .hero-tech svg { width: min(clamp(22px, 6.5cqw, 32px), calc(var(--cw) / 9 - 4px)); }
+  }
+
+  /* Header real encima del panel: marca a la izquierda y nav/herramientas a la derecha
+     del PANEL (más anchos que la columna de 736). Estado base = progreso 0. */
+  .site-header {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 40;
+    border-bottom-color: transparent;
+    --h-in: clamp(10px, 3.2vw, 40px);
+    --h-L: max(var(--gutter), calc(var(--h-in) + clamp(16px, 3.75vw, 48px)));
+    --h-dx: max(0px, calc((100vw - min(100vw, var(--measure))) / 2 + var(--gutter) - var(--h-L)));
+    --h-dy: calc(var(--h-in) + 8px);
+  }
+  .site-header .brand { transform: translate(calc(-1 * var(--h-dx)), var(--h-dy)); }
+  .site-header .nav,
+  .site-header .tools { transform: translate(var(--h-dx), var(--h-dy)); }
+  .site-header .menu-list { transform: translateY(var(--h-dy)); }   /* el cajón móvil baja igual que el botón «Menú» y no lo tapa */
+  .site-header .brand span { opacity: 0; }   /* el texto de la marca lo pone la palabra gigante */
+
+  /* Tramos del recorrido (en :root porque los usan main y footer, fuera de .top).
+     Cada tramo = [inicio fin] del scroll, como fracción de --hero-run (75svh). */
+  :root {
+    --t-panel: 0px calc(var(--hero-run) * 0.6);                                  /* el panel se expande, el header se acomoda */
+    --t-photo: 0px calc(var(--hero-run) * 0.5);                                  /* la foto viaja al ícono de la marca */
+    --t-pfade: calc(var(--hero-run) * 0.35) calc(var(--hero-run) * 0.5);         /* …y se disuelve al llegar */
+    --t-word:  calc(var(--hero-run) * 0.05) calc(var(--hero-run) * 0.7);         /* la palabra viaja al texto de la marca */
+    --t-mix:   calc(var(--hero-run) * 0.35) calc(var(--hero-run) * 0.7);         /* …y pasa de acento a --fg */
+    --t-txt:   0px calc(var(--hero-run) * 0.22);                                 /* los textos se van primero */
+    --t-page:  calc(var(--hero-run) * 0.15) calc(var(--hero-run) * 0.55);        /* entra la página real, solapada con la salida del hero */
+    --t-end:   calc(var(--hero-run) * 0.85) var(--hero-run);                     /* el hero se disuelve */
+  }
+
+  /* --------------------------------------------------------------------------
+     2. Transición animada: progreso = scroll de 0 a --hero-run (75svh)
+     -------------------------------------------------------------------------- */
+  @media (prefers-reduced-motion: no-preference) and (min-height: 34rem) {
+    @supports (animation-timeline: scroll()) {
+
+      /* El hero pasa a capa fija; el scroll lo "gasta" un espaciador de 100svh */
+      .top { height: calc(var(--hero-run) + var(--hero-hdr)); }
+      .hero-stage { position: fixed; inset: 0; height: auto; min-height: 0; }
+      .site-header { position: sticky; top: 0; }
+
+      @keyframes hero-panel   { to { transform: translate(calc(var(--dx) * var(--out)), calc(var(--dy) * var(--out))); } }
+      @keyframes hero-word    { from { transform: translate(var(--L), calc(var(--cy) - var(--F) / 2)) scale(1); }
+                                to   { transform: translate(calc(var(--col) + 28px), calc(var(--hero-hdr) / 2 - 8px)) scale(var(--ws)); } }
+      @keyframes hero-photo   { from { transform: translate(calc(100cqw - var(--L) - var(--Wp)), calc(var(--cyp) - var(--Hp) / 2)); clip-path: inset(0 0 0 0 round 20px); }
+                                to   { transform: translate(var(--col), calc(var(--hero-hdr) / 2 - 10px)) scale(var(--ps)); clip-path: inset(0 0 20% 0 round 0); } }
+      @keyframes hero-photo-m { from { transform: translate(calc(100cqw - var(--L) - var(--Wp)), 47cqh); clip-path: inset(0 0 0 0 round 20px); }
+                                to   { transform: translate(var(--col), calc(var(--hero-hdr) / 2 - 10px)) scale(var(--ps)); clip-path: inset(0 0 20% 0 round 0); } }
+      @keyframes hero-fade-up   { to { opacity: 0; transform: translateY(-28px); } }
+      @keyframes hero-fade-down { to { opacity: 0; transform: translateY(20px); } }
+      @keyframes hero-show    { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes hero-hide    { from { opacity: 1; } to { opacity: 0; } }
+      @keyframes hero-out     { from { opacity: 1; visibility: visible; } to { opacity: 0; visibility: hidden; } }
+      @keyframes hero-brand   { to { transform: none; } }
+      @keyframes hero-nav     { to { transform: none; } }
+      @keyframes hero-line    { to { border-bottom-color: var(--line); } }
+
+      .hero-panel > i, .hero-word, .hero-photo, .site-header, .site-header .brand, .site-header .nav, .site-header .tools, .site-header .menu-list {
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        animation-fill-mode: both; animation-duration: auto;
+        animation-timeline: scroll(root block);
+      }
+      .hero-panel > i { animation-name: hero-panel; animation-range: var(--t-panel); will-change: transform; }
+      .hero-word   { animation-name: hero-word;  animation-range: var(--t-word);  will-change: transform; }
+      .hero-photo  { animation-name: hero-photo, hero-hide; animation-range: var(--t-photo), var(--t-pfade);
+                     animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1), linear; will-change: transform, opacity; }
+      .site-header .brand { animation-name: hero-brand; animation-range: var(--t-panel); }
+      .site-header .nav, .site-header .tools, .site-header .menu-list { animation-name: hero-nav; animation-range: var(--t-panel); }
+      .site-header { animation-name: hero-line; animation-range: var(--t-panel); }
+      @container (max-width: 43.75rem) or (max-aspect-ratio: 1/1) {
+        .hero-photo { animation-name: hero-photo-m, hero-hide; }
+      }
+
+      /* Textos del hero: se van hacia arriba / abajo en el primer 30 % */
+      .hero-eyebrow, .hero-title, .hero-copy, .hero-tech {
+        animation-duration: auto; animation-fill-mode: both; animation-timing-function: ease-in;
+        animation-timeline: scroll(root block); animation-range: var(--t-txt); will-change: transform, opacity;
+      }
+      .hero-eyebrow, .hero-title { animation-name: hero-fade-up; }
+      .hero-copy, .hero-tech     { animation-name: hero-fade-down; }
+
+      /* La palabra cambia de acento a color de texto mientras viaja */
+      .hero-word .w-ac { animation: hero-hide linear both; animation-duration: auto; animation-timeline: scroll(root block); animation-range: var(--t-mix); }
+      .hero-word .w-fg { animation: hero-show linear both; animation-duration: auto; animation-timeline: scroll(root block); animation-range: var(--t-mix); }
+
+      /* Al final el hero se disuelve y aparece el texto real de la marca en el header */
+      .hero-stage { animation: hero-out linear both; animation-duration: auto; animation-timeline: scroll(root block); animation-range: var(--t-end); }
+      .site-header .brand span { animation: hero-show linear both; animation-duration: auto; animation-timeline: scroll(root block); animation-range: var(--t-end); }
+
+      /* La página real (main + footer) queda invisible debajo hasta el tramo final.
+         NO aplicar a los diálogos/modales (viven fuera de main). */
+      main, .site-footer {
+        animation: hero-show linear both; animation-duration: auto;
+        animation-timeline: scroll(root block); animation-range: var(--t-page);
+      }
+    }
+  }
+
+  /* Contenedor muy angosto (<360 px): el eyebrow queda solo con el nombre */
+  @container (max-width: 22.5rem) { .hero-eyebrow .eb-role { display: none; } }
+
+  /* Un solo <h1> en la página: el del hero real, con nombre y rol (ver DISENO-HERO.md §8).
+     El rol pasa de <p class="role"> a <span class="role"> dentro del h1 y conserva su look. */
+  .hero h1 .role { display: block; margin-top: var(--s-3); letter-spacing: 0; }
 }
 
 @layer utilities {
