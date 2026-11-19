@@ -760,6 +760,7 @@
   .site-header .menu-list {
     --sheet-R: clamp(16px, 2.2vw, 28px);                         /* = radio del hueco del panel (--R) */
     left: var(--h-in); right: var(--h-in);                       /* dentro del marco cian, nunca encima */
+    left: round(up, var(--h-in), 1px); right: round(up, var(--h-in), 1px);   /* en px enteros: el borde de la tarjeta y el del relleno ::before caen en el mismo píxel (sin muesca) */
     padding: 0; background: none; border: 0; z-index: 1;
     visibility: hidden; pointer-events: none;
     transition: visibility 0s linear 260ms;                      /* se oculta recién cuando terminó de cerrar */
@@ -796,6 +797,8 @@
     transition: clip-path 440ms cubic-bezier(0.22, 1, 0.36, 1), transform 440ms cubic-bezier(0.22, 1, 0.36, 1), opacity 120ms linear;
   }
   /* Ítems: aparecen en cascada una vez que el rectángulo ya los alcanzó */
+  .hero-word { transition: opacity 200ms linear 120ms; }
+  body:has(.menu-list.is-open) .hero-word { opacity: 0; transition: opacity 140ms linear; }
   .menu-sheet > * { opacity: 0; translate: 0 -8px; transition: opacity 90ms linear, translate 90ms linear; }
   .menu-list.is-open .menu-sheet > * {
     opacity: 1; translate: 0 0;
@@ -805,7 +808,7 @@
   .menu-sheet > :nth-child(5) { --i: 4; } .menu-sheet > :nth-child(6) { --i: 5; }
   /* El botón: el texto cambia con un pequeño deslizamiento */
   .menu-btn:active { transform: scale(0.96); }
-  .menu-btn span { animation: menu-label 220ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .menu-btn.has-toggled span { animation: menu-label 220ms cubic-bezier(0.22, 1, 0.36, 1) both; }   /* solo al abrir/cerrar, no al cargar la página */
   @keyframes menu-label { from { opacity: 0; translate: 0 -5px; } }
 
   @media (prefers-reduced-motion: reduce) {

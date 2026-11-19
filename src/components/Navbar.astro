@@ -143,12 +143,14 @@ const links = [
         drawer.style.setProperty("--oy", `${(b.top + b.height / 2 - d.top).toFixed(1)}px`);
     }
 
-    function closeMobileDrawer() {
+    function closeMobileDrawer(returnFocus = false) {
         const drawer = document.getElementById("mobile-menu-drawer");
         const mobileBtn = document.getElementById("mobile-menu-btn");
         if (!drawer || !mobileBtn) return;
+        mobileBtn.classList.add("has-toggled");
         drawer.classList.remove("is-open");
         mobileBtn.setAttribute("aria-expanded", "false");
+        if (returnFocus) mobileBtn.focus({ preventScroll: true });
         mobileBtn.querySelector(".menu-open-icon")?.classList.remove("hidden");
         mobileBtn.querySelector(".menu-close-icon")?.classList.add("hidden");
     }
@@ -157,6 +159,7 @@ const links = [
         const drawer = document.getElementById("mobile-menu-drawer");
         const mobileBtn = document.getElementById("mobile-menu-btn");
         if (!drawer || !mobileBtn) return;
+        mobileBtn.classList.add("has-toggled");
         if (!drawer.classList.contains("is-open")) setDrawerOrigin(drawer, mobileBtn);
         const isHidden = !drawer.classList.toggle("is-open");
         mobileBtn.setAttribute("aria-expanded", String(!isHidden));
@@ -212,7 +215,8 @@ const links = [
         const mobileBtn = document.getElementById("mobile-menu-btn");
         if (drawer && drawer.classList.contains("is-open")) {
             if (!drawer.contains(target) && !mobileBtn?.contains(target)) {
-                closeMobileDrawer();
+                // el foco vuelve al botón, salvo que el clic cayó en algo enfocable (no se lo robamos)
+                closeMobileDrawer(!target.closest("a, button, input, textarea, select, summary, [tabindex]"));
             }
         }
     });
@@ -221,7 +225,7 @@ const links = [
         if (e.key === "Escape") {
             const drawer = document.getElementById("mobile-menu-drawer");
             if (drawer && drawer.classList.contains("is-open")) {
-                closeMobileDrawer();
+                closeMobileDrawer(true);
             }
         }
     });
