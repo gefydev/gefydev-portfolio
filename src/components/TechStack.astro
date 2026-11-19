@@ -9,6 +9,25 @@ interface Props {
 const { lang } = Astro.props;
 const t = translations[lang];
 
+// Logos de simple-icons: los mismos símbolos <symbol id="i-…"> que dibuja HeroStage.astro (sprite en la misma página).
+const logos: Record<string, string[]> = {
+    "TypeScript": ["typescript"],
+    "JavaScript (ESNext)": ["javascript"],
+    "React / Preact": ["react"],
+    "Astro": ["astro"],
+    "Rust": ["rust"],
+    "C": ["c"],
+    "C++": ["cplusplus"],
+    "Python": ["python"],
+    "Tailwind CSS": ["tailwindcss"],
+    "Bun & Node.js": ["bun", "nodedotjs"],
+    "Vite": ["vite"],
+    "Linux & Shell Scripting": ["linux"],
+    "PostgreSQL & SQLite": ["postgresql", "sqlite"],
+    "Git & GitHub Actions": ["git", "githubactions"],
+    "Android Debug Bridge (ADB)": ["android"],
+};
+
 const groups = [
     { category: "web-core", title: t.stack.webCore },
     { category: "languages", title: t.stack.languages },
@@ -37,10 +56,19 @@ const groups = [
                         <div>
                             {g.items.map((item) => (
                                 <div class="tech">
-                                    <p class="tech-name">{item.name}</p>
-                                    <span class="tech-role">
-                                        {item.roleBadge[lang]}
-                                    </span>
+                                    <div class="tech-head">
+                                        <span class="tech-logos" aria-hidden="true">
+                                            {(logos[item.name] ?? []).map((id) => (
+                                                <span class="tech-logo"><svg focusable="false"><use href={`#i-${id}`} /></svg></span>
+                                            ))}
+                                        </span>
+                                        <div class="tech-id">
+                                            <p class="tech-name">{item.name}</p>
+                                            <span class="tech-role">
+                                                {item.roleBadge[lang]}
+                                            </span>
+                                        </div>
+                                    </div>
                                     <p class="tech-desc">
                                         {item.description[lang]}
                                     </p>

@@ -492,6 +492,8 @@
   :root {
     --hero-run: 75svh;           /* distancia de scroll de la transición (el espaciador mide esto + 56 px) */
     --hero-hdr: 3.5rem;          /* alto del header (56 px, ya existente) */
+    --hero-ease: cubic-bezier(0.45, 0, 0.15, 1);     /* arranque suave, final largo (reemplaza a cubic-bezier(.4,0,.2,1)) */
+    --hero-ease-in: cubic-bezier(0.5, 0, 0.9, 0.5);
     --hero-frame: #0a7a7c;       /* marco de color — claro  (= --accent) */
     --hero-k: 3.98;              /* ancho de "gefy.dev" en em (Geist 600, -0.01em); se mide en DISENO-HERO.md §7 */
   }
@@ -604,7 +606,7 @@
     width: var(--Wp); height: var(--Hp);
     transform-origin: 0 0;
     transform: translate(calc(100cqw - var(--L) - var(--Wp)), calc(var(--cyp) - var(--Hp) / 2));
-    clip-path: inset(0 0 0 0 round 20px);
+    clip-path: inset(0 round 20px);   /* estático: la escala de la foto ya encoge el radio al viajar */
     background: var(--surface);
     box-shadow: inset 0 0 0 1px var(--line);
   }
@@ -638,7 +640,7 @@
      del PANEL (más anchos que la columna de 736). Estado base = progreso 0. */
   .site-header {
     position: absolute; top: 0; left: 0; right: 0; z-index: 40;
-    border-bottom-color: transparent;
+    border-bottom-color: transparent;     /* la línea la dibuja ::after con opacity (compositor) */
     --h-in: clamp(10px, 3.2vw, 40px);
     --h-L: max(var(--gutter), calc(var(--h-in) + clamp(16px, 3.75vw, 48px)));
     --h-dx: max(0px, calc((100vw - min(100vw, var(--measure))) / 2 + var(--gutter) - var(--h-L)));
@@ -658,7 +660,9 @@
     --t-pfade: calc(var(--hero-run) * 0.35) calc(var(--hero-run) * 0.5);         /* …y se disuelve al llegar */
     --t-word:  calc(var(--hero-run) * 0.05) calc(var(--hero-run) * 0.7);         /* la palabra viaja al texto de la marca */
     --t-mix:   calc(var(--hero-run) * 0.35) calc(var(--hero-run) * 0.7);         /* …y pasa de acento a --fg */
-    --t-txt:   0px calc(var(--hero-run) * 0.22);                                 /* los textos se van primero */
+    --t-txt-1: 0px calc(var(--hero-run) * 0.16);                                 /* los textos se van primero, escalonados */
+    --t-txt-2: calc(var(--hero-run) * 0.03) calc(var(--hero-run) * 0.2);
+    --t-txt-3: calc(var(--hero-run) * 0.06) calc(var(--hero-run) * 0.24);
     --t-page:  calc(var(--hero-run) * 0.15) calc(var(--hero-run) * 0.55);        /* entra la página real, solapada con la salida del hero */
     --t-end:   calc(var(--hero-run) * 0.85) var(--hero-run);                     /* el hero se disuelve */
   }
@@ -671,48 +675,63 @@
 
       /* El hero pasa a capa fija; el scroll lo "gasta" un espaciador de 100svh */
       .top { height: calc(var(--hero-run) + var(--hero-hdr)); }
-      .hero-stage { position: fixed; inset: 0; height: auto; min-height: 0; }
+      /* FIX saltos: antes `inset: 0` => el hero medía 100dvh y cambiaba de alto cuando la barra de direcciones
+         se oculta/aparece (el panel, la palabra y la foto —medidos en cqh— se corrían hasta 84 px).
+         Ahora mide 100svh, fijo: la composición no depende de la barra. */
+      .hero-stage { position: fixed; top: 0; left: 0; right: 0; height: 100svh; min-height: 0; }
       .site-header { position: sticky; top: 0; }
 
       @keyframes hero-panel   { to { transform: translate(calc(var(--dx) * var(--out)), calc(var(--dy) * var(--out))); } }
       @keyframes hero-word    { from { transform: translate(var(--L), calc(var(--cy) - var(--F) / 2)) scale(1); }
                                 to   { transform: translate(calc(var(--col) + 28px), calc(var(--hero-hdr) / 2 - 8px)) scale(var(--ws)); } }
-      @keyframes hero-photo   { from { transform: translate(calc(100cqw - var(--L) - var(--Wp)), calc(var(--cyp) - var(--Hp) / 2)); clip-path: inset(0 0 0 0 round 20px); }
-                                to   { transform: translate(var(--col), calc(var(--hero-hdr) / 2 - 10px)) scale(var(--ps)); clip-path: inset(0 0 20% 0 round 0); } }
-      @keyframes hero-photo-m { from { transform: translate(calc(100cqw - var(--L) - var(--Wp)), 47cqh); clip-path: inset(0 0 0 0 round 20px); }
-                                to   { transform: translate(var(--col), calc(var(--hero-hdr) / 2 - 10px)) scale(var(--ps)); clip-path: inset(0 0 20% 0 round 0); } }
-      @keyframes hero-fade-up   { to { opacity: 0; transform: translateY(-28px); } }
-      @keyframes hero-fade-down { to { opacity: 0; transform: translateY(20px); } }
+      @keyframes hero-photo   { from { transform: translate(calc(100cqw - var(--L) - var(--Wp)), calc(var(--cyp) - var(--Hp) / 2)); }
+                                to   { transform: translate(var(--col), calc(var(--hero-hdr) / 2 - 10px)) scale(var(--ps)); } }
+      @keyframes hero-photo-m { from { transform: translate(calc(100cqw - var(--L) - var(--Wp)), 47cqh); }
+                                to   { transform: translate(var(--col), calc(var(--hero-hdr) / 2 - 10px)) scale(var(--ps)); } }
+      /* "rotate" es una propiedad independiente: va por el compositor y no pisa a transform (arco con giro leve) */
+      @keyframes hero-photo-spin { 0% { rotate: 0deg; } 45% { rotate: -7deg; } 100% { rotate: 0deg; } }
+      @keyframes hero-fade-up   { to { opacity: 0; transform: translateY(-34px); } }
+      @keyframes hero-fade-down { to { opacity: 0; transform: translateY(26px); } }
+      @keyframes hero-icon      { to { opacity: 0; transform: translateY(28px) scale(0.6); } }
       @keyframes hero-show    { from { opacity: 0; } to { opacity: 1; } }
       @keyframes hero-hide    { from { opacity: 1; } to { opacity: 0; } }
-      @keyframes hero-out     { from { opacity: 1; visibility: visible; } to { opacity: 0; visibility: hidden; } }
+      @keyframes hero-out     { from { opacity: 1; } to { opacity: 0; } }   /* sin visibility: no es animable en el compositor */
       @keyframes hero-brand   { to { transform: none; } }
       @keyframes hero-nav     { to { transform: none; } }
-      @keyframes hero-line    { to { border-bottom-color: var(--line); } }
 
-      .hero-panel > i, .hero-word, .hero-photo, .site-header, .site-header .brand, .site-header .nav, .site-header .tools, .site-header .menu-list {
-        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      .hero-panel > i, .hero-word, .hero-photo, .site-header .brand, .site-header .nav, .site-header .tools, .site-header .menu-list {
+        animation-timing-function: var(--hero-ease);
         animation-fill-mode: both; animation-duration: auto;
         animation-timeline: scroll(root block);
       }
-      .hero-panel > i { animation-name: hero-panel; animation-range: var(--t-panel); will-change: transform; }
-      .hero-word   { animation-name: hero-word;  animation-range: var(--t-word);  will-change: transform; }
-      .hero-photo  { animation-name: hero-photo, hero-hide; animation-range: var(--t-photo), var(--t-pfade);
-                     animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1), linear; will-change: transform, opacity; }
+      /* will-change fuera: el compositor ya promueve lo que anima transform/opacity (menos capas = menos memoria en el teléfono) */
+      .hero-panel > i { animation-name: hero-panel; animation-range: var(--t-panel); }
+      .hero-word   { animation-name: hero-word;  animation-range: var(--t-word); }
+      .hero-photo  { animation-name: hero-photo, hero-photo-spin, hero-hide; animation-range: var(--t-photo), var(--t-photo), var(--t-pfade);
+                     animation-timing-function: var(--hero-ease), ease-in-out, linear; }
       .site-header .brand { animation-name: hero-brand; animation-range: var(--t-panel); }
       .site-header .nav, .site-header .tools, .site-header .menu-list { animation-name: hero-nav; animation-range: var(--t-panel); }
-      .site-header { animation-name: hero-line; animation-range: var(--t-panel); }
+      .site-header::after {
+        content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--line);
+        opacity: 0; pointer-events: none;
+        animation: hero-show linear both; animation-duration: auto; animation-timeline: scroll(root block); animation-range: var(--t-panel);
+      }
       @container (max-width: 43.75rem) or (max-aspect-ratio: 1/1) {
-        .hero-photo { animation-name: hero-photo-m, hero-hide; }
+        .hero-photo { animation-name: hero-photo-m, hero-photo-spin, hero-hide; }
       }
 
-      /* Textos del hero: se van hacia arriba / abajo en el primer 30 % */
-      .hero-eyebrow, .hero-title, .hero-copy, .hero-tech {
-        animation-duration: auto; animation-fill-mode: both; animation-timing-function: ease-in;
-        animation-timeline: scroll(root block); animation-range: var(--t-txt); will-change: transform, opacity;
+      /* Textos del hero: salen escalonados (cada línea con su propio tramo) en el primer ~30 % */
+      .hero-eyebrow, .hero-title span, .hero-copy, .hero-tech li {
+        animation-duration: auto; animation-fill-mode: both; animation-timing-function: var(--hero-ease-in);
+        animation-timeline: scroll(root block);
       }
-      .hero-eyebrow, .hero-title { animation-name: hero-fade-up; }
-      .hero-copy, .hero-tech     { animation-name: hero-fade-down; }
+      .hero-eyebrow           { animation-name: hero-fade-up;   animation-range: var(--t-txt-1); }
+      .hero-title span:nth-child(1) { animation-name: hero-fade-up; animation-range: var(--t-txt-2); }
+      .hero-title span:nth-child(2) { animation-name: hero-fade-up; animation-range: var(--t-txt-3); }
+      .hero-copy              { animation-name: hero-fade-down; animation-range: var(--t-txt-2); }
+      /* Íconos: 18, escalonados de a poco (cada <li> trae --i = 0…17 en el HTML) */
+      .hero-tech li { animation-name: hero-icon;
+        animation-range: calc(var(--hero-run) * (0.02 + var(--i) * 0.006)) calc(var(--hero-run) * (0.16 + var(--i) * 0.006)); }
 
       /* La palabra cambia de acento a color de texto mientras viaja */
       .hero-word .w-ac { animation: hero-hide linear both; animation-duration: auto; animation-timeline: scroll(root block); animation-range: var(--t-mix); }
@@ -729,6 +748,101 @@
         animation-timeline: scroll(root block); animation-range: var(--t-page);
       }
     }
+  }
+
+  /* ==========================================================================
+     MENÚ MÓVIL — cajón integrado al panel, que nace del botón «Menú»
+     (ver DISENO-PULIDO.md §3). Va DESPUÉS del bloque HERO.
+     - .menu-list  = solo posiciona (conserva la animación de scroll translateY de hero-nav)
+     - .menu-sheet = la tarjeta visible (fondo, borde, radio, sombra, revelado, escalonado)
+     ========================================================================== */
+  .site-header .bar { position: relative; z-index: 2; }          /* la barra queda SOBRE la tarjeta */
+  .site-header .menu-list {
+    --sheet-R: clamp(16px, 2.2vw, 28px);                         /* = radio del hueco del panel (--R) */
+    left: var(--h-in); right: var(--h-in);                       /* dentro del marco cian, nunca encima */
+    padding: 0; background: none; border: 0; z-index: 1;
+    visibility: hidden; pointer-events: none;
+    transition: visibility 0s linear 260ms;                      /* se oculta recién cuando terminó de cerrar */
+  }
+  .site-header .menu-list.is-open { visibility: visible; pointer-events: auto; transition-delay: 0s; }
+
+  .menu-sheet {
+    position: relative;
+    padding: var(--s-1) var(--s-4) var(--s-3);
+    background: var(--bg);
+    border: 1px solid var(--line-strong); border-top: 0;
+    border-radius: 0 0 var(--sheet-R) var(--sheet-R);
+    box-shadow: 0 22px 44px -22px rgb(0 0 0 / 0.38), 0 1px 3px rgb(0 0 0 / 0.08);
+    transform-origin: var(--ox, 85%) var(--oy, -1.75rem);        /* el botón (lo mide el JS) */
+    /* cerrado: un rectángulo de tamaño 0 en el centro del botón */
+    clip-path: inset(var(--oy, -1.75rem) calc(100% - var(--ox, 85%)) calc(100% - var(--oy, -1.75rem)) var(--ox, 85%) round 14px);
+    transform: scale(0.94); opacity: 0;
+    /* cierre: más corto que la apertura y con curva de entrada */
+    transition: clip-path 240ms cubic-bezier(0.5, 0, 0.75, 0), transform 240ms cubic-bezier(0.5, 0, 0.75, 0), opacity 160ms linear 80ms;
+  }
+  /* Relleno de la zona de la barra: en progreso 0 la barra está dentro del panel y el cajón la incluye
+     (sin franja de 19 px por la que se veía el hero). Se funde al llegar el header a su sitio. */
+  .menu-sheet::before {
+    content: ""; position: absolute; left: -1px; right: -1px; bottom: calc(100% - 1px);   /* solapa 1 px con la tarjeta: sin costura a medio píxel (el cajón arranca en y fraccionario) */
+    height: calc(var(--hero-hdr) + 9px);
+    background: var(--bg);
+    border: 1px solid var(--line-strong); border-bottom: 0;
+    border-radius: var(--sheet-R) var(--sheet-R) 0 0;
+  }
+  .menu-list.is-open .menu-sheet {
+    clip-path: inset(-120px -40px -64px -40px round var(--sheet-R));   /* abierto: cubre la tarjeta, el relleno y la sombra */
+    transform: none; opacity: 1;
+    /* apertura: sale del botón con curva de salida larga */
+    transition: clip-path 440ms cubic-bezier(0.22, 1, 0.36, 1), transform 440ms cubic-bezier(0.22, 1, 0.36, 1), opacity 120ms linear;
+  }
+  /* Ítems: aparecen en cascada una vez que el rectángulo ya los alcanzó */
+  .menu-sheet > * { opacity: 0; translate: 0 -8px; transition: opacity 90ms linear, translate 90ms linear; }
+  .menu-list.is-open .menu-sheet > * {
+    opacity: 1; translate: 0 0;
+    transition: opacity 260ms ease-out calc(120ms + var(--i, 0) * 38ms), translate 320ms cubic-bezier(0.22, 1, 0.36, 1) calc(120ms + var(--i, 0) * 38ms);
+  }
+  .menu-sheet > :nth-child(2) { --i: 1; } .menu-sheet > :nth-child(3) { --i: 2; } .menu-sheet > :nth-child(4) { --i: 3; }
+  .menu-sheet > :nth-child(5) { --i: 4; } .menu-sheet > :nth-child(6) { --i: 5; }
+  /* El botón: el texto cambia con un pequeño deslizamiento */
+  .menu-btn:active { transform: scale(0.96); }
+  .menu-btn span { animation: menu-label 220ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  @keyframes menu-label { from { opacity: 0; translate: 0 -5px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* versión mínima: sin movimiento (el reset global ya fija las duraciones en ~0): aparece/desaparece */
+    .menu-sheet, .menu-list.is-open .menu-sheet { clip-path: none; transform: none; }
+    .menu-sheet > * { translate: none; }
+  }
+  /* Progreso del hero: el relleno de la barra se funde cuando el header llega a su posición final */
+  @media (prefers-reduced-motion: no-preference) and (min-height: 34rem) {
+    @supports (animation-timeline: scroll()) {
+      @keyframes menu-back-out { to { opacity: 0; } }
+      .menu-sheet::before { animation: menu-back-out linear both; animation-duration: auto; animation-timeline: scroll(root block); animation-range: var(--t-panel); }
+    }
+  }
+
+  /* ==========================================================================
+     STACK — logos junto al nombre (ver DISENO-PULIDO.md §1)
+     Tarjeta cuadrada con borde fino (como el ⌘K y los .cmd), ícono en currentColor => claro/oscuro sin código extra.
+     ========================================================================== */
+  .tech-head { display: flex; align-items: center; gap: var(--s-3); }
+  .tech-logos { display: inline-flex; flex: none; gap: var(--s-1); }
+  .tech-logo {
+    display: grid; place-items: center; flex: none;
+    width: 2.5rem; height: 2.5rem;                  /* 40 px fijos: sin CLS */
+    border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface);
+    color: var(--fg-2);
+    transition: color 160ms ease, border-color 160ms ease;
+  }
+  .tech-logo svg { display: block; width: 1.375rem; height: 1.375rem; fill: currentColor; }   /* 22 px */
+  .tech-id { min-width: 0; }
+  .tech-head + .tech-desc { margin-top: var(--s-3); }
+  @media (hover: hover) {
+    .tech:hover .tech-logo { color: var(--accent); border-color: var(--line-strong); }
+  }
+  @media (min-width: 40rem) {
+    .tech-logo { width: 2.75rem; height: 2.75rem; }       /* 44 px en escritorio */
+    .tech-logo svg { width: 1.5rem; height: 1.5rem; }
   }
 
   /* Contenedor muy angosto (<360 px): el eyebrow queda solo con el nombre */
