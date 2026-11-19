@@ -23,7 +23,7 @@ const t = translations[lang];
         <div class="hero-photo is-logo"><img src="/images/logo.png" alt="" width="512" height="512" decoding="async" fetchpriority="high" /></div>
         <p class="hero-copy">{t.hero.stageCopy}</p>
         <ul class="hero-tech">
-            {heroIcons.map((i) => <li><svg focusable="false"><use href={`#i-${i.id}`} /></svg></li>)}
+            {heroIcons.map((i, n) => <li style={`--i:${n}`}><svg focusable="false"><use href={`#i-${i.id}`} /></svg></li>)}
         </ul>
     </div>
 </div>

@@ -85,21 +85,23 @@ const links = [
 
     <nav
         id="mobile-menu-drawer"
-        class="menu-list hidden md:hidden"
+        class="menu-list md:hidden"
         aria-label={lang === "es" ? "Navegación móvil" : "Mobile Navigation"}
     >
-        {
-            links.map((l) => (
-                <a href={l.href} class="mobile-nav-link">
-                    <span>{l.label}</span>
-                    <span class="hint" aria-hidden="true">↗</span>
-                </a>
-            ))
-        }
-        <button id="mobile-cmd-btn" type="button">
-            <span>{t.nav.commandPalette}</span>
-            <span class="hint" aria-hidden="true">⌘K</span>
-        </button>
+        <div class="menu-sheet">
+            {
+                links.map((l) => (
+                    <a href={l.href} class="mobile-nav-link">
+                        <span>{l.label}</span>
+                        <span class="hint" aria-hidden="true">↗</span>
+                    </a>
+                ))
+            }
+            <button id="mobile-cmd-btn" type="button">
+                <span>{t.nav.commandPalette}</span>
+                <span class="hint" aria-hidden="true">⌘K</span>
+            </button>
+        </div>
     </nav>
 </header>
 
@@ -133,12 +135,22 @@ const links = [
         clockInterval = setInterval(updateAllClocks, 1000);
     }
 
-    function closeMobileDrawer() {
+    // El cajón nace del botón «Menú»: se mide el centro del botón respecto del cajón y CSS lo usa de origen.
+    function setDrawerOrigin(drawer: HTMLElement, btn: HTMLElement) {
+        const d = drawer.getBoundingClientRect();
+        const b = btn.getBoundingClientRect();
+        drawer.style.setProperty("--ox", `${(b.left + b.width / 2 - d.left).toFixed(1)}px`);
+        drawer.style.setProperty("--oy", `${(b.top + b.height / 2 - d.top).toFixed(1)}px`);
+    }
+
+    function closeMobileDrawer(returnFocus = false) {
         const drawer = document.getElementById("mobile-menu-drawer");
         const mobileBtn = document.getElementById("mobile-menu-btn");
         if (!drawer || !mobileBtn) return;
-        drawer.classList.add("hidden");
+        mobileBtn.classList.add("has-toggled");
+        drawer.classList.remove("is-open");
         mobileBtn.setAttribute("aria-expanded", "false");
+        if (returnFocus) mobileBtn.focus({ preventScroll: true });
         mobileBtn.querySelector(".menu-open-icon")?.classList.remove("hidden");
         mobileBtn.querySelector(".menu-close-icon")?.classList.add("hidden");
     }
@@ -147,7 +159,9 @@ const links = [
         const drawer = document.getElementById("mobile-menu-drawer");
         const mobileBtn = document.getElementById("mobile-menu-btn");
         if (!drawer || !mobileBtn) return;
-        const isHidden = drawer.classList.toggle("hidden");
+        mobileBtn.classList.add("has-toggled");
+        if (!drawer.classList.contains("is-open")) setDrawerOrigin(drawer, mobileBtn);
+        const isHidden = !drawer.classList.toggle("is-open");
         mobileBtn.setAttribute("aria-expanded", String(!isHidden));
         mobileBtn
             .querySelector(".menu-open-icon")
@@ -199,9 +213,10 @@ const links = [
         // Outside click to close mobile menu
         const drawer = document.getElementById("mobile-menu-drawer");
         const mobileBtn = document.getElementById("mobile-menu-btn");
-        if (drawer && !drawer.classList.contains("hidden")) {
+        if (drawer && drawer.classList.contains("is-open")) {
             if (!drawer.contains(target) && !mobileBtn?.contains(target)) {
-                closeMobileDrawer();
+                // el foco vuelve al botón, salvo que el clic cayó en algo enfocable (no se lo robamos)
+                closeMobileDrawer(!target.closest("a, button, input, textarea, select, summary, [tabindex]"));
             }
         }
     });
@@ -209,8 +224,8 @@ const links = [
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
             const drawer = document.getElementById("mobile-menu-drawer");
-            if (drawer && !drawer.classList.contains("hidden")) {
-                closeMobileDrawer();
+            if (drawer && drawer.classList.contains("is-open")) {
+                closeMobileDrawer(true);
             }
         }
     });
