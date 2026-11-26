@@ -29,7 +29,8 @@ test('sin manifiesto anterior purga todo lo publicado (y no lo que da 404)', asy
   const r = await run(opts(w));
   assert.deepEqual(r.purged, ['/', '/en', '/es', '/llms.txt', '/sitemap.xml']);
   assert.deepEqual(w.purges[0][0], 'https://example.test/');
-  assert.ok(PATHS.includes('/cv.pdf'));
+  assert.ok(PATHS.includes('/en/cv.pdf') && PATHS.includes('/es/cv.pdf'));
+  assert.ok(!PATHS.includes('/cv.pdf'), '/cv.pdf es una redirección no-store: no hace falta purgarla');
 });
 
 test('sin cambios no purga, aunque Cloudflare inyecte un script distinto en cada pedido', async () => {
@@ -42,10 +43,10 @@ test('sin cambios no purga, aunque Cloudflare inyecte un script distinto en cada
 });
 
 test('una página cambiada: purga solo esa; una que desaparece también', async () => {
-  const first = await run(opts(world({ pages: { '/cv.pdf': 'pdf' } })));
+  const first = await run(opts(world({ pages: { '/en/cv.pdf': 'pdf' } })));
   const w = world({ pages: { '/es': 'texto nuevo' } });
   const r = await run(opts(w, { previous: first.manifest }));
-  assert.deepEqual(r.purged, ['/cv.pdf', '/es']);
+  assert.deepEqual(r.purged, ['/en/cv.pdf', '/es']);
 });
 
 test('sin token: no purga, avisa, no falla y no da por purgado el manifiesto', async () => {

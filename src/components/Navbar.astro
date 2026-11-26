@@ -1,5 +1,6 @@
 ---
 import { translations } from "../data/translations";
+import { cvLink } from "../data/cv";
 
 interface Props {
     lang: "es" | "en";
@@ -22,6 +23,7 @@ const menuAriaLabel =
         : "Toggle mobile navigation menu";
 
 const githubUrl = "https://github.com/gefydev";
+const cv = cvLink(lang);
 
 const links = [
     { href: "#projects", label: t.nav.projects },
@@ -47,6 +49,7 @@ const links = [
         <nav class="nav" aria-label="Main Navigation">
             {links.map((l) => <a href={l.href}>{l.label}</a>)}
             <a href={githubUrl} target="_blank" rel="noopener noreferrer me">GitHub</a>
+            <a href={cv.href} download={cv.file} aria-label={cv.label} data-astro-reload>CV</a>
         </nav>
 
         <div class="tools">
@@ -103,6 +106,10 @@ const links = [
             <a href={githubUrl} target="_blank" rel="noopener noreferrer me" class="mobile-nav-link">
                 <span>GitHub</span>
                 <span class="hint" aria-hidden="true">↗</span>
+            </a>
+            <a href={cv.href} download={cv.file} aria-label={cv.label} class="mobile-nav-link" data-astro-reload>
+                <span>CV (PDF)</span>
+                <span class="hint" aria-hidden="true">↓</span>
             </a>
             <button id="mobile-cmd-btn" type="button">
                 <span>{t.nav.commandPalette}</span>

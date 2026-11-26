@@ -24,5 +24,8 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+# CV generado en cada build (scripts/cv.mjs)
+src/data/cv/generated.json
+cv-out/
 # Generado en cada build
 public/deploy.json

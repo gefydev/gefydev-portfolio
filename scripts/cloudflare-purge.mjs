@@ -11,7 +11,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
-export const PATHS = ['/', '/es', '/en', '/llms.txt', '/sitemap.xml', '/cv.pdf', '/es/cv.pdf'];
+export const PATHS = ['/', '/es', '/en', '/llms.txt', '/sitemap.xml', '/en/cv.pdf', '/es/cv.pdf'];
 
 export function normalize(body) {
   return Buffer.from(body)
