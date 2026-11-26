@@ -21,6 +21,8 @@ const menuAriaLabel =
         ? "Alternar menú de navegación móvil"
         : "Toggle mobile navigation menu";
 
+const githubUrl = "https://github.com/gefydev";
+
 const links = [
     { href: "#projects", label: t.nav.projects },
     { href: "#contributions", label: t.nav.contributions },
@@ -44,6 +46,7 @@ const links = [
 
         <nav class="nav" aria-label="Main Navigation">
             {links.map((l) => <a href={l.href}>{l.label}</a>)}
+            <a href={githubUrl} target="_blank" rel="noopener noreferrer me">GitHub</a>
         </nav>
 
         <div class="tools">
@@ -97,6 +100,10 @@ const links = [
                     </a>
                 ))
             }
+            <a href={githubUrl} target="_blank" rel="noopener noreferrer me" class="mobile-nav-link">
+                <span>GitHub</span>
+                <span class="hint" aria-hidden="true">↗</span>
+            </a>
             <button id="mobile-cmd-btn" type="button">
                 <span>{t.nav.commandPalette}</span>
                 <span class="hint" aria-hidden="true">⌘K</span>
