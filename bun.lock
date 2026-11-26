@@ -13,7 +13,7 @@
         "@tailwindcss/vite": "^4.3.3",
         "astro": "^7.2.4",
         "canvas-confetti": "^1.9.4",
-        "pdfkit": "0",
+        "pdfkit": "^0.21.0",
         "tailwindcss": "^4.3.3",
       },
       "devDependencies": {

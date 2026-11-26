@@ -6,7 +6,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   // Los archivos estáticos y de descubrimiento son cacheados directamente en el Edge por Cloudflare
   if (
-    pathname.includes('.') ||
+    (pathname.includes('.') && pathname !== '/cv.pdf') ||
     pathname.startsWith('/_astro/')
   ) {
     return next();
@@ -44,8 +44,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   // "/" no tiene contenido propio: redirige (302, depende del visitante) a /es o /en.
   // private/no-store para que ni la CDN ni el navegador la cacheen y la raíz no duplique /en.
-  if (pathname === '/') {
-    const redirect = context.redirect(`/${lang}`, 302);
+  // "/cv.pdf" sigue la misma regla y manda al PDF del idioma.
+  if (pathname === '/' || pathname === '/cv.pdf') {
+    const redirect = context.redirect(pathname === '/' ? `/${lang}` : `/${lang}/cv.pdf`, 302);
+    if (pathname !== '/') redirect.headers.set('X-Robots-Tag', 'noindex');
     redirect.headers.set('Cache-Control', 'private, no-store');
     redirect.headers.set('CDN-Cache-Control', 'no-store');
     redirect.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');

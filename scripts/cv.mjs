@@ -1,7 +1,10 @@
-// Genera el CV en PDF antes de compilar: public/cv.pdf (EN, Letter) y public/es/cv.pdf (ES, A4).
+// Genera el CV en PDF antes de compilar: EN (Letter) y ES (A4). Quedan en src/data/cv/generated.json (los sirven
+// src/pages/{en,es}/cv.pdf.ts) y en cv-out/ para revisarlos.
+// La fecha "Updated" es la del último cambio de contenido o datos, no la del build (ver resolveVersion).
 // Contenido: src/data/cv/cv.{en,es}.md. Números: src/data/github-snapshot.json (el mismo que usa el sitio).
 // Una columna, texto real, Arimo (métrica de Arial) embebida, sin tablas ni encabezado/pie. Falla (y corta el build) si queda un
 // {{placeholder}} o [FALTA], o si no entra en una página al tamaño mínimo: nunca recorta contenido.
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
@@ -16,8 +19,8 @@ const FONTS = {
 };
 
 export const VARIANTS = {
-  en: { source: 'src/data/cv/cv.en.md', out: 'public/cv.pdf', size: 'LETTER', title: 'Genaro Febbo Yapur — Resume' },
-  es: { source: 'src/data/cv/cv.es.md', out: 'public/es/cv.pdf', size: 'A4', title: 'Genaro Febbo Yapur — Currículum' }
+  en: { source: 'src/data/cv/cv.en.md', out: 'cv-out/GenaroFebboYapur-CV-EN.pdf', size: 'LETTER', title: 'Genaro Febbo Yapur — Resume' },
+  es: { source: 'src/data/cv/cv.es.md', out: 'cv-out/GenaroFebboYapur-CV-ES.pdf', size: 'A4', title: 'Genaro Febbo Yapur — Currículum' }
 };
 const MARGIN = 36; // 0,5"
 const SIZES = [11, 10.75, 10.5, 10.25, 10]; // rango 10–11 pt: se usa el más grande que entra en una página
@@ -159,13 +162,33 @@ function layout(doc, blocks, size, draw) {
 
 function newDocument(variant, lang, date) {
   // margen inferior 0 en el motor: el control de "una sola página" lo hace layout(), no el salto automático
-  const doc = new PDFDocument({ size: variant.size, margins: { top: MARGIN, left: MARGIN, right: MARGIN, bottom: 0 }, lang, pdfVersion: '1.7', displayTitle: true, info: { Title: variant.title, Author: 'Genaro Febbo Yapur', Subject: 'CV', CreationDate: date } });
+  const doc = new PDFDocument({ size: variant.size, margins: { top: MARGIN, left: MARGIN, right: MARGIN, bottom: 0 }, lang, pdfVersion: '1.7', displayTitle: true, info: { Title: variant.title, Author: 'Genaro Febbo Yapur', Subject: 'CV', CreationDate: date, ModDate: date } });
   doc.registerFont('regular', FONTS.regular);
   doc.registerFont('bold', FONTS.bold);
   return doc;
 }
 
 // `date`: la fecha de los datos (no la hora del build), para que el PDF sea idéntico si nada cambió y no dispare purgas.
+export function stamp(lang, date) {
+  const p = Object.fromEntries(new Intl.DateTimeFormat(lang === 'es' ? 'es-AR' : 'en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(date).map((x) => [x.type, x.value]));
+  const month = p.month.replace('.', '').slice(0, 3);
+  const day = `${p.day} ${month} ${p.year}, ${p.hour}:${p.minute} UTC`;
+  return lang === 'es' ? `Actualizado el ${day}` : `Updated ${day}`;
+}
+
+/**
+ * Fecha del último cambio real del CV: si el texto ya completado (contenido + datos) es el mismo que alguna versión
+ * conocida, se conserva su fecha. Se miran la versión del build anterior (caché de build) y la versionada en el repo.
+ */
+export function resolveVersion(markdown, known, now) {
+  const hash = crypto.createHash('sha256').update(markdown).digest('hex');
+  const same = known.find((v) => v?.hash === hash && !Number.isNaN(Date.parse(v.updatedAt)));
+  if (same) return { hash, updatedAt: same.updatedAt };
+  const at = new Date(now);
+  at.setUTCSeconds(0, 0);
+  return { hash, updatedAt: at.toISOString() };
+}
+
 export async function renderCv(lang, markdown, date = new Date(0)) {
   const variant = VARIANTS[lang];
   const blocks = parse(markdown);
@@ -183,22 +206,47 @@ export async function renderCv(lang, markdown, date = new Date(0)) {
     doc.on('error', reject);
   });
   layout(doc, blocks, size, true);
+  // marca discreta dentro del margen inferior: permite distinguir un PDF viejo de uno nuevo
+  const note = stamp(lang, date);
+  doc.font('regular').fontSize(7.5).fillColor('#555').text(note, MARGIN, doc.page.height - MARGIN + 8, { lineBreak: false });
   doc.end();
   await done;
   return { pdf: Buffer.concat(chunks), size };
 }
 
-export async function main({ log = console.log } = {}) {
-  const snapshot = JSON.parse(fs.readFileSync(path.join(root, 'src/data/github-snapshot.json'), 'utf8'));
-  const values = placeholders(snapshot);
-  const date = new Date(`${String(snapshot.fetchedAt || '2026-11-26').slice(0, 10)}T00:00:00Z`);
+const STATE = 'src/data/cv-state.json'; // versionado, junto al snapshot
+const CACHE = 'node_modules/.cache/portfolio/cv-state.json'; // sobrevive entre builds con la caché de build de Vercel
+const readJson = (p) => {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(root, p), 'utf8'));
+  } catch {
+    return {};
+  }
+};
+const writeFile = (p, data) => {
+  fs.mkdirSync(path.dirname(path.join(root, p)), { recursive: true });
+  fs.writeFileSync(path.join(root, p), data);
+};
+
+export async function main({ log = console.log, env = process.env, argv = process.argv.slice(2), now = Date.now() } = {}) {
+  const values = placeholders(readJson('src/data/github-snapshot.json'));
+  const committed = readJson(STATE);
+  const cached = readJson(CACHE);
+  const state = {};
+  const generated = {};
   for (const [lang, v] of Object.entries(VARIANTS)) {
     const started = Date.now();
-    const { pdf, size } = await renderCv(lang, fill(fs.readFileSync(path.join(root, v.source), 'utf8'), values), date);
-    fs.mkdirSync(path.dirname(path.join(root, v.out)), { recursive: true });
-    fs.writeFileSync(path.join(root, v.out), pdf);
-    log(`[cv] ${v.out}: ${v.size}, ${size} pt, ${Math.round(pdf.length / 1024)} KB, ${Date.now() - started} ms`);
+    const markdown = fill(fs.readFileSync(path.join(root, v.source), 'utf8'), values);
+    state[lang] = resolveVersion(markdown, [cached[lang], committed[lang]], now);
+    const { pdf, size } = await renderCv(lang, markdown, new Date(state[lang].updatedAt));
+    writeFile(v.out, pdf);
+    generated[lang] = pdf.toString('base64');
+    log(`[cv] ${lang}: ${v.size}, ${size} pt, ${Math.round(pdf.length / 1024)} KB, ${stamp(lang, new Date(state[lang].updatedAt))}, ${Date.now() - started} ms`);
   }
+  writeFile('src/data/cv/generated.json', JSON.stringify(generated));
+  writeFile(CACHE, JSON.stringify(state));
+  // el archivo versionado solo se reescribe en el workspace de Vercel/CI o con --write (nunca se commitea solo)
+  if (argv.includes('--write') || env.VERCEL || env.CI) writeFile(STATE, `${JSON.stringify(state, null, 2)}\n`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main();

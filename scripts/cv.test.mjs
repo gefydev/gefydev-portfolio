@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { fill, parse, placeholders, renderCv, runs, VARIANTS } from './cv.mjs';
+import { fill, parse, placeholders, renderCv, resolveVersion, runs, stamp, VARIANTS } from './cv.mjs';
 
 const read = (p) => fs.readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
 const values = placeholders(JSON.parse(read('src/data/github-snapshot.json')));
@@ -63,4 +63,27 @@ test('el mismo contenido y fecha dan exactamente el mismo PDF (para no purgar la
   await new Promise((r) => setTimeout(r, 1100));
   const b = await renderCv('en', md, date);
   assert.ok(a.pdf.equals(b.pdf));
+});
+
+test('la fecha es la del último cambio de contenido o datos, no la del build', () => {
+  const first = resolveVersion('contenido', [], Date.parse('2026-11-26T12:17:45Z'));
+  assert.equal(first.updatedAt, '2026-11-26T12:17:00.000Z');
+  // mismo contenido, otro build: se conserva (sirve la caché de build o el archivo versionado)
+  assert.deepEqual(resolveVersion('contenido', [undefined, first], Date.parse('2026-11-28T00:00:00Z')), first);
+  // cambió un número: fecha nueva
+  assert.equal(resolveVersion('contenido 36', [first, first], Date.parse('2026-11-28T00:00:00Z')).updatedAt, '2026-11-28T00:00:00.000Z');
+});
+
+test('el pie dice la fecha y hora UTC en cada idioma y entra en la página; CreationDate y ModDate salen de ella', async () => {
+  const date = new Date('2026-11-26T12:17:00Z');
+  assert.equal(stamp('en', date), 'Updated 26 Nov 2026, 12:17 UTC');
+  assert.equal(stamp('es', date), 'Actualizado el 26 nov 2026, 12:17 UTC');
+  for (const lang of ['en', 'es']) {
+    const { pdf } = await renderCv(lang, fill(read(VARIANTS[lang].source), values), date);
+    const r = await extract(pdf);
+    assert.equal(r.pages, 1);
+    assert.ok(r.text.includes(stamp(lang, date)), r.text.slice(-120));
+    assert.match(r.meta.CreationDate, /^D:20261126121700/);
+    assert.match(r.meta.ModDate, /^D:20261126121700/);
+  }
 });
