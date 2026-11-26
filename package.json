@@ -8,7 +8,9 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/github-data.mjs && astro build",
+    "test": "node --test scripts/*.test.mjs",
+    "data": "node scripts/github-data.mjs --write",
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro"

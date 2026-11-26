@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { projects, openSourceContributions } from '../data/projects';
 import { techStack } from '../data/stack';
+import { githubDate } from '../data/github';
 
 export const GET: APIRoute = async () => {
   const siteUrl = 'https://gefy.dev';
@@ -18,7 +19,9 @@ export const GET: APIRoute = async () => {
 ${projects.map((p) => `- [${p.name}](${p.homepageUrl || p.githubUrl}): ${p.description.en}${p.githubUrl ? ` (Repository: [GitHub](${p.githubUrl}))` : ''}`).join('\n')}
 
 ## Open Source Contributions
-${openSourceContributions.map((c) => `- [${c.author}/${c.repo}](${c.url}): ${c.description.en} (Role: ${c.role.en}, Stars: ${c.stars})`).join('\n')}
+${openSourceContributions.map((c) => `- [${c.author}/${c.repo}](${c.url}): ${c.description.en} (Role: ${c.role.en}, Merged PRs: ${c.prsCount}, Stars: ${c.stars})`).join('\n')}
+
+GitHub data as of ${githubDate('en')}.
 
 ## Technical Competencies
 ${techStack.map((t) => `- **${t.name}** (${t.roleBadge.en}): ${t.description.en}`).join('\n')}
@@ -34,7 +37,7 @@ ${techStack.map((t) => `- **${t.name}** (${t.roleBadge.en}): ${t.description.en}
   return new Response(content.trim(), {
     headers: {
       'Content-Type': 'text/markdown; charset=utf-8',
-      'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
     },
   });
 };

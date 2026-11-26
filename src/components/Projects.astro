@@ -1,6 +1,7 @@
 ---
 import { projects, openSourceContributions } from '../data/projects';
 import { translations } from '../data/translations';
+import { githubDate } from '../data/github';
 import ProjectCard from './ProjectCard.astro';
 
 interface Props {
@@ -78,6 +79,7 @@ const t = translations[lang];
     <div class="section-head">
       <h2 id="contributions-title">{t.projects.contributionsTitle}</h2>
       <p class="sub">{t.projects.contributionsSubtitle}</p>
+      {githubDate(lang) && <p class="meta">{lang === 'es' ? 'Datos de GitHub al' : 'GitHub data as of'} {githubDate(lang)}</p>}
     </div>
 
     <ol>

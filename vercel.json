@@ -35,7 +35,7 @@
       ]
     },
     {
-      "source": "/(sitemap.xml|robots.txt|llms.txt|favicon.ico)",
+      "source": "/(sitemap.xml|robots.txt|favicon.ico)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -48,6 +48,23 @@
         {
           "key": "Cloudflare-CDN-Cache-Control",
           "value": "max-age=604800, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/llms.txt",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "max-age=3600"
+        },
+        {
+          "key": "Cloudflare-CDN-Cache-Control",
+          "value": "max-age=3600"
         }
       ]
     }

@@ -1,0 +1,30 @@
+# Recompila gefy.dev cada tanto para refrescar los datos de GitHub (stars, PRs). No commitea nada.
+# Necesita el secreto VERCEL_DEPLOY_HOOK_URL (Vercel → Settings → Git → Deploy Hooks, rama main).
+# Intervalo: cambiar el cron (por defecto cada 6 horas).
+name: Scheduled rebuild
+
+on:
+  schedule:
+    - cron: '41 */6 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: scheduled-rebuild
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call the Vercel Deploy Hook
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::notice::VERCEL_DEPLOY_HOOK_URL no está configurado; no se hace nada."
+            exit 0
+          fi
+          curl --fail --silent --show-error --retry 3 --max-time 30 -X POST "$HOOK" > /dev/null
+          echo "Deploy pedido a Vercel."
