@@ -15,7 +15,7 @@ Contributor · {{xcl_prs_merged}} merged pull requests, of {{xcl_prs_total}} sub
 - Implemented changes to the shader recompiler that turns RDNA2 shaders into DXIL, including a mask write fix and a per-lane backend option. [PR #2074](https://github.com/xcl-dev/xcl/pull/2074) · [PR #1745](https://github.com/xcl-dev/xcl/pull/1745)
 - Fixed Direct3D 12.X video-memory handling so memory arenas never overlap, and corrected an 8-byte write in a queue before its layout is known. [PR #122](https://github.com/xcl-dev/xcl/pull/122) · [PR #121](https://github.com/xcl-dev/xcl/pull/121)
 - Redirected copy, replace and move operations in the virtual file system, and kept the PC's own folders visible on a mounted console drive. [PR #59](https://github.com/xcl-dev/xcl/pull/59) · [PR #49](https://github.com/xcl-dev/xcl/pull/49)
-- Full list of merged pull requests: github.com/xcl-dev/xcl/pulls?q=is%3Apr+author%3Agefydev+is%3Amerged
+- [All merged pull requests →](https://github.com/xcl-dev/xcl/pulls?q=is%3Apr+author%3Agefydev+is%3Amerged)
 
 **stremio-enhanced** · TypeScript · Electron · React · REVENGE977/stremio-enhanced
 Core Contributor · {{stremio_prs_merged}} merged pull requests · {{stremio_stars}} GitHub stars

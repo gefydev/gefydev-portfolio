@@ -1,10 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { fill, parse, placeholders, renderCv, resolveVersion, runs, stamp, VARIANTS } from './cv.mjs';
+import { fill, parse, placeholders, renderCv, resolveVersion, runs, shortStars, stamp, VARIANTS } from './cv.mjs';
 
 const read = (p) => fs.readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
-const values = placeholders(JSON.parse(read('src/data/github-snapshot.json')));
+const snapshot = JSON.parse(read('src/data/github-snapshot.json'));
+const values = placeholders(snapshot, 'en');
+const valuesFor = (lang) => placeholders(snapshot, lang);
 const SECTIONS = { en: ['EDUCATION', 'OPEN SOURCE', 'PROJECTS', 'SKILLS', 'OTHER'], es: ['EDUCACIÓN', 'PROYECTOS DE CÓDIGO ABIERTO', 'PROYECTOS', 'HABILIDADES', 'OTROS'] };
 
 async function extract(pdf) {
@@ -19,14 +21,18 @@ async function extract(pdf) {
 
 for (const lang of ['en', 'es']) {
   test(`CV ${lang}: una página, todas las secciones, sin huecos, enlaces válidos y metadatos`, async () => {
-    const { pdf, size } = await renderCv(lang, fill(read(VARIANTS[lang].source), values));
+    const { pdf, size } = await renderCv(lang, fill(read(VARIANTS[lang].source), valuesFor(lang)));
     const r = await extract(pdf);
     assert.equal(r.pages, 1);
     assert.ok(size >= 10 && size <= 12);
     assert.match(r.text, /Genaro Febbo Yapur/);
     for (const s of SECTIONS[lang]) assert.ok(r.text.includes(s), `falta la sección ${s}`);
     assert.doesNotMatch(r.text, /\{\{|\}\}|\[FALTA|\bFALTA\b/);
-    assert.ok(r.text.includes(String(values.xcl_prs_merged)) && r.text.includes(String(values.stremio_stars)));
+    assert.ok(r.text.includes(String(values.xcl_prs_merged)) && r.text.includes(valuesFor(lang).stremio_stars));
+    assert.ok(r.text.includes(valuesFor(lang).xcl_stars.replace('\u00a0', ' ')), 'stars redondeadas');
+    assert.doesNotMatch(r.text, /pulls\?q=|is%3Apr/, 'la URL de la lista de PRs no se muestra');
+    assert.ok(r.text.includes(lang === 'es' ? 'Todos los pull requests mergeados →' : 'All merged pull requests →'));
+    assert.ok(r.links.includes('https://github.com/xcl-dev/xcl/pulls?q=is%3Apr+author%3Agefydev+is%3Amerged'));
     assert.ok(r.links.length >= 20, `${r.links.length} enlaces`);
     for (const url of r.links) assert.doesNotThrow(() => new URL(url));
     assert.ok(r.links.every((u) => /^(https:\/\/(github\.com|linkedin\.com|gefy\.dev|spotifust\.gefy\.dev|cenba\.com\.ar|comidolar\.com\.ar)|mailto:hi@gefy\.dev)/.test(u)), r.links.join(' '));
@@ -79,11 +85,22 @@ test('el pie dice la fecha y hora UTC en cada idioma y entra en la página; Crea
   assert.equal(stamp('en', date), 'Updated 26 Nov 2026, 12:17 UTC');
   assert.equal(stamp('es', date), 'Actualizado el 26 nov 2026, 12:17 UTC');
   for (const lang of ['en', 'es']) {
-    const { pdf } = await renderCv(lang, fill(read(VARIANTS[lang].source), values), date);
+    const { pdf } = await renderCv(lang, fill(read(VARIANTS[lang].source), valuesFor(lang)), date);
     const r = await extract(pdf);
     assert.equal(r.pages, 1);
     assert.ok(r.text.includes(stamp(lang, date)), r.text.slice(-120));
     assert.match(r.meta.CreationDate, /^D:20261126121700/);
     assert.match(r.meta.ModDate, /^D:20261126121700/);
+  }
+});
+
+test('stars redondeadas solo en el CV; una estrella más no cambia el texto ni la fecha, un PR más sí', () => {
+  assert.deepEqual([shortStars(999, 'en'), shortStars(1000, 'en'), shortStars(8437, 'en'), shortStars(8437, 'es'), shortStars(917, 'es')], ['999', '1.0k', '8.4k', '8,4\u00a0k', '917']);
+  const snap = (stars, merged) => ({ stars: { 'xcl-dev/xcl': { value: stars }, 'REVENGE977/stremio-enhanced': { value: 917 } }, prs: { 'xcl-dev/xcl': { total: 43, merged }, 'REVENGE977/stremio-enhanced': { total: 10, merged: 8 } } });
+  for (const lang of ['en', 'es']) {
+    const md = (s) => fill(read(VARIANTS[lang].source), placeholders(s, lang));
+    const first = resolveVersion(md(snap(8427, 35)), [], Date.parse('2026-01-01T00:00:00Z'));
+    assert.equal(resolveVersion(md(snap(8440, 35)), [first], Date.parse('2026-02-01T00:00:00Z')).updatedAt, first.updatedAt);
+    assert.notEqual(resolveVersion(md(snap(8440, 36)), [first], Date.parse('2026-02-01T00:00:00Z')).updatedAt, first.updatedAt);
   }
 });

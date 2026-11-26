@@ -25,21 +25,29 @@ export const VARIANTS = {
 const MARGIN = 36; // 0,5"
 const SIZES = [11, 10.75, 10.5, 10.25, 10]; // rango 10–11 pt: se usa el más grande que entra en una página
 
-export function placeholders(snapshot) {
+// En el CV las stars van redondeadas desde 1000 ("8.4k" / "8,4 k"): así el PDF (y su fecha) no cambia con cada estrella.
+export function shortStars(n, lang) {
+  if (!Number.isInteger(n)) return undefined;
+  if (n < 1000) return String(n);
+  const k = (Math.round(n / 100) / 10).toFixed(1);
+  return lang === 'es' ? `${k.replace('.', ',')}\u00a0k` : `${k}k`;
+}
+
+export function placeholders(snapshot, lang = 'en') {
   const xcl = 'xcl-dev/xcl';
   const stremio = 'REVENGE977/stremio-enhanced';
   return {
     xcl_prs_merged: snapshot.prs?.[xcl]?.merged,
     xcl_prs_total: snapshot.prs?.[xcl]?.total,
-    xcl_stars: snapshot.stars?.[xcl]?.value,
+    xcl_stars: shortStars(snapshot.stars?.[xcl]?.value, lang),
     stremio_prs_merged: snapshot.prs?.[stremio]?.merged,
     stremio_prs_total: snapshot.prs?.[stremio]?.total,
-    stremio_stars: snapshot.stars?.[stremio]?.value
+    stremio_stars: shortStars(snapshot.stars?.[stremio]?.value, lang)
   };
 }
 
 export function fill(text, values) {
-  const out = text.replace(/\{\{(\w+)\}\}/g, (m, k) => (Number.isInteger(values[k]) ? String(values[k]) : m));
+  const out = text.replace(/\{\{(\w+)\}\}/g, (m, k) => (Number.isInteger(values[k]) || (typeof values[k] === 'string' && values[k]) ? String(values[k]) : m));
   const left = out.match(/\{\{[^}]*\}\}|\[FALTA[^\]]*\]?/g);
   if (left) throw new Error(`el CV tiene datos sin completar: ${[...new Set(left)].join(', ')}`);
   return out;
@@ -229,14 +237,14 @@ const writeFile = (p, data) => {
 };
 
 export async function main({ log = console.log, env = process.env, argv = process.argv.slice(2), now = Date.now() } = {}) {
-  const values = placeholders(readJson('src/data/github-snapshot.json'));
+  const snapshot = readJson('src/data/github-snapshot.json');
   const committed = readJson(STATE);
   const cached = readJson(CACHE);
   const state = {};
   const generated = {};
   for (const [lang, v] of Object.entries(VARIANTS)) {
     const started = Date.now();
-    const markdown = fill(fs.readFileSync(path.join(root, v.source), 'utf8'), values);
+    const markdown = fill(fs.readFileSync(path.join(root, v.source), 'utf8'), placeholders(snapshot, lang));
     state[lang] = resolveVersion(markdown, [cached[lang], committed[lang]], now);
     const { pdf, size } = await renderCv(lang, markdown, new Date(state[lang].updatedAt));
     writeFile(v.out, pdf);

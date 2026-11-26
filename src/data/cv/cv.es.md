@@ -15,7 +15,7 @@ Contribuidor · {{xcl_prs_merged}} pull requests mergeados, de {{xcl_prs_total}}
 - Implementé cambios en el recompilador de shaders que convierte RDNA2 a DXIL, incluida una corrección de máscara y una opción por lane para el backend. [PR #2074](https://github.com/xcl-dev/xcl/pull/2074) · [PR #1745](https://github.com/xcl-dev/xcl/pull/1745)
 - Corregí el manejo de memoria de video de Direct3D 12.X para que las áreas no se superpongan, y una escritura de 8 bytes en una cola antes de conocer su layout. [PR #122](https://github.com/xcl-dev/xcl/pull/122) · [PR #121](https://github.com/xcl-dev/xcl/pull/121)
 - Redirigí las operaciones de copiar, reemplazar y mover en el sistema de archivos virtual, y dejé visibles las carpetas de la PC en una unidad de consola montada. [PR #59](https://github.com/xcl-dev/xcl/pull/59) · [PR #49](https://github.com/xcl-dev/xcl/pull/49)
-- Lista completa de pull requests mergeados: github.com/xcl-dev/xcl/pulls?q=is%3Apr+author%3Agefydev+is%3Amerged
+- [Todos los pull requests mergeados →](https://github.com/xcl-dev/xcl/pulls?q=is%3Apr+author%3Agefydev+is%3Amerged)
 
 **stremio-enhanced** · TypeScript · Electron · React · REVENGE977/stremio-enhanced
 Contribuidor principal · {{stremio_prs_merged}} pull requests mergeados · {{stremio_stars}} estrellas en GitHub
