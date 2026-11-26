@@ -25,7 +25,7 @@ Core Contributor · {{stremio_prs_merged}} merged pull requests · {{stremio_sta
 ### Projects
 
 **CENBA: Student Union website, Colegio Nacional de Buenos Aires** · Astro · React · TypeScript · Tailwind · Cloudflare Workers · D1 · R2 · Durable Objects · cenba.com.ar · In production
-- Built the union's site with a no-code editing panel for news, bylaws and elections.
+- Designed and built the site as sole developer, with a no-code editing panel for news, bylaws and elections.
 - Built a Cloudflare Workers backend with an exam library (PDF viewer and OCR) and live vote counting over WebSocket.
 
 **ComiDólar: real-time Argentine currency monitor** · Astro · TypeScript · Tailwind · GitHub Actions · comidolar.com.ar · In production

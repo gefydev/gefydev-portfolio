@@ -25,7 +25,7 @@ Contribuidor principal · {{stremio_prs_merged}} pull requests mergeados · {{st
 ### Proyectos
 
 **CENBA: sitio del Centro de Estudiantes del CNBA** · Astro · React · TypeScript · Tailwind · Cloudflare Workers · D1 · R2 · Durable Objects · cenba.com.ar · En producción
-- Desarrollé el sitio con un panel de edición sin código para noticias, estatuto y elecciones.
+- Diseñé y desarrollé el sitio como único desarrollador, con un panel de edición sin código para noticias, estatuto y elecciones.
 - Armé el backend en Cloudflare Workers, con biblioteca de exámenes (visor PDF y OCR) y escrutinio en vivo por WebSocket.
 
 **ComiDólar: monitor de divisas en tiempo real** · Astro · TypeScript · Tailwind · GitHub Actions · comidolar.com.ar · En producción
