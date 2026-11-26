@@ -72,6 +72,31 @@ const tag = (name: string, color = '#a1a1aa'): TechTag => ({ name, color, bg: 'r
 
 export const projects: Project[] = [
   {
+    id: 'xcl',
+    name: 'XCL',
+    category: 'rust',
+    featured: true,
+    title: {
+      es: 'XCL — Capa de compatibilidad Xbox Series → Windows',
+      en: 'XCL — Xbox Series → Windows compatibility layer',
+    },
+    description: {
+      es: 'Capa de compatibilidad open source, escrita en Rust, que corre en Windows juegos de Xbox Series X|S que ya tenés, sin emular la CPU: el código x64 corre nativo y los shaders RDNA2 se recompilan a DXIL sobre Direct3D 12. Aporto como contribuidor.',
+      en: 'Open source compatibility layer, written in Rust, that runs Xbox Series X|S games you own on Windows with no CPU emulation: the x64 code runs natively and RDNA2 shaders are recompiled to DXIL on Direct3D 12. I contribute to it.',
+    },
+    githubUrl: 'https://github.com/xcl-dev/xcl',
+    techTags: [techBadgeStyles.Rust, tag('Direct3D 12'), tag('HLSL / DXIL')],
+    stars: 8424,
+    badge: {
+      es: 'Open Source',
+      en: 'Open Source',
+    },
+    accentColor: '#735ed5',
+    placeholderPattern: 'web',
+    image: '/images/projects/xcl.webp',
+    imageFull: '/images/projects/xcl-full.webp',
+  },
+  {
     id: 'cenba',
     name: 'CENBA',
     category: 'astro',
@@ -237,6 +262,22 @@ export const projects: Project[] = [
 ];
 
 export const openSourceContributions: OpenSourceContribution[] = [
+  {
+    repo: 'xcl',
+    author: 'xcl-dev',
+    url: 'https://github.com/xcl-dev/xcl',
+    stars: 8424,
+    prsCount: 35,
+    role: {
+      es: 'Contribuidor',
+      en: 'Contributor',
+    },
+    description: {
+      es: 'Capa de compatibilidad Xbox Series → Windows. Mis cambios fusionados tocan el recompilador de shaders (RDNA2 → DXIL), los gráficos D3D12.X, el sistema de archivos virtual, las tareas asíncronas y el guardado de partidas, y la configuración de cada título.',
+      en: 'Xbox Series → Windows compatibility layer. My merged changes cover the shader recompiler (RDNA2 → DXIL), D3D12.X graphics, the virtual file system, async tasks and game saves, and per-title configuration.',
+    },
+    techTags: [techBadgeStyles.Rust, tag('Direct3D 12'), tag('HLSL / DXIL')],
+  },
   {
     repo: 'stremio-enhanced',
     author: 'REVENGE977',

@@ -76,7 +76,7 @@ const thumb640 = project.image;
                         {lang === "es" ? "Ver Sitio" : "Live Demo"}
                     </a>
                 ) : (
-                    <span class="stars">CLI / TUI Tool</span>
+                    project.placeholderPattern === "terminal" && <span class="stars">CLI / TUI Tool</span>
                 )
             }
             {

@@ -161,6 +161,8 @@
   .brand { display: inline-flex; align-items: center; gap: var(--s-2); color: var(--fg); text-decoration: none; font-weight: 600; letter-spacing: -0.01em; }
   .brand img { width: 20px; height: 20px; }
   .nav { display: none; margin-left: auto; gap: var(--s-6); }
+  .nav a { white-space: nowrap; }
+  @media (max-width: 900px) { .nav { gap: var(--s-3); } }
   .nav a { color: var(--fg-2); text-decoration: none; font-size: var(--fs-sm); font-weight: 500; padding-block: var(--s-3); transition: color 120ms ease; }
   .nav a:hover { color: var(--fg); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 0.5em; text-decoration-thickness: 1px; }
   .tools { display: flex; align-items: center; gap: var(--s-3); margin-left: auto; }
