@@ -1,0 +1,57 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { fill, parse, placeholders, renderCv, runs, VARIANTS } from './cv.mjs';
+
+const read = (p) => fs.readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
+const values = placeholders(JSON.parse(read('src/data/github-snapshot.json')));
+const SECTIONS = { en: ['EDUCATION', 'OPEN SOURCE', 'PROJECTS', 'SKILLS', 'OTHER'], es: ['EDUCACIÓN', 'PROYECTOS DE CÓDIGO ABIERTO', 'PROYECTOS', 'HABILIDADES', 'OTROS'] };
+
+async function extract(pdf) {
+  const { getDocument } = await import('pdfjs-dist/legacy/build/pdf.mjs');
+  const doc = await getDocument({ data: new Uint8Array(pdf), useSystemFonts: false, verbosity: 0 }).promise;
+  const page = await doc.getPage(1);
+  const text = (await page.getTextContent()).items.map((i) => i.str).join(' ').replace(/\s+/g, ' ');
+  const links = (await page.getAnnotations()).filter((a) => a.subtype === 'Link').map((a) => a.url || a.unsafeUrl);
+  const meta = (await doc.getMetadata()).info;
+  return { pages: doc.numPages, text, links, meta };
+}
+
+for (const lang of ['en', 'es']) {
+  test(`CV ${lang}: una página, todas las secciones, sin huecos, enlaces válidos y metadatos`, async () => {
+    const { pdf, size } = await renderCv(lang, fill(read(VARIANTS[lang].source), values));
+    const r = await extract(pdf);
+    assert.equal(r.pages, 1);
+    assert.ok(size >= 10 && size <= 12);
+    assert.match(r.text, /Genaro Febbo Yapur/);
+    for (const s of SECTIONS[lang]) assert.ok(r.text.includes(s), `falta la sección ${s}`);
+    assert.doesNotMatch(r.text, /\{\{|\}\}|\[FALTA|\bFALTA\b/);
+    assert.ok(r.text.includes(String(values.xcl_prs_merged)) && r.text.includes(String(values.stremio_stars)));
+    assert.ok(r.links.length >= 20, `${r.links.length} enlaces`);
+    for (const url of r.links) assert.doesNotThrow(() => new URL(url));
+    assert.ok(r.links.every((u) => /^(https:\/\/(github\.com|linkedin\.com|gefy\.dev|spotifust\.gefy\.dev|cenba\.com\.ar|comidolar\.com\.ar)|mailto:hi@gefy\.dev)/.test(u)), r.links.join(' '));
+    assert.ok(r.links.includes('https://github.com/xcl-dev/xcl/pull/2074'));
+    assert.equal(r.meta.Author, 'Genaro Febbo Yapur');
+    assert.match(r.meta.Title, /Genaro Febbo Yapur/);
+    // ningún nombre del juego meta de XCL
+    assert.doesNotMatch(r.text, /grand\s*theft|\bGTA\b|rockstar|newer retail game/i);
+  });
+}
+
+test('si queda un {{placeholder}} o [FALTA] el build falla', () => {
+  assert.throws(() => fill('x {{no_existe}} y', values), /sin completar/);
+  assert.throws(() => fill('x {{xcl_stars}}', {}), /sin completar/);
+  assert.throws(() => fill('algo [FALTA: dato]', values), /sin completar/);
+});
+
+test('si no entra en una página falla en vez de recortar', async () => {
+  const long = `**N**\ncontacto\n### A\n${Array.from({ length: 90 }, (_, i) => `- línea ${i} de contenido`).join('\n')}\n`;
+  await assert.rejects(renderCv('en', long), /no entra en una página/);
+});
+
+test('enlaces escritos como texto quedan clicables', () => {
+  assert.deepEqual(runs('Web: gefy.dev').at(-1), { text: 'gefy.dev', link: 'https://gefy.dev' });
+  assert.equal(runs('hi@gefy.dev')[0].link, 'mailto:hi@gefy.dev');
+  assert.equal(runs('xcl-dev/xcl')[0].link, 'https://github.com/xcl-dev/xcl');
+  assert.equal(parse('### T\n- a\nb').length, 3);
+});

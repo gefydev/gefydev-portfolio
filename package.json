@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/github-data.mjs && astro build",
+    "build": "node scripts/github-data.mjs && node scripts/cv.mjs && astro build",
+    "cv": "node scripts/cv.mjs",
     "test": "node --test scripts/*.test.mjs",
     "data": "node scripts/github-data.mjs --write",
     "preview": "astro preview",
@@ -18,15 +19,18 @@
   "dependencies": {
     "@astrojs/node": "^11.1.2",
     "@astrojs/vercel": "^11.0.5",
+    "@expo-google-fonts/arimo": "^0.4.3",
     "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/geist-mono": "^5.3.0",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.2.4",
     "canvas-confetti": "^1.9.4",
+    "pdfkit": "^0.19.0",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.9.0",
+    "pdfjs-dist": "^6.5.438",
     "sharp": "^0.35.3"
   }
 }

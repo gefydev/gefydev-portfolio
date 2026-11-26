@@ -1,5 +1,6 @@
 ---
 import { translations } from "../data/translations";
+import { cvLink } from "../data/cv";
 
 interface Props {
     lang: "es" | "en";
@@ -7,6 +8,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = translations[lang];
+const cv = cvLink(lang);
 
 const copyCmdAria =
     lang === "es" ? "Copiar comando npx gefydev" : "Copy command npx gefydev";
@@ -37,6 +39,15 @@ const copyCmdAria =
             >
                 <span>GitHub</span>
                 <span aria-hidden="true">↗</span>
+            </a>
+            <a
+                href={cv.href}
+                class="btn btn-ghost"
+                download={cv.file}
+                aria-label={cv.label}
+            >
+                <span>CV</span>
+                <span aria-hidden="true">↓</span>
             </a>
         </div>
 
