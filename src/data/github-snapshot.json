@@ -1,0 +1,45 @@
+{
+  "fetchedAt": "2026-11-26T12:01:24.924Z",
+  "stars": {
+    "xcl-dev/xcl": {
+      "value": 8427,
+      "fetchedAt": "2026-11-26T12:01:24.924Z"
+    },
+    "gefydev/spotifust": {
+      "value": 38,
+      "fetchedAt": "2026-11-26T12:01:24.924Z"
+    },
+    "gefydev/ComiDolar": {
+      "value": 3,
+      "fetchedAt": "2026-11-26T12:01:24.924Z"
+    },
+    "gefydev/genacleaner": {
+      "value": 0,
+      "fetchedAt": "2026-11-26T12:01:24.924Z"
+    },
+    "gefydev/412": {
+      "value": 0,
+      "fetchedAt": "2026-11-26T12:01:24.924Z"
+    },
+    "gefydev/BlackMaps-Website": {
+      "value": 1,
+      "fetchedAt": "2026-11-26T12:01:24.924Z"
+    },
+    "REVENGE977/stremio-enhanced": {
+      "value": 917,
+      "fetchedAt": "2026-11-26T12:01:24.924Z"
+    }
+  },
+  "prs": {
+    "xcl-dev/xcl": {
+      "total": 43,
+      "merged": 35,
+      "fetchedAt": "2026-11-26T12:01:24.924Z"
+    },
+    "REVENGE977/stremio-enhanced": {
+      "total": 10,
+      "merged": 8,
+      "fetchedAt": "2026-11-26T12:01:24.924Z"
+    }
+  }
+}

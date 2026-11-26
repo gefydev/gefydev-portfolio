@@ -1,3 +1,5 @@
+import { mergedPrsOf, starsOf } from './github';
+
 export interface TechTag {
   name: string;
   color: string;
@@ -86,7 +88,7 @@ export const projects: Project[] = [
     },
     githubUrl: 'https://github.com/xcl-dev/xcl',
     techTags: [techBadgeStyles.Rust, tag('Direct3D 12'), tag('HLSL / DXIL')],
-    stars: 8424,
+    stars: starsOf('xcl-dev/xcl'),
     badge: {
       es: 'Open Source',
       en: 'Open Source',
@@ -159,7 +161,7 @@ export const projects: Project[] = [
     homepageUrl: 'https://spotifust.gefy.dev',
     githubUrl: 'https://github.com/gefydev/spotifust',
     techTags: [techBadgeStyles.Rust, techBadgeStyles.Iced, techBadgeStyles.Rodio],
-    stars: 2,
+    stars: starsOf('gefydev/spotifust'),
     accentColor: '#735ed5',
     placeholderPattern: 'music',
     image: '/images/projects/spotifust.webp',
@@ -181,7 +183,7 @@ export const projects: Project[] = [
     homepageUrl: 'https://comidolar.com.ar',
     githubUrl: 'https://github.com/gefydev/ComiDolar',
     techTags: [techBadgeStyles.Astro, techBadgeStyles.TypeScript, techBadgeStyles.Tailwind, techBadgeStyles.CI],
-    stars: 2,
+    stars: starsOf('gefydev/ComiDolar'),
     badge: {
       es: 'En Producción',
       en: 'In Production',
@@ -206,7 +208,7 @@ export const projects: Project[] = [
     },
     githubUrl: 'https://github.com/gefydev/genacleaner',
     techTags: [techBadgeStyles.Rust, techBadgeStyles.TUI, techBadgeStyles.ADB],
-    stars: 0,
+    stars: starsOf('gefydev/genacleaner'),
     badge: {
       es: 'CLI & TUI',
       en: 'CLI & TUI',
@@ -232,7 +234,7 @@ export const projects: Project[] = [
     homepageUrl: 'https://cuatrodoce.vercel.app',
     githubUrl: 'https://github.com/gefydev/412',
     techTags: [techBadgeStyles.Astro, techBadgeStyles.TypeScript, techBadgeStyles.Tailwind],
-    stars: 0,
+    stars: starsOf('gefydev/412'),
     accentColor: '#735ed5',
     placeholderPattern: 'stream',
     image: '/images/projects/cuatrodoce.webp',
@@ -253,7 +255,7 @@ export const projects: Project[] = [
     },
     githubUrl: 'https://github.com/gefydev/BlackMaps-Website',
     techTags: [techBadgeStyles.JavaScript, techBadgeStyles.Leaflet, techBadgeStyles.Tailwind],
-    stars: 1,
+    stars: starsOf('gefydev/BlackMaps-Website'),
     accentColor: '#0db7b9',
     placeholderPattern: 'maps',
     image: '/images/projects/blackmaps.webp',
@@ -266,8 +268,8 @@ export const openSourceContributions: OpenSourceContribution[] = [
     repo: 'xcl',
     author: 'xcl-dev',
     url: 'https://github.com/xcl-dev/xcl',
-    stars: 8424,
-    prsCount: 35,
+    stars: starsOf('xcl-dev/xcl'),
+    prsCount: mergedPrsOf('xcl-dev/xcl'),
     role: {
       es: 'Contribuidor',
       en: 'Contributor',
@@ -282,8 +284,8 @@ export const openSourceContributions: OpenSourceContribution[] = [
     repo: 'stremio-enhanced',
     author: 'REVENGE977',
     url: 'https://github.com/REVENGE977/stremio-enhanced',
-    stars: 819,
-    prsCount: 8,
+    stars: starsOf('REVENGE977/stremio-enhanced'),
+    prsCount: mergedPrsOf('REVENGE977/stremio-enhanced'),
     role: {
       es: 'Contribuidor Principal',
       en: 'Core Contributor',
