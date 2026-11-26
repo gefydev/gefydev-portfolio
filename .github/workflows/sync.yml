@@ -2,6 +2,9 @@
 # merge a main, purga en Cloudflare SOLO las URLs que efectivamente cambiaron. No commitea nada.
 # Secretos (los carga Gena; si faltan, ese paso se omite sin fallar):
 #   VERCEL_DEPLOY_HOOK_URL   Vercel → Settings → Git → Deploy Hooks (rama main)
+#   VERCEL_AUTOMATION_BYPASS_SECRET  Vercel → Settings → Deployment Protection → Protection Bypass for Automation.
+#                            Sin él no se espera el deploy ni se purga (el run queda en verde con un warning).
+# Opcional: variable VERCEL_ORIGIN_URL si el alias de producción no es el de la rama main.
 #   CLOUDFLARE_API_TOKEN     permiso único: Zone → Cache Purge, solo gefy.dev
 #   CLOUDFLARE_ZONE_ID       id de la zona gefy.dev
 # Intervalo: cambiar el cron.
@@ -41,6 +44,8 @@ jobs:
       - name: Deploy, wait and purge what changed
         env:
           VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          VERCEL_ORIGIN_URL: ${{ vars.VERCEL_ORIGIN_URL }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
         run: node scripts/cloudflare-purge.mjs .purge/manifest.json
