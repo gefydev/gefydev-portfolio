@@ -14,12 +14,10 @@ export async function collect({ config, previous, token, fetchImpl = fetch, now 
   const out = { fetchedAt: previous?.fetchedAt ?? null, stars: { ...previous?.stars }, prs: { ...previous?.prs } };
   const at = now().toISOString();
   let calls = 0;
-  let blocked = null;
   let failures = 0;
   let auth = token || null;
 
   async function get(path) {
-    if (blocked) throw new Error(blocked);
     calls += 1;
     const headers = { accept: 'application/vnd.github+json', 'user-agent': 'portfolio-build', 'x-github-api-version': '2022-11-28' };
     if (auth) headers.authorization = `Bearer ${auth}`;
@@ -30,8 +28,7 @@ export async function collect({ config, previous, token, fetchImpl = fetch, now 
       return get(path);
     }
     if (res.status === 429 || (res.status === 403 && res.headers.get('x-ratelimit-remaining') === '0')) {
-      // el límite de búsqueda y el general son distintos: solo se cortan los pedidos del mismo tipo
-      throw Object.assign(new Error(`límite de GitHub (HTTP ${res.status})`), { limit: true });
+      throw new Error(`límite de GitHub (HTTP ${res.status})`);
     }
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return res.json();

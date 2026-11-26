@@ -1,0 +1,52 @@
+# Mantiene gefy.dev al día: cada 6 h pide un rebuild a Vercel (datos de GitHub) y, tanto en el cron como en cada
+# merge a main, purga en Cloudflare SOLO las URLs que efectivamente cambiaron. No commitea nada.
+# Secretos (los carga Gena; si faltan, ese paso se omite sin fallar):
+#   VERCEL_DEPLOY_HOOK_URL   Vercel → Settings → Git → Deploy Hooks (rama main)
+#   CLOUDFLARE_API_TOKEN     permiso único: Zone → Cache Purge, solo gefy.dev
+#   CLOUDFLARE_ZONE_ID       id de la zona gefy.dev
+# Intervalo: cambiar el cron.
+name: Sync site
+
+on:
+  schedule:
+    - cron: '41 */6 * * *'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-site
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - name: Restore last purged manifest
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: .purge
+          key: purge-manifest-${{ github.run_id }}
+          restore-keys: purge-manifest-
+      - name: Deploy, wait and purge what changed
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+        run: node scripts/cloudflare-purge.mjs .purge/manifest.json
+      - name: Save manifest
+        if: hashFiles('.purge/manifest.json') != ''
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: .purge
+          key: purge-manifest-${{ github.run_id }}

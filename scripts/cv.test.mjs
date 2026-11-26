@@ -55,3 +55,12 @@ test('enlaces escritos como texto quedan clicables', () => {
   assert.equal(runs('xcl-dev/xcl')[0].link, 'https://github.com/xcl-dev/xcl');
   assert.equal(parse('### T\n- a\nb').length, 3);
 });
+
+test('el mismo contenido y fecha dan exactamente el mismo PDF (para no purgar la caché sin cambios)', async () => {
+  const md = fill(read(VARIANTS.en.source), values);
+  const date = new Date('2026-01-02T00:00:00Z');
+  const a = await renderCv('en', md, date);
+  await new Promise((r) => setTimeout(r, 1100));
+  const b = await renderCv('en', md, date);
+  assert.ok(a.pdf.equals(b.pdf));
+});

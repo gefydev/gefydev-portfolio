@@ -109,8 +109,8 @@ export const techStack: TechItem[] = [
     name: 'C',
     category: 'languages',
     roleBadge: {
-      es: 'Fundamentos & Memoria // Exactas UBA',
-      en: 'Foundations & Memory // UBA Exactas',
+      es: 'Fundamentos & Memoria',
+      en: 'Foundations & Memory',
     },
     description: {
       es: 'Comprensión profunda de la gestión manual de memoria, punteros, llamadas al sistema POSIX y algoritmos a nivel de máquina.',
@@ -126,11 +126,11 @@ export const techStack: TechItem[] = [
     name: 'C++',
     category: 'languages',
     roleBadge: {
-      es: 'Estructuras de Datos // Exactas UBA',
-      en: 'Data Structures // UBA Exactas',
+      es: 'Estructuras de Datos',
+      en: 'Data Structures',
     },
     description: {
-      es: 'Diseño de estructuras de datos complejas, plantillas, programación orientada a objetos y algoritmos eficientes en el ámbito académico.',
+      es: 'Diseño de estructuras de datos complejas, plantillas, programación orientada a objetos y algoritmos eficientes.',
       en: 'Complex data structures design, templates, object-oriented programming, and efficient algorithmic implementations.',
     },
     tags: ['STL', 'OOP', 'Data Structures', 'Algorithms'],

@@ -157,24 +157,25 @@ function layout(doc, blocks, size, draw) {
   return { bottom: y, lh };
 }
 
-function newDocument(variant, lang) {
+function newDocument(variant, lang, date) {
   // margen inferior 0 en el motor: el control de "una sola página" lo hace layout(), no el salto automático
-  const doc = new PDFDocument({ size: variant.size, margins: { top: MARGIN, left: MARGIN, right: MARGIN, bottom: 0 }, lang, pdfVersion: '1.7', displayTitle: true, info: { Title: variant.title, Author: 'Genaro Febbo Yapur', Subject: 'CV', CreationDate: new Date() } });
+  const doc = new PDFDocument({ size: variant.size, margins: { top: MARGIN, left: MARGIN, right: MARGIN, bottom: 0 }, lang, pdfVersion: '1.7', displayTitle: true, info: { Title: variant.title, Author: 'Genaro Febbo Yapur', Subject: 'CV', CreationDate: date } });
   doc.registerFont('regular', FONTS.regular);
   doc.registerFont('bold', FONTS.bold);
   return doc;
 }
 
-export async function renderCv(lang, markdown) {
+// `date`: la fecha de los datos (no la hora del build), para que el PDF sea idéntico si nada cambió y no dispare purgas.
+export async function renderCv(lang, markdown, date = new Date(0)) {
   const variant = VARIANTS[lang];
   const blocks = parse(markdown);
-  const probe = newDocument(variant, lang);
+  const probe = newDocument(variant, lang, date);
   const size = SIZES.find((s) => layout(probe, blocks, s, false).bottom <= probe.page.height - MARGIN);
   if (!size) {
     const over = Math.ceil(layout(probe, blocks, SIZES.at(-1), false).bottom - (probe.page.height - MARGIN));
     throw new Error(`el CV ${lang} no entra en una página ni a ${SIZES.at(-1)} pt (sobran ${over} pt): hay que recortar contenido`);
   }
-  const doc = newDocument(variant, lang);
+  const doc = newDocument(variant, lang, date);
   const chunks = [];
   doc.on('data', (c) => chunks.push(c));
   const done = new Promise((resolve, reject) => {
@@ -190,9 +191,10 @@ export async function renderCv(lang, markdown) {
 export async function main({ log = console.log } = {}) {
   const snapshot = JSON.parse(fs.readFileSync(path.join(root, 'src/data/github-snapshot.json'), 'utf8'));
   const values = placeholders(snapshot);
+  const date = new Date(`${String(snapshot.fetchedAt || '2026-11-26').slice(0, 10)}T00:00:00Z`);
   for (const [lang, v] of Object.entries(VARIANTS)) {
     const started = Date.now();
-    const { pdf, size } = await renderCv(lang, fill(fs.readFileSync(path.join(root, v.source), 'utf8'), values));
+    const { pdf, size } = await renderCv(lang, fill(fs.readFileSync(path.join(root, v.source), 'utf8'), values), date);
     fs.mkdirSync(path.dirname(path.join(root, v.out)), { recursive: true });
     fs.writeFileSync(path.join(root, v.out), pdf);
     log(`[cv] ${v.out}: ${v.size}, ${size} pt, ${Math.round(pdf.length / 1024)} KB, ${Date.now() - started} ms`);

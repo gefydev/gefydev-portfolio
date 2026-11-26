@@ -27,3 +27,5 @@ pnpm-debug.log*
 # CV generado en cada build (scripts/cv.mjs)
 public/cv.pdf
 public/es/cv.pdf
+# Generado en cada build
+public/deploy.json
