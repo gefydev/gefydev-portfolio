@@ -153,6 +153,7 @@ const noindex = Astro.props.noindex || false;
                     el.dataset.gridExtra = String(next);
                 }
                 els.forEach(round);
+                window.__gridRound = function () { els.forEach(round); };   // antes de saltar a un ancla
                 if (window.ResizeObserver) {
                     var ro = new ResizeObserver(function (list) { requestAnimationFrame(function () { list.forEach(function (e) { round(e.target); }); }); });
                     els.forEach(function (el) { ro.observe(el); });
@@ -164,7 +165,7 @@ const noindex = Astro.props.noindex || false;
             /* ANCLAS: se activa en fase de captura, antes de que el navegador (o la paleta de comandos) haga el scroll. */
             (function () {
                 var d = document.documentElement;
-                function real() { if (!d.classList.contains("cv-off")) { d.classList.add("cv-off"); void d.offsetHeight; } }
+                function real() { if (!d.classList.contains("cv-off")) { d.classList.add("cv-off"); void d.offsetHeight; if (window.__gridRound) window.__gridRound(); } }
                 if (location.hash.length > 1) real();
                 addEventListener("click", function (e) { if (e.target.closest && e.target.closest('a[href^="#"], [data-action="navigate"]')) real(); }, true);
                 addEventListener("keydown", function (e) { if (e.key === "Enter" && document.querySelector("[data-action='navigate']")) { var t = document.activeElement; if (t && (t.closest("[data-action='navigate']") || t.closest("dialog, [role='dialog']"))) real(); } }, true);
