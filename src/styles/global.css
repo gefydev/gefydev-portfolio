@@ -160,9 +160,8 @@
   .bar { display: flex; align-items: center; gap: var(--s-6); height: 3.5rem; }
   .brand { display: inline-flex; align-items: center; gap: var(--s-2); color: var(--fg); text-decoration: none; font-weight: 600; letter-spacing: -0.01em; }
   .brand img { width: 20px; height: 20px; }
-  .nav { display: none; margin-left: auto; gap: var(--s-6); }
+  .nav { display: none; margin-left: auto; gap: var(--s-3); }   /* 7 links: con 24 px de separación se salían en español */
   .nav a { white-space: nowrap; }
-  @media (max-width: 900px) { .nav { gap: var(--s-3); } }
   .nav a { color: var(--fg-2); text-decoration: none; font-size: var(--fs-sm); font-weight: 500; padding-block: var(--s-3); transition: color 120ms ease; }
   .nav a:hover { color: var(--fg); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 0.5em; text-decoration-thickness: 1px; }
   .tools { display: flex; align-items: center; gap: var(--s-3); margin-left: auto; }
@@ -179,7 +178,7 @@
   .menu-list .hint { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--fg-3); }
 
   /* Hero */
-  .hero { padding-block: var(--s-16); }
+  .hero { padding-block: var(--s-16); border-top: 1px solid var(--line); }
   .greet { display: block; color: var(--fg-3); font-weight: 400; }
   .role { margin-top: var(--s-3); font-size: var(--fs-lg); line-height: 1.3; font-weight: 500; color: var(--fg-2); }
   .byline { margin-top: var(--s-3); font-family: var(--font-mono); font-size: var(--fs-mono); line-height: 1.6; color: var(--fg-3); }
@@ -315,10 +314,10 @@
     --vida-calm: 0.25;              /* grilla base detrás de la columna (0–1) */
     --vida-calm-lit: 0.07;          /* spotlight detrás de la columna (0–1) */
     /* Origen común de las dos grillas (base y linterna): X centrada y redondeada a píxel entero
-       (sin esto una línea cae a medio píxel y se ve doble); Y = alto de la navbar (3.5rem), para
-       que la primera línea horizontal caiga sobre su borde inferior. */
+       (sin esto una línea cae a medio píxel y se ve doble); Y = 0 del documento: las líneas caen en múltiplos de 32,
+       igual que el comienzo de cada sección. La linterna (fija) compensa el scroll desde el JS. */
     --vida-x: calc(50% - var(--vida-cell) / 2);
-    --vida-y: 3.5rem;
+    --vida-y: 0px;
     /* posición de reposo de la linterna (px enteros: las dos capas se contra-trasladan sin resto) */
     --vida-x0: round(down, calc(50vw - var(--vida-r)), 1px);
     --vida-y0: round(down, calc(28vh - var(--vida-r)), 1px);
@@ -345,9 +344,12 @@
   body { isolation: isolate; }                 /* contiene el z-index:-1 de las capas */
   .site-header { background: transparent; }    /* que la grilla corra también detrás del header */
 
+  /* La grilla base cubre todo el documento y se desplaza con él: así los bordes de sección (alturas múltiplos de
+     32 px) caen sobre una línea con cualquier scroll. */
+  body { position: relative; }
   body::before {
     content: "";
-    position: fixed;
+    position: absolute;
     inset: 0;
     z-index: -1;
     pointer-events: none;
@@ -385,7 +387,7 @@
   .vida-spot > div {
     position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; height: 100lvh;
     /* misma caja que la grilla base (.vida = inset:0): 100vw incluiría la barra de scroll */
-    width: 100cqw; height: 100cqh;
+    width: 100cqw; height: calc(100cqh + var(--vida-cell));   /* sobra una celda: el JS la corre según el scroll */
     transform: translate3d(calc(-1 * var(--vida-x0)), calc(-1 * var(--vida-y0)), 0);
     background-image:
       /* punto centrado en el cruce (centro de la línea de 1 px = +0,5 px) */
@@ -643,9 +645,10 @@
   .site-header {
     position: absolute; top: 0; left: 0; right: 0; z-index: 40;
     border-bottom-color: transparent;     /* la línea la dibuja ::after con opacity (compositor) */
-    --h-in: clamp(10px, 3.2vw, 40px);
-    --h-L: max(var(--gutter), calc(var(--h-in) + clamp(16px, 3.75vw, 48px)));
-    --h-dx: max(0px, calc((100vw - min(100vw, var(--measure))) / 2 + var(--gutter) - var(--h-L)));
+    container-type: inline-size;          /* cqw = ancho real del header: 100vw incluía la barra de scroll y empujaba ES/EN fuera del marco */
+    --h-in: clamp(10px, 3.2cqw, 40px);
+    --h-L: max(var(--gutter), calc(var(--h-in) + clamp(16px, 3.75cqw, 48px)));
+    --h-dx: max(0px, calc((100cqw - min(100cqw, var(--measure))) / 2 + var(--gutter) - var(--h-L)));
     --h-dy: calc(var(--h-in) + 8px);
   }
   .site-header .brand { transform: translate(calc(-1 * var(--h-dx)), var(--h-dy)); }
@@ -714,7 +717,12 @@
       .site-header .brand { animation-name: hero-brand; animation-range: var(--t-panel); }
       .site-header .nav, .site-header .tools, .site-header .menu-list { animation-name: hero-nav; animation-range: var(--t-panel); }
       .site-header::after {
-        content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--line);
+        /* línea inferior + fondo del header fijo: la grilla viaja con la página, así que sin esto alguna línea quedaría
+           pegada al borde. El fondo tapa la barra y se desvanece 24 px por debajo. */
+        content: ""; position: absolute; left: 0; right: 0; top: 0; bottom: -25px; z-index: -1;
+        background:
+          linear-gradient(var(--line), var(--line)) 0 calc(100% - 24px) / 100% 1px no-repeat,
+          linear-gradient(to bottom, var(--bg) calc(100% - 24px), transparent 100%);
         opacity: 0; pointer-events: none;
         animation: hero-show linear both; animation-duration: auto; animation-timeline: scroll(root block); animation-range: var(--t-panel);
       }
@@ -861,6 +869,18 @@
 @layer utilities {
   .section-cv {
     content-visibility: auto;
-    contain-intrinsic-size: 1px 700px;
+    contain-intrinsic-size: 1px 704px;   /* 22 celdas: la altura provisoria tampoco corre los bordes */
+  }
+
+  /* Cada bloque mide un múltiplo de la celda (32 px): todos los bordes de sección caen sobre una línea de la grilla.
+     Sin soporte de calc-size (Firefox, Safari) lo completa el script de Layout.astro con el mismo redondeo. */
+  .top { height: round(up, max(100svh, 34rem), 32px); }
+  @supports (height: calc-size(auto, size)) {
+    .hero, .section { height: calc-size(auto, round(up, size, 32px)); }
+  }
+  @media (prefers-reduced-motion: no-preference) and (min-height: 34rem) {
+    @supports (animation-timeline: scroll()) {
+      .top { height: round(up, calc(var(--hero-run) + var(--hero-hdr)), 32px); }
+    }
   }
 }

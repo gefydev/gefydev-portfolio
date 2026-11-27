@@ -114,14 +114,19 @@ const noindex = Astro.props.noindex || false;
                 if (!s || !matchMedia("(hover: hover) and (pointer: fine)").matches) return;
                 var rm = matchMedia("(prefers-reduced-motion: reduce)");
                 if (rm.matches) return;
-                var g = s.firstElementChild, R = s.offsetWidth / 2, tx = 0, ty = 0, x = 0, y = 0, raf = 0, first = true;
+                var g = s.firstElementChild, R = s.offsetWidth / 2, tx = 0, ty = 0, x = 0, y = 0, raf = 0, first = true, a = 0, b = 0;
+                function place() {
+                    // la grilla base viaja con la página: la iluminada (capa fija) se corre el resto del scroll sobre la celda
+                    s.style.transform = "translate3d(" + a + "px," + b + "px,0)";
+                    g.style.transform = "translate3d(" + -a + "px," + (-b - (scrollY % 32)) + "px,0)";
+                }
                 function tick() {
                     x += (tx - x) * 0.18; y += (ty - y) * 0.18;
-                    var a = Math.round(x - R), b = Math.round(y - R);
-                    s.style.transform = "translate3d(" + a + "px," + b + "px,0)";
-                    g.style.transform = "translate3d(" + -a + "px," + -b + "px,0)";
+                    a = Math.round(x - R); b = Math.round(y - R);
+                    place();
                     raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.5 ? requestAnimationFrame(tick) : 0;
                 }
+                addEventListener("scroll", function () { if (!first) place(); }, { passive: true });
                 addEventListener("pointermove", function (e) {
                     if (e.pointerType !== "mouse" || rm.matches) return;
                     tx = e.clientX; ty = e.clientY;
@@ -130,6 +135,29 @@ const noindex = Astro.props.noindex || false;
                     if (!raf) raf = requestAnimationFrame(tick);
                 }, { passive: true });
                 document.addEventListener("pointerout", function (e) { if (!e.relatedTarget) d.removeAttribute("data-vida"); });
+            })();
+        </script>
+        <script is:inline>
+            /* GRILLA: sin calc-size (Firefox, Safari) se completa con padding la altura de cada bloque a un múltiplo de 32 px. */
+            (function () {
+                if (window.CSS && CSS.supports("height", "calc-size(auto, size)")) return;
+                var els = document.querySelectorAll(".hero, .section");
+                function round(el) {
+                    var extra = parseFloat(el.dataset.gridExtra || "0"), base = el.getBoundingClientRect().height - extra;
+                    var next = (32 - (base % 32)) % 32;
+                    if (next > 31.5) next = 0;
+                    if (Math.abs(next - extra) < 0.25) return;
+                    el.style.paddingBottom = "";
+                    var pad = parseFloat(getComputedStyle(el).paddingBottom);
+                    el.style.paddingBottom = pad + next + "px";
+                    el.dataset.gridExtra = String(next);
+                }
+                els.forEach(round);
+                if (window.ResizeObserver) {
+                    var ro = new ResizeObserver(function (list) { requestAnimationFrame(function () { list.forEach(function (e) { round(e.target); }); }); });
+                    els.forEach(function (el) { ro.observe(el); });
+                }
+                addEventListener("load", function () { els.forEach(round); });
             })();
         </script>
     </body>
