@@ -66,6 +66,30 @@ export async function collect({ config, previous, token, fetchImpl = fetch, now 
     });
   }
 
+  // PRs fusionados en repos ajenos (para "cada cuadro es un PR"): se reemplaza entero o se conserva entero
+  if (previous?.activity) out.activity = previous.activity;
+  if (config.activity) {
+    await attempt('actividad', async () => {
+      const q = encodeURIComponent(`is:pr is:merged is:public author:${config.author} -user:${config.author}`);
+      const items = [];
+      let total = 0;
+      for (let page = 1; page <= 3; page++) {
+        const data = await get(`/search/issues?per_page=100&page=${page}&q=${q}`);
+        if (data.incomplete_results || !isCount(data.total_count) || !Array.isArray(data.items)) throw new Error('búsqueda incompleta');
+        total = data.total_count;
+        for (const it of data.items) {
+          const repo = String(it.repository_url || '').split('/repos/')[1];
+          const mergedAt = it.pull_request?.merged_at;
+          if (!/^[\w.-]+\/[\w.-]+$/.test(repo || '') || !isCount(it.number) || !mergedAt) throw new Error('resultado inesperado');
+          items.push({ repo, number: it.number, title: String(it.title || '').slice(0, 200), mergedAt });
+        }
+        if (page * 100 >= total) break;
+      }
+      items.sort((a, b) => a.mergedAt.localeCompare(b.mergedAt) || a.number - b.number);
+      out.activity = { total, items, fetchedAt: at };
+    });
+  }
+
   // la fecha general solo avanza si todo se trajo en esta corrida: así nunca promete datos más nuevos que los que hay
   if (failures === 0) out.fetchedAt = at;
   return { data: out, calls, failures };

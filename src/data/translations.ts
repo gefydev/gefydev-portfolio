@@ -1,4 +1,17 @@
 export interface TranslationDict {
+  activity: {
+    title: string;
+    sub: (n: number) => string;
+    pick: string;
+    others: string;
+    group: string;
+    list: string;
+    last: string;
+    focus: string;
+    total: string;
+    all: (n: number) => string;
+    data: string;
+  };
   meta: {
     title: string;
     description: string;
@@ -120,6 +133,19 @@ export interface TranslationDict {
 
 export const translations: Record<'es' | 'en', TranslationDict> = {
   es: {
+    activity: {
+      title: 'Cada cuadro es un PR fusionado',
+      sub: (n) => `${n} cambios míos aceptados en repositorios de otras personas, del más viejo al más nuevo.`,
+      pick: 'Tocá, pasá o recorré con las flechas los cuadros para ver cuál es cada uno.',
+      others: 'otros',
+      group: 'Pull requests fusionados, del más viejo al más nuevo. Usá las flechas para recorrerlos.',
+      list: 'Lista de pull requests fusionados',
+      last: 'Último PR fusionado',
+      focus: 'Foco',
+      total: 'Total',
+      all: (n) => `Ver los ${n} en GitHub`,
+      data: 'Datos de GitHub al',
+    },
     meta: {
       title: 'GefyDev (Genaro Febbo Yapur) — Desarrollador Full-Stack',
       description: 'Portfolio de Genaro Febbo Yapur (GefyDev), ingresante 2027 a Ciencias de la Computación en la Universidad de Buenos Aires (Exactas) y egresado del CNBA. Especialista en TypeScript, JavaScript, React y Astro.',
@@ -239,6 +265,19 @@ export const translations: Record<'es' | 'en', TranslationDict> = {
     },
   },
   en: {
+    activity: {
+      title: 'Each square is a merged PR',
+      sub: (n) => `${n} changes of mine accepted into other people’s repositories, oldest to newest.`,
+      pick: 'Tap, hover or use the arrow keys on the squares to see which is which.',
+      others: 'others',
+      group: 'Merged pull requests, oldest to newest. Use the arrow keys to move between them.',
+      list: 'List of merged pull requests',
+      last: 'Last merged PR',
+      focus: 'Focus',
+      total: 'Total',
+      all: (n) => `See all ${n} on GitHub`,
+      data: 'GitHub data as of',
+    },
     meta: {
       title: 'GefyDev (Genaro Febbo Yapur) — Full-Stack Developer',
       description: 'Portfolio of Genaro Febbo Yapur (GefyDev), incoming 2027 Computer Science student at the University of Buenos Aires (Exactas) and CNBA alumnus. Specializing in TypeScript, JavaScript, React, and Astro.',
