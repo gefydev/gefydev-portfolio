@@ -1,6 +1,7 @@
 ---
 import snapshot from "../data/github-snapshot.json";
 import config from "../data/github-repos.json";
+import { loadList, sanitize } from "../../scripts/check-titles.mjs";
 import { buildActivity } from "../data/activity.mjs";
 import { translations } from "../data/translations";
 
@@ -10,7 +11,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = translations[lang].activity;
-const data = buildActivity((snapshot as any).activity, { exclude: (config as any).exclude });
+const data = buildActivity(sanitize((snapshot as any).activity, { list: loadList(), exclude: (config as any).exclude || [], warn: () => {} }));
 const locale = lang === "es" ? "es-AR" : "en-US";
 const date = (iso: string) => new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeZone: "America/Argentina/Buenos_Aires" }).format(new Date(iso));
 const short = (repo: string) => (repo === "xcl-dev/xcl" ? repo : repo.split("/")[1]);
@@ -38,7 +39,7 @@ const search = "https://github.com/search?q=is%3Apr+is%3Amerged+author%3Agefydev
                         class={`pr-cell pr-c${p.color}`}
                         tabindex={i === data.cells.length - 1 ? 0 : -1}
                         style={`--i:${i}`}
-                        aria-label={`${date(p.mergedAt)}, ${short(p.repo)} #${p.number}: ${p.title}`}
+                        aria-label={`${date(p.mergedAt)}, ${short(p.repo)} #${p.number}${p.title ? `: ${p.title}` : ""}`}
                         data-date={date(p.mergedAt)}
                         data-repo={p.repo}
                         data-number={p.number}
@@ -86,7 +87,7 @@ const search = "https://github.com/search?q=is%3Apr+is%3Amerged+author%3Agefydev
                     {data.cells.map((p: any) => (
                         <li>
                             <a href={p.url} tabindex="-1">
-                                {date(p.mergedAt)} — {p.repo} #{p.number}: {p.title}
+                                {date(p.mergedAt)} — {p.repo} #{p.number}{p.title ? `: ${p.title}` : ""}
                             </a>
                         </li>
                     ))}

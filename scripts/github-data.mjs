@@ -6,6 +6,7 @@
 // GITHUB_TOKEN es opcional (solo lectura de repos públicos); sin token alcanzan 7 llamadas REST y 4 de búsqueda.
 import fs from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import { loadList, sanitize } from './check-titles.mjs';
 
 const API = 'https://api.github.com';
 const isCount = (n) => Number.isInteger(n) && n >= 0;
@@ -86,7 +87,8 @@ export async function collect({ config, previous, token, fetchImpl = fetch, now 
         if (page * 100 >= total) break;
       }
       items.sort((a, b) => a.mergedAt.localeCompare(b.mergedAt) || a.number - b.number);
-      out.activity = { total, items, fetchedAt: at };
+      // un título con un nombre bloqueado no llega al snapshot (que está versionado en un repo público)
+      out.activity = sanitize({ total, items, fetchedAt: at }, { list: loadList(), exclude: config.exclude || [], warn: log });
     });
   }
 

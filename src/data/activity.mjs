@@ -7,15 +7,15 @@ export const areaOf = (title) => {
   return m && AREA.test(m[1]) ? m[1] : null;
 };
 
-export function buildActivity(activity, { recent = 20, exclude = [] } = {}) {
-  const items = (activity?.items || []).filter((p) => !exclude.includes(`${p.repo}#${p.number}`)).sort((a, b) => a.mergedAt.localeCompare(b.mergedAt) || a.number - b.number);
+export function buildActivity(activity, { recent = 20 } = {}) {
+  const items = [...(activity?.items || [])].sort((a, b) => a.mergedAt.localeCompare(b.mergedAt) || a.number - b.number);
   if (!items.length) return null;
   const count = new Map();
   for (const p of items) count.set(p.repo, (count.get(p.repo) || 0) + 1);
   const ranked = [...count].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   // color propio para los dos repos con más PRs; el resto, "otros"
   const colorOf = new Map(ranked.slice(0, 2).map(([repo], i) => [repo, i + 1]));
-  const cells = items.map((p) => ({ ...p, area: areaOf(p.title), color: colorOf.get(p.repo) ?? 3, url: `https://github.com/${p.repo}/pull/${p.number}` }));
+  const cells = items.map((p) => ({ ...p, area: areaOf(p.title) || (p.hidden ? p.title || null : null), color: colorOf.get(p.repo) ?? 3, url: `https://github.com/${p.repo}/pull/${p.number}` }));
   const legend = ranked.slice(0, 2).map(([repo, n], i) => ({ repo, n, color: i + 1 }));
   const rest = items.length - legend.reduce((a, l) => a + l.n, 0);
   if (rest) legend.push({ repo: null, n: rest, color: 3 });
@@ -37,6 +37,6 @@ export function buildActivity(activity, { recent = 20, exclude = [] } = {}) {
       areas.delete(short);
     }
   }
-  const total = Math.max((activity.total || 0) - ((activity.items?.length || 0) - items.length), items.length);
+  const total = Math.max(activity.total || 0, items.length);
   return { cells, legend, total, last, focus: { repo: focusRepo, areas: [...areas].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([a]) => a) }, fetchedAt: activity.fetchedAt };
 }

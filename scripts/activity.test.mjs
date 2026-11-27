@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { areaOf, buildActivity } from '../src/data/activity.mjs';
-import { blockedIn, findBlocked, hashTerm, loadHashes } from './check-titles.mjs';
+import { blockedIn, loadList, sanitize } from './check-titles.mjs';
 import { collect } from './github-data.mjs';
 
 const pr = (repo, number, mergedAt, title = 'x: y') => ({ repo, number, mergedAt, title });
@@ -60,29 +60,48 @@ test('respaldo: si la búsqueda falla o viene incompleta se conserva la activida
 });
 
 // términos inventados: los reales no se versionan en texto
-test('el build falla con un título que nombra algo bloqueado, también pegado, en camelCase o con signos; y no repite el término', () => {
-  const hashes = new Set(['Acme Wonder World', 'AWW 9', 'Zorbo'].map(hashTerm));
-  for (const text of ['Fix crash in Acme Wonder World', 'AcmeWonderWorld: boot', 'acme-wonder-world: x', 'tune for AWW9', 'Zorbo\'s launcher', 'ZorboClient: y', 'A.c.m.e wonder world'.replace('A.c.m.e', 'Acme')]) assert.ok(blockedIn(text, hashes), text);
-  for (const text of ['Zorbos everywhere', 'zorbo64 build', 'superzorbo', 'AcmeWonderWorlds']) assert.ok(blockedIn(text, loadHashes({ BLOCKED_TERMS: 'Acme Wonder World; AWW 9; Zorbo' })), text);
-  for (const text of ['Recompiler: keep lanes', 'zorb', 'the game logs']) assert.ok(!blockedIn(text, hashes), text);
-  const refs = findBlocked({ items: [pr('a/b', 7, 'x', 'Zorbo support'), pr('a/b', 8, 'x', 'ok')] }, hashes);
-  assert.deepEqual(refs, ['a/b#7']);
-  assert.ok(loadHashes({ BLOCKED_TERMS: 'Extra Name; Otro' }).has(hashTerm('extraname')));
+const list = loadList({ BLOCKED_TERMS: 'Acme Wonder World; AWW 9; Zorbo' });
+test('detecta el nombre sin importar mayúsculas, acentos, separadores, plurales ni si está pegado', () => {
+  const si = ['Acme Wonder World', 'ACME WONDER WORLD', 'Ácme Wónder Wörld', 'AcmeWonderWorld: boot', 'acme-wonder_world', 'A.c.m.e W o n d e r W o r l d', 'Acme\u200bWonder World', 'Acme Wonder Worlds', 'Acmes Wonder World', 'myacmewonderworldmod', 'tune for AWW9', 'aww-9s', 'aww964', "Zorbo's launcher", 'Zorbos everywhere', 'superzorbo64', 'ZorboClient: y', 'Z O R B O'];
+  for (const text of si) assert.ok(blockedIn(text, list), text);
+  for (const text of ['Recompiler: keep lanes', 'zorb', 'the game logs', 'Config: an alias pattern']) assert.ok(!blockedIn(text, list), text);
 });
 
-test('los títulos versionados pasan la lista, y la lista no está en texto', () => {
+test('un título bloqueado no frena nada: queda el área (o nada), con un aviso que no repite el nombre', () => {
+  const warns = [];
+  const activity = { total: 4, fetchedAt: 'x', items: [pr('a/b', 1, '2026-01-01', 'Recompiler: fix Zorbo boot'), pr('a/b', 2, '2026-01-02', 'Zorbo support'), pr('a/b', 3, '2026-01-03', 'ok: x'), pr('a/zorbo-mods', 4, '2026-01-04', 'ok: y')] };
+  const out = sanitize(activity, { list, warn: (m) => warns.push(m) });
+  assert.deepEqual(out.items.map((i) => [i.number, i.title]), [[1, 'Recompiler'], [2, ''], [3, 'ok: x']]);
+  assert.equal(out.total, 3);
+  assert.equal(warns.length, 3);
+  assert.doesNotMatch(warns.join(' '), /zorbo support|fix zorbo|Zorbo/);
+  assert.doesNotMatch(JSON.stringify(out), /zorbo/i);
+  const a = buildActivity(out);
+  assert.equal(a.cells[0].area, 'Recompiler');
+});
+
+test('los datos nuevos llegan limpios al snapshot', async () => {
+  process.env.BLOCKED_TERMS = 'Zorbo';
+  const reply = (body) => ({ status: 200, ok: true, headers: new Headers(), json: async () => body });
+  const logs = [];
+  const r = await collect({ config: { stars: [], prs: [], author: 'me', activity: true }, previous: null, log: (m) => logs.push(m), fetchImpl: async () => reply({ total_count: 1, incomplete_results: false, items: [{ number: 5, title: 'Zorbo fix', repository_url: 'https://api.github.com/repos/a/b', pull_request: { merged_at: '2026-01-05T00:00:00Z' } }] }) });
+  delete process.env.BLOCKED_TERMS;
+  assert.equal(r.data.activity.items[0].title, '');
+  assert.equal(r.failures, 0);
+  assert.match(logs.join('\n'), /título bloqueado/);
+});
+
+test('un PR puntual se puede excluir a mano', () => {
+  const activity = { total: 2, fetchedAt: 'x', items: [pr('a/b', 7, '2026-01-01'), pr('a/b', 8, '2026-01-02')] };
+  const out = sanitize(activity, { list, exclude: ['a/b#7'], warn: () => {} });
+  assert.deepEqual([out.items.map((i) => i.number), out.total], [[8], 1]);
+});
+
+test('los títulos versionados no nombran nada y la lista no está en texto', () => {
   const read = (p) => fs.readFileSync(new URL(p, import.meta.url), 'utf8');
   const snapshot = JSON.parse(read('../src/data/github-snapshot.json'));
   assert.ok(snapshot.activity.items.length >= 1);
-  assert.deepEqual(findBlocked(snapshot.activity, loadHashes({})), []);
+  for (const i of snapshot.activity.items) assert.ok(!blockedIn(i.title, loadList({})) && !blockedIn(i.repo, loadList({})), `${i.repo}#${i.number}`);
   const stored = JSON.parse(read('./blocked-hashes.json')).hashes;
   assert.ok(stored.length >= 10 && stored.every((h) => /^[0-9a-f]{64}$/.test(h)));
-});
-
-test('un PR bloqueado se puede excluir sin frenar el build ni mostrarlo', () => {
-  const hashes = new Set(['Zorbo'].map(hashTerm));
-  const activity = { total: 6, items: [pr('a/b', 7, '2026-01-01', 'Zorbo support'), pr('a/b', 8, '2026-01-02', 'ok: x')], fetchedAt: 'x' };
-  assert.deepEqual(findBlocked(activity, hashes, ['a/b#7']), []);
-  const a = buildActivity(activity, { exclude: ['a/b#7'] });
-  assert.deepEqual([a.cells.map((c) => c.number), a.total], [[8], 5]);
 });
