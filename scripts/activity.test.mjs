@@ -102,6 +102,6 @@ test('los títulos versionados no nombran nada y la lista no está en texto', ()
   const snapshot = JSON.parse(read('../src/data/github-snapshot.json'));
   assert.ok(snapshot.activity.items.length >= 1);
   for (const i of snapshot.activity.items) assert.ok(!blockedIn(i.title, loadList({})) && !blockedIn(i.repo, loadList({})), `${i.repo}#${i.number}`);
-  const stored = JSON.parse(read('./blocked-hashes.json')).hashes;
+  const stored = JSON.parse(read('../src/data/blocked-hashes.json')).hashes;
   assert.ok(stored.length >= 10 && stored.every((h) => /^[0-9a-f]{64}$/.test(h)));
 });

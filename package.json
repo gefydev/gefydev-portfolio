@@ -11,6 +11,7 @@
     "build": "node scripts/github-data.mjs && node scripts/check-titles.mjs && node scripts/deploy-info.mjs && node scripts/cv.mjs && astro build",
     "cv": "node scripts/cv.mjs",
     "test": "node --test scripts/*.test.mjs",
+    "smoke": "node scripts/smoke.mjs",
     "data": "node scripts/github-data.mjs --write",
     "preview": "astro preview",
     "check": "astro check",
