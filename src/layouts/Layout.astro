@@ -160,5 +160,17 @@ const noindex = Astro.props.noindex || false;
                 addEventListener("load", function () { els.forEach(round); });
             })();
         </script>
+        <script is:inline>
+            /* ANCLAS: se activa en fase de captura, antes de que el navegador (o la paleta de comandos) haga el scroll. */
+            (function () {
+                var d = document.documentElement;
+                function real() { if (!d.classList.contains("cv-off")) { d.classList.add("cv-off"); void d.offsetHeight; } }
+                if (location.hash.length > 1) real();
+                addEventListener("click", function (e) { if (e.target.closest && e.target.closest('a[href^="#"], [data-action="navigate"]')) real(); }, true);
+                addEventListener("keydown", function (e) { if (e.key === "Enter" && document.querySelector("[data-action='navigate']")) { var t = document.activeElement; if (t && (t.closest("[data-action='navigate']") || t.closest("dialog, [role='dialog']"))) real(); } }, true);
+                addEventListener("hashchange", real);
+                addEventListener("load", function () { if (location.hash.length > 1) { var el = document.getElementById(location.hash.slice(1)); if (el) el.scrollIntoView({ behavior: "instant" }); } });
+            })();
+        </script>
     </body>
 </html>

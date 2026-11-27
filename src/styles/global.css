@@ -874,6 +874,8 @@
     content-visibility: auto;
     contain-intrinsic-size: 1px 704px;   /* 22 celdas: la altura provisoria tampoco corre los bordes */
   }
+  /* Antes de saltar a una sección se calculan las alturas reales: con la provisoria el salto caía cientos de px corrido. */
+  .cv-off .section-cv { content-visibility: visible; }
 
   /* Cada bloque mide un múltiplo de la celda (32 px): todos los bordes de sección caen sobre una línea de la grilla.
      Sin soporte de calc-size (Firefox, Safari) lo completa el script de Layout.astro con el mismo redondeo. */
