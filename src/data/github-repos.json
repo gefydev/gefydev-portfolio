@@ -8,6 +8,10 @@
     "gefydev/BlackMaps-Website",
     "REVENGE977/stremio-enhanced"
   ],
-  "prs": ["xcl-dev/xcl", "REVENGE977/stremio-enhanced"],
-  "author": "gefydev"
+  "prs": [
+    "xcl-dev/xcl",
+    "REVENGE977/stremio-enhanced"
+  ],
+  "author": "gefydev",
+  "activity": true
 }

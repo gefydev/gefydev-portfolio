@@ -1,0 +1,148 @@
+---
+import snapshot from "../data/github-snapshot.json";
+import config from "../data/github-repos.json";
+import { loadList, sanitize } from "../data/titles.mjs";
+import { buildActivity } from "../data/activity.mjs";
+import { translations } from "../data/translations";
+
+interface Props {
+    lang: "es" | "en";
+}
+
+const { lang } = Astro.props;
+const t = translations[lang].activity;
+const data = buildActivity(sanitize((snapshot as any).activity, { list: loadList(), exclude: (config as any).exclude || [], warn: () => {} }));
+const locale = lang === "es" ? "es-AR" : "en-US";
+const date = (iso: string) => new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeZone: "America/Argentina/Buenos_Aires" }).format(new Date(iso));
+const short = (repo: string) => (repo === "xcl-dev/xcl" ? repo : repo.split("/")[1]);
+const search = "https://github.com/search?q=is%3Apr+is%3Amerged+author%3Agefydev+-user%3Agefydev&type=pullrequests";
+---
+
+{
+    data && (
+        <section id="activity" class="section section-cv" aria-labelledby="activity-title">
+            <div class="wrap">
+                <div class="grid-round">
+                    <div class="section-head">
+                        <h2 id="activity-title">{t.title}</h2>
+                        <p class="sub">{t.sub(data.total)}</p>
+                        <p class="meta">{t.data} {date(data.fetchedAt)}</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* fuera de .wrap: la cuadrícula se calza sobre la grilla de fondo (mismo origen que body::before) */}
+            <div class="pr-cells" role="group" aria-label={t.group}>
+                {data.cells.map((p: any, i: number) => (
+                    <button
+                        type="button"
+                        class={`pr-cell pr-c${p.color}`}
+                        tabindex={i === data.cells.length - 1 ? 0 : -1}
+                        style={`--i:${i}`}
+                        aria-label={`${date(p.mergedAt)}, ${short(p.repo)} #${p.number}${p.title ? `: ${p.title}` : ""}`}
+                        data-date={date(p.mergedAt)}
+                        data-repo={p.repo}
+                        data-number={p.number}
+                        data-title={p.title}
+                        data-url={p.url}
+                    />
+                ))}
+            </div>
+
+            <div class="wrap">
+                <ul class="pr-legend">
+                    {data.legend.map((l: any) => (
+                        <li>
+                            <i class={`pr-c${l.color}`} aria-hidden="true" />
+                            {l.repo ? short(l.repo) : t.others} · {l.n}
+                        </li>
+                    ))}
+                </ul>
+                <p class="pr-read" data-hint={t.pick}>
+                    <span>{t.pick}</span>
+                </p>
+
+                <dl class="pr-now">
+                    <div>
+                        <dt>{t.last}</dt>
+                        <dd>{date(data.last.mergedAt)}</dd>
+                    </div>
+                    <div>
+                        <dt>{t.focus}</dt>
+                        <dd>
+                            {short(data.focus.repo)}
+                            {data.focus.areas.length > 0 && <small>{data.focus.areas.join(" · ")}</small>}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>{t.total}</dt>
+                        <dd>{data.total}</dd>
+                    </div>
+                </dl>
+                <a class="link ext" href={search} target="_blank" rel="noopener noreferrer">
+                    {t.all(data.total)}
+                </a>
+
+                <ul class="sr-only" aria-label={t.list}>
+                    {data.cells.map((p: any) => (
+                        <li>
+                            <a href={p.url} tabindex="-1">
+                                {date(p.mergedAt)} — {p.repo} #{p.number}{p.title ? `: ${p.title}` : ""}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </section>
+    )
+}
+
+<script>
+    function initActivity() {
+        const group = document.querySelector<HTMLElement>(".pr-cells");
+        const read = document.querySelector<HTMLElement>(".pr-read");
+        if (!group || !read || group.dataset.bound) return;
+        group.dataset.bound = "true";
+        const cells = Array.from(group.querySelectorAll<HTMLButtonElement>(".pr-cell"));
+
+        function show(cell: HTMLButtonElement) {
+            cells.forEach((c) => c.classList.toggle("is-on", c === cell));
+            const link = document.createElement("a");
+            link.className = "link ext";
+            link.href = cell.dataset.url!;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.textContent = `${cell.dataset.repo} #${cell.dataset.number}`;
+            const title = document.createElement("span");
+            title.textContent = cell.dataset.title!; // texto, nunca HTML
+            read!.replaceChildren(`${cell.dataset.date} · `, link, title);
+        }
+        function move(to: number) {
+            const i = Math.max(0, Math.min(cells.length - 1, to));
+            cells.forEach((c, k) => (c.tabIndex = k === i ? 0 : -1));
+            cells[i].focus();
+        }
+
+        group.addEventListener("pointerover", (e) => {
+            const c = (e.target as HTMLElement).closest<HTMLButtonElement>(".pr-cell");
+            if (c) show(c);
+        });
+        group.addEventListener("click", (e) => {
+            const c = (e.target as HTMLElement).closest<HTMLButtonElement>(".pr-cell");
+            if (c) show(c);
+        });
+        group.addEventListener("focusin", (e) => show(e.target as HTMLButtonElement));
+        group.addEventListener("keydown", (e) => {
+            const i = cells.indexOf(e.target as HTMLButtonElement);
+            if (i < 0) return;
+            const cols = cells.filter((c) => c.offsetTop === cells[0].offsetTop).length;
+            const to = { ArrowRight: i + 1, ArrowLeft: i - 1, ArrowDown: i + cols, ArrowUp: i - cols, Home: 0, End: cells.length - 1 }[e.key];
+            if (to === undefined) return;
+            e.preventDefault();
+            move(to);
+        });
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initActivity);
+    else initActivity();
+    document.addEventListener("astro:page-load", initActivity);
+</script>

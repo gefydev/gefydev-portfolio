@@ -141,7 +141,7 @@ const noindex = Astro.props.noindex || false;
             /* GRILLA: sin calc-size (Firefox, Safari) se completa con padding la altura de cada bloque a un múltiplo de 32 px. */
             (function () {
                 if (window.CSS && CSS.supports("height", "calc-size(auto, size)")) return;
-                var els = document.querySelectorAll(".hero, .section");
+                var els = document.querySelectorAll(".grid-round, .hero, .section");
                 function round(el) {
                     var extra = parseFloat(el.dataset.gridExtra || "0"), base = el.getBoundingClientRect().height - extra;
                     var next = (32 - (base % 32)) % 32;

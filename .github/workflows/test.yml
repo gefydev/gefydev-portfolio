@@ -22,3 +22,5 @@ jobs:
           node-version: 22
       - run: bun install --frozen-lockfile
       - run: bun run test
+      - run: bun run build
+      - run: bun run smoke

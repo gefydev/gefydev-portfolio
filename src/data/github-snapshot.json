@@ -1,45 +1,327 @@
 {
-  "fetchedAt": "2026-11-26T12:01:24.924Z",
+  "fetchedAt": "2026-11-27T03:37:32.185Z",
   "stars": {
     "xcl-dev/xcl": {
-      "value": 8427,
-      "fetchedAt": "2026-11-26T12:01:24.924Z"
+      "value": 8625,
+      "fetchedAt": "2026-11-27T03:37:32.185Z"
     },
     "gefydev/spotifust": {
       "value": 38,
-      "fetchedAt": "2026-11-26T12:01:24.924Z"
+      "fetchedAt": "2026-11-27T03:37:32.185Z"
     },
     "gefydev/ComiDolar": {
       "value": 3,
-      "fetchedAt": "2026-11-26T12:01:24.924Z"
+      "fetchedAt": "2026-11-27T03:37:32.185Z"
     },
     "gefydev/genacleaner": {
       "value": 0,
-      "fetchedAt": "2026-11-26T12:01:24.924Z"
+      "fetchedAt": "2026-11-27T03:37:32.185Z"
     },
     "gefydev/412": {
       "value": 0,
-      "fetchedAt": "2026-11-26T12:01:24.924Z"
+      "fetchedAt": "2026-11-27T03:37:32.185Z"
     },
     "gefydev/BlackMaps-Website": {
       "value": 1,
-      "fetchedAt": "2026-11-26T12:01:24.924Z"
+      "fetchedAt": "2026-11-27T03:37:32.185Z"
     },
     "REVENGE977/stremio-enhanced": {
       "value": 917,
-      "fetchedAt": "2026-11-26T12:01:24.924Z"
+      "fetchedAt": "2026-11-27T03:37:32.185Z"
     }
   },
   "prs": {
     "xcl-dev/xcl": {
       "total": 43,
       "merged": 35,
-      "fetchedAt": "2026-11-26T12:01:24.924Z"
+      "fetchedAt": "2026-11-27T03:37:32.185Z"
     },
     "REVENGE977/stremio-enhanced": {
       "total": 10,
       "merged": 8,
-      "fetchedAt": "2026-11-26T12:01:24.924Z"
+      "fetchedAt": "2026-11-27T03:37:32.185Z"
     }
+  },
+  "activity": {
+    "total": 46,
+    "items": [
+      {
+        "repo": "florian-lefebvre/astro-loading-indicator",
+        "number": 15,
+        "title": "chore(deps): update astro to version 5",
+        "mergedAt": "2024-12-09T13:33:39Z"
+      },
+      {
+        "repo": "Fxy6969/Stremio-Glass-Theme",
+        "number": 45,
+        "title": "fix: remove conflicting opacity on player menu layer",
+        "mergedAt": "2026-05-19T21:14:35Z"
+      },
+      {
+        "repo": "REVENGE977/stremio-enhanced",
+        "number": 101,
+        "title": "feat: add automatic server.js update checking at startup",
+        "mergedAt": "2026-06-26T08:10:44Z"
+      },
+      {
+        "repo": "REVENGE977/stremio-enhanced-registry",
+        "number": 36,
+        "title": "Add plugin: AniListSync (AniList auto-scrobbler)",
+        "mergedAt": "2026-09-17T18:03:37Z"
+      },
+      {
+        "repo": "REVENGE977/stremio-enhanced",
+        "number": 130,
+        "title": "feat: add option to auto-kill Stremio Service on exit (closes #125)",
+        "mergedAt": "2026-10-26T15:22:44Z"
+      },
+      {
+        "repo": "REVENGE977/stremio-enhanced",
+        "number": 121,
+        "title": "feat: add toggle all plugins button (#104)",
+        "mergedAt": "2026-10-26T15:24:32Z"
+      },
+      {
+        "repo": "REVENGE977/stremio-enhanced",
+        "number": 119,
+        "title": "feat: now stremio enhanced sends subtitle tracks to external players (#113)",
+        "mergedAt": "2026-10-26T15:27:42Z"
+      },
+      {
+        "repo": "REVENGE977/stremio-enhanced",
+        "number": 118,
+        "title": "feat: added persistency to window state via localStorage (#60)",
+        "mergedAt": "2026-10-26T15:34:39Z"
+      },
+      {
+        "repo": "REVENGE977/stremio-enhanced",
+        "number": 117,
+        "title": "perf: optimized subtitle loading logic to make it faster (#103)",
+        "mergedAt": "2026-10-26T15:40:01Z"
+      },
+      {
+        "repo": "REVENGE977/stremio-enhanced",
+        "number": 116,
+        "title": "feat: added SSA and ASS subtitle codec support (#107)",
+        "mergedAt": "2026-10-26T15:43:04Z"
+      },
+      {
+        "repo": "REVENGE977/stremio-enhanced",
+        "number": 115,
+        "title": "fix: added volume persistency through sessions (#111)",
+        "mergedAt": "2026-10-26T15:46:17Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 47,
+        "title": "XNetworking: read CERT_CHAIN_CONTEXT at its real offsets",
+        "mergedAt": "2026-11-22T21:41:50Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 48,
+        "title": "Config: the Series S title memory for every Series S spelling",
+        "mergedAt": "2026-11-22T21:41:50Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 49,
+        "title": "VFS: a console drive mount leaves the PC's own folders on that drive",
+        "mergedAt": "2026-11-22T22:31:13Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 52,
+        "title": "MicrosoftGame.config: attribute values with their character references replaced",
+        "mergedAt": "2026-11-22T22:40:51Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 55,
+        "title": "Game saves: names Windows does not keep as file names stay intact",
+        "mergedAt": "2026-11-23T09:44:40Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 53,
+        "title": "XAsync: cancellation is the provider's to do",
+        "mergedAt": "2026-11-23T09:44:41Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 54,
+        "title": "Task queues: terminating cancels delayed callbacks before the termination callback",
+        "mergedAt": "2026-11-23T09:44:41Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 56,
+        "title": "XAsync: a failing Begin fails the call, and E_PENDING does not complete",
+        "mergedAt": "2026-11-23T09:44:41Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 57,
+        "title": "Task queues: a terminated queue takes no new work",
+        "mergedAt": "2026-11-23T09:44:41Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 58,
+        "title": "VFS: moves through MoveFileWithProgressW are redirected too",
+        "mergedAt": "2026-11-23T09:44:41Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 59,
+        "title": "VFS: CopyFileW is redirected too",
+        "mergedAt": "2026-11-23T09:44:41Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 60,
+        "title": "VFS: ReplaceFileW is redirected",
+        "mergedAt": "2026-11-23T09:44:41Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 62,
+        "title": "MicrosoftGame.config: commented-out entries are not the game's",
+        "mergedAt": "2026-11-23T10:20:31Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 63,
+        "title": "MicrosoftGame.config settings: comments skipped, UTF-16 BE read",
+        "mergedAt": "2026-11-23T10:20:31Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 64,
+        "title": "VFS: FindFirstFileExW with FindExSearchLimitToDirectories is listed too",
+        "mergedAt": "2026-11-23T10:20:31Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 65,
+        "title": "XUserGetGamertag: components as XUserGamertagComponent documents them",
+        "mergedAt": "2026-11-23T10:20:31Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 66,
+        "title": "XSystemGetConsoleId: the console id in its documented format",
+        "mergedAt": "2026-11-23T10:20:31Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 78,
+        "title": "Tests: a console compute shader through the D3D12.X PSO hook, dispatched and read back",
+        "mergedAt": "2026-11-23T10:29:16Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 115,
+        "title": "xcl run: say what the PC is missing before the game starts",
+        "mergedAt": "2026-11-23T14:13:38Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 116,
+        "title": "Issue templates: a game report form that asks for report.json and xcl.log",
+        "mergedAt": "2026-11-23T14:13:38Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 117,
+        "title": "recomp: cube T#s are cube arrays – the face coordinate's slice is sampled",
+        "mergedAt": "2026-11-23T14:13:38Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 121,
+        "title": "D3D12.X: queue #18 before the layout is known writes 8 bytes",
+        "mergedAt": "2026-11-23T14:13:38Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 122,
+        "title": "D3D12.X: video-memory arenas never overlap",
+        "mergedAt": "2026-11-23T14:13:38Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 123,
+        "title": "recomp: memory window from the full 64-bit address (carry out of the low dword)",
+        "mergedAt": "2026-11-23T14:13:38Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 771,
+        "title": "README: point the Discord invite at discord.gg/xcl",
+        "mergedAt": "2026-11-24T05:06:53Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 1745,
+        "title": "Recompiler: a per-lane form for the direct DXIL backend (XCL_PER_LANE)",
+        "mergedAt": "2026-11-24T21:10:43Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 1876,
+        "title": "Recompiler: a float v_cmpx through #1426's lowering keeps lanes outside EXEC out",
+        "mergedAt": "2026-11-24T23:43:55Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 2310,
+        "title": "Config: an alias pattern with several '*' matches its DLLs",
+        "mergedAt": "2026-11-25T16:15:16Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 2311,
+        "title": "Config: device_type in xcl.toml names the Series S in every spelling",
+        "mergedAt": "2026-11-25T16:15:36Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 2312,
+        "title": "XCL_NETWORK=0: GetAddrInfoExW answers local names like getaddrinfo does",
+        "mergedAt": "2026-11-25T16:15:58Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 2346,
+        "title": "Recompiler: emit globallycoherent on compute memory windows only when needed",
+        "mergedAt": "2026-11-25T16:16:40Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 2074,
+        "title": "Recompiler: a bridged mask write in the split form meets no barrier",
+        "mergedAt": "2026-11-25T16:42:42Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 2314,
+        "title": "README: the switches for how a title runs",
+        "mergedAt": "2026-11-25T18:21:22Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 2313,
+        "title": "README: the switches for a bug report's diagnostics",
+        "mergedAt": "2026-11-25T21:36:25Z"
+      },
+      {
+        "repo": "xcl-dev/xcl",
+        "number": 174,
+        "title": "DXC: compute programs are linked with their memory accessors (window switches no longer dominate DXC time)",
+        "mergedAt": "2026-11-25T23:01:59Z"
+      }
+    ],
+    "fetchedAt": "2026-11-27T03:37:32.185Z"
   }
 }
