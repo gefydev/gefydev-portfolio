@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { blockedIn, loadHashes } from './check-titles.mjs';
 import fs from 'node:fs';
 import { fill, parse, placeholders, renderCv, resolveVersion, runs, shortStars, stamp, VARIANTS } from './cv.mjs';
 
@@ -39,8 +40,9 @@ for (const lang of ['en', 'es']) {
     assert.ok(r.links.includes('https://github.com/xcl-dev/xcl/pull/2074'));
     assert.equal(r.meta.Author, 'Genaro Febbo Yapur');
     assert.match(r.meta.Title, /Genaro Febbo Yapur/);
-    // ningún nombre del juego meta de XCL
-    assert.doesNotMatch(r.text, /grand\s*theft|\bGTA\b|rockstar|newer retail game/i);
+    // ningún nombre de juego o estudio (la lista se comprueba por hashes, no se escribe acá)
+    assert.ok(!blockedIn(r.text, loadHashes({})), 'el CV nombra algo bloqueado');
+    assert.doesNotMatch(r.text, /newer retail game/i);
   });
 }
 

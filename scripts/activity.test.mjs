@@ -63,7 +63,8 @@ test('respaldo: si la búsqueda falla o viene incompleta se conserva la activida
 test('el build falla con un título que nombra algo bloqueado, también pegado, en camelCase o con signos; y no repite el término', () => {
   const hashes = new Set(['Acme Wonder World', 'AWW 9', 'Zorbo'].map(hashTerm));
   for (const text of ['Fix crash in Acme Wonder World', 'AcmeWonderWorld: boot', 'acme-wonder-world: x', 'tune for AWW9', 'Zorbo\'s launcher', 'ZorboClient: y', 'A.c.m.e wonder world'.replace('A.c.m.e', 'Acme')]) assert.ok(blockedIn(text, hashes), text);
-  for (const text of ['Recompiler: keep lanes', 'zorbonauts', 'the game logs']) assert.ok(!blockedIn(text, hashes), text);
+  for (const text of ['Zorbos everywhere', 'zorbo64 build', 'superzorbo', 'AcmeWonderWorlds']) assert.ok(blockedIn(text, loadHashes({ BLOCKED_TERMS: 'Acme Wonder World; AWW 9; Zorbo' })), text);
+  for (const text of ['Recompiler: keep lanes', 'zorb', 'the game logs']) assert.ok(!blockedIn(text, hashes), text);
   const refs = findBlocked({ items: [pr('a/b', 7, 'x', 'Zorbo support'), pr('a/b', 8, 'x', 'ok')] }, hashes);
   assert.deepEqual(refs, ['a/b#7']);
   assert.ok(loadHashes({ BLOCKED_TERMS: 'Extra Name; Otro' }).has(hashTerm('extraname')));
@@ -76,4 +77,12 @@ test('los títulos versionados pasan la lista, y la lista no está en texto', ()
   assert.deepEqual(findBlocked(snapshot.activity, loadHashes({})), []);
   const stored = JSON.parse(read('./blocked-hashes.json')).hashes;
   assert.ok(stored.length >= 10 && stored.every((h) => /^[0-9a-f]{64}$/.test(h)));
+});
+
+test('un PR bloqueado se puede excluir sin frenar el build ni mostrarlo', () => {
+  const hashes = new Set(['Zorbo'].map(hashTerm));
+  const activity = { total: 6, items: [pr('a/b', 7, '2026-01-01', 'Zorbo support'), pr('a/b', 8, '2026-01-02', 'ok: x')], fetchedAt: 'x' };
+  assert.deepEqual(findBlocked(activity, hashes, ['a/b#7']), []);
+  const a = buildActivity(activity, { exclude: ['a/b#7'] });
+  assert.deepEqual([a.cells.map((c) => c.number), a.total], [[8], 5]);
 });

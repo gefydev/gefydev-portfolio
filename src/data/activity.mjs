@@ -7,8 +7,8 @@ export const areaOf = (title) => {
   return m && AREA.test(m[1]) ? m[1] : null;
 };
 
-export function buildActivity(activity, { recent = 20 } = {}) {
-  const items = [...(activity?.items || [])].sort((a, b) => a.mergedAt.localeCompare(b.mergedAt) || a.number - b.number);
+export function buildActivity(activity, { recent = 20, exclude = [] } = {}) {
+  const items = (activity?.items || []).filter((p) => !exclude.includes(`${p.repo}#${p.number}`)).sort((a, b) => a.mergedAt.localeCompare(b.mergedAt) || a.number - b.number);
   if (!items.length) return null;
   const count = new Map();
   for (const p of items) count.set(p.repo, (count.get(p.repo) || 0) + 1);
@@ -37,6 +37,6 @@ export function buildActivity(activity, { recent = 20 } = {}) {
       areas.delete(short);
     }
   }
-  const total = Math.max(activity.total || 0, items.length);
+  const total = Math.max((activity.total || 0) - ((activity.items?.length || 0) - items.length), items.length);
   return { cells, legend, total, last, focus: { repo: focusRepo, areas: [...areas].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([a]) => a) }, fetchedAt: activity.fetchedAt };
 }
